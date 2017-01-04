@@ -5,8 +5,8 @@
 Flowbox allows visual programming by connecting and visualizing
 parameterized objects.  Examples of types of parameterized objects that
 FlowBox aims to support include param parameters and number generators,
-[Imagen](https://ioam.github.io/imagen/) patterns and eventually
-[HoloViews](holoviews.org) elements in future.
+[Imagen](http://ioam.github.io/imagen/) patterns and eventually
+[HoloViews](http://www.holoviews.org) elements in future.
 
 Currently work-in-progress but many of the essential features are now in place. Note that development may be slow as this is currently a personal project that I am working on in my free time.
 
@@ -103,6 +103,4 @@ This project is written in ES6 using Chrome (with these experimental language fe
 License
 ----
 
-To be determined (probably BSD 3-clause).
-
-*Converted to HTML using dillinger.io*
+BSD 3-clause license.
