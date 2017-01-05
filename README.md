@@ -1,16 +1,16 @@
-# FlowBox
+# Boxflow
 
 *Visual dataflow programming between parameterized objects*
 
-Flowbox allows visual programming by connecting and visualizing
+Boxflow allows visual programming by connecting and visualizing
 parameterized objects.  Examples of types of parameterized objects that
-FlowBox aims to support include param parameters and number generators,
+Boxflow aims to support include param parameters and number generators,
 [Imagen](http://ioam.github.io/imagen/) patterns and eventually
 [HoloViews](http://www.holoviews.org) elements in future.
 
 Currently work-in-progress but many of the essential features are now in place. Note that development may be slow as this is currently a personal project that I am working on in my free time.
 
-[![Example-use-style='width:600px'](./flowbox/assets/example.png)](index.html)
+[![Example-use-style='width:600px'](./boxflow/assets/example.png)](index.html)
 
 *Recommended browser: Chrome with ES6 enabled (chrome://flags/#enable-javascript-harmony)*
 
@@ -50,7 +50,7 @@ Currently work-in-progress but many of the essential features are now in place. 
 - Alternatively:
 
   ```
-  $ python -c "from flowbox.server import main; main('js')"
+  $ python -c "from boxflow.server import main; main('js')"
   ```
 
 ### Babel and ES5

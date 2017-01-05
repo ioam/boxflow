@@ -6,7 +6,7 @@ from distutils.core import setup
 install_requires = ['tornado', 'imagen', 'pillow']
 extras_require={}
 setup_args = dict(
-    name='flowbox',
+    name='boxflow',
     version="0.0.1",
     install_requires = install_requires,
     extras_require = extras_require,
@@ -18,12 +18,12 @@ setup_args = dict(
     maintainer_email= "jlrstevens@gmail.com",
     platforms=['Windows', 'Mac OS X', 'Linux'],
     license='BSD',
-    url='https://github.com/ioam/flowbox',
-    packages = ["flowbox", "flowbox.assets", "flowbox.js", "flowbox.static"],
-    package_data={'flowbox':['*.tpl'],
-                  'flowbox.assets':['*.png'],
-                  'flowbox.js':['*.js'],
-                  'flowbox.static':['*.js']},
+    url='https://github.com/ioam/boxflow',
+    packages = ["boxflow", "boxflow.assets", "boxflow.js", "boxflow.static"],
+    package_data={'boxflow':['*.tpl'],
+                  'boxflow.assets':['*.png'],
+                  'boxflow.js':['*.js'],
+                  'boxflow.static':['*.js']},
     classifiers = [
         "License :: OSI Approved :: BSD License",
         "Development Status :: 3 - Alpha",
