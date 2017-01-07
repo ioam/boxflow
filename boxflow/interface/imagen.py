@@ -18,6 +18,8 @@ class Viewport(PatternGenerator):
     node.
     """
 
+    nodetype = 'Viewport'
+
     input = param.ClassSelector(class_=PatternGenerator,
                                 default=imagen.Constant(), precedence=1)
 
