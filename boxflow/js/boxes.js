@@ -114,7 +114,6 @@ class LabelledBox extends BaseBox {
         }
         // Allocate space in the node neader
         node.title_height = title.top + (title.height * title.scaleY);
-        node.header_height += node.title_height;
 
         return title
     }
