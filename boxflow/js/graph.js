@@ -138,7 +138,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         // <!-- TODO: Make use of this order in the GUI -->
         this.order = order;
 
-        this.boxtypes = _.object(_.map(boxes, (bx) => [bx.nodetype(), bx]));
+        this._boxtypes = _.object(_.map(boxes, (bx) => [bx.nodetype(), bx]));
     }
 
     param(name, value=true, lims=[], step=null) { // A parameter definition
@@ -193,7 +193,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         // Currently a 1-to-1 relation.
         // If you want a different boxtype for the same type of node,
         // a trivial subclass is easy enough to define.
-        return this.boxtypes[this.nodetype(type).name]
+        return this._boxtypes[this.nodetype(type).name]
     }
 
 }
