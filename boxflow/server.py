@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import os
 import param
 import time
@@ -9,20 +11,16 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
+import interface
 from command import Command
 
-import imagen
-import extras
+
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 
-    classes = [imagen.Disk,
-               imagen.Gaussian,
-               imagen.Line,
-               imagen.Spiral,
-               extras.Sub,
-               extras.Mul,
-               extras.Viewport]
+    classes = (interface.param_classes()
+               + interface.imagen_classes()
+               + interface.holoviews_classes() )
 
     def open(self):
         print('New websocket connection')

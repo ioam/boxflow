@@ -1,3 +1,7 @@
+# Module adapting imagen classes for use with boxflow
+#
+#
+from __future__ import absolute_import
 import imagen
 from imagen import PatternGenerator
 import param
@@ -49,17 +53,33 @@ class BinaryOp(PatternGenerator):
     output_fns = param.HookList(default=[], precedence=-1)
     mask_shape = param.ClassSelector(param.Parameterized, default=None, precedence=-1)
 
+
 class Add(BinaryOp):
 
     def function(self,p):
         return (p.lhs + p.rhs)()
+
 
 class Sub(BinaryOp):
 
     def function(self,p):
         return (p.lhs - p.rhs)()
 
+
 class Mul(BinaryOp):
 
     def function(self,p):
         return (p.lhs * p.rhs)()
+
+
+
+
+binary_ops = [Sub, Mul]
+support_classes = [Viewport]
+vanilla_classes = [ imagen.Disk,
+                    imagen.Gaussian,
+                    imagen.Line,
+                    imagen.Spiral ]
+
+def imagen_classes():
+    return vanilla_classes + binary_ops + support_classes
