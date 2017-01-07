@@ -131,14 +131,14 @@ class Edge {
 
 class Definitions { //  Associates nodes to the input/output param definitions
 
-    constructor(definitions={}, order=undefined) {
+    constructor(definitions={},
+                order=undefined,
+                boxes = [LabelledBox, ImageBox, ViewportBox]) {
         this.definitions = definitions;
         // <!-- TODO: Make use of this order in the GUI -->
         this.order = order;
 
-        this.boxtypes={'Node': NodeBox,
-                       'Viewport': ViewportBox,
-                       'LabelledNode': LabelledBox}
+        this.boxtypes = _.object(_.map(boxes, (bx) => [bx.nodetype(), bx]));
     }
 
     param(name, value=true, lims=[], step=null) { // A parameter definition
@@ -181,7 +181,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         }
         // <!-- FIXME! Height seems to include image height somehow in demo graph
         // if (type == 'Mul') { return LabelledNode } -->
-        return Node
+        return ImageNode
     }
 
     boxtype(type) {
