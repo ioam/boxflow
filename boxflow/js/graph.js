@@ -182,8 +182,6 @@ class Definitions { //  Associates nodes to the input/output param definitions
     nodetype(type) { // Return the appropriate node class for a given type name
         // Note: All node types support: name, type, params, inputs, outputs
         return this._node_names[this.definitions[type].nodetype]
-        // <!-- FIXME! Height seems to include image height somehow in demo graph
-        // if (type == 'Mul') { return LabelledNode } -->
     }
 
     boxtype(type) {
