@@ -30,7 +30,7 @@ class CommLink {
         console.log('Socket error');
     }
 
-    socket_onmessage(e) {
+    socket_onmessage(e) { // Dispatch according to value of 'command'
         let json = JSON.parse(e.data);
         if (json.command == 'definitions') {
             this.graph.defs.definitions = json['data'];
@@ -50,7 +50,8 @@ class CommLink {
 
     send_message(command, data) {
         if (this.socket.readyState === this.socket.OPEN ) {
-            this.socket.send(JSON.stringify({'command': command, 'data':data}));
+            this.socket.send(JSON.stringify({'command': command,
+                                             'data':data}));
         }
         else {
             console.log('Socket not ready');
@@ -60,7 +61,7 @@ class CommLink {
     add_node(node) {
         this.send_message('add_node',
                           {'type':node.type, 'name':node.name, 'params':node.params});
-        // Use watch.js to follow the new nodes parameters
+        // Using watch.js to trigger update_params when the params change
         watch(node.params, () => {
             this.update_params(node);
         });
@@ -90,14 +91,25 @@ class CommLink {
     }
 
 
-    update_params(node) {
-        // Send updated param values to Python
+    update_params(node) {  // Send updated param values to Python
         this.send_message('update_params',
-                          {'name':node.name, 'params':node.params})
+                          {'name':node.name,
+                           'params':node.params})
     }
-
 
     unwatch_params(node) {
 
     }
 }
+
+// Docs Index
+//
+// [main.js](main.html) :  Toplevel entry point. <br>
+// [nodes.js](nodes.html) : Nodes hold semantic and visual state.<br>
+// [graph.js](graph.html) : A Graph holds nodes and edges.<br>
+// [commlink.js](commlink.html) : Commlink links the graph to the server.<br>
+// [utils.js](utils.html) : Simple set of utilities injected into underscore. <br>
+// [view.js](view.html) : The View manages graphical state.. <br>
+// [boxes.js](boxes.html) : Boxes are the visual representation of nodes. <br>
+// [tools.js](tools.html) : Tools respond to interactive events. <br>
+// [connector.js](connector.html) : The connection tool has its own file. <br>
