@@ -66,13 +66,14 @@ class BaseNode {
     }
 
 
-    unlocked_params(plims=undefined) {
-        if ((plims !== undefined) && (Object.keys(plims).length == 0)) {
+    unlocked_params(pmode=undefined) {
+        if (!(pmode)) {return [] }
+        else if (Object.keys(pmode).length == 0) {
             return []
         }
         let unlocked = [];
         for (let param of Object.keys(this.params)) {
-            if (plims && plims[param]=='untyped-port') {
+            if (pmode[param]=='untyped-port') {
                 continue }
             else if (!(this.locked_params[param])) {
                 unlocked.push(param);

@@ -143,7 +143,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         this._node_names = _.object(_.map(nodes, (nd) => [nd.name, nd]));
     }
 
-    param(name, value=true, lims=[], step=null) { // A parameter definition
+    param(name, value=true, lims=[], mode='normal', step=null) { // A parameter definition
         // name:   The name of the parameter.
         // value:  The default parameter values.
         // lims:   Limits or state i.e one of...
@@ -163,10 +163,9 @@ class Definitions { //  Associates nodes to the input/output param definitions
     }
 
     default_params(type, field='value') { // Generate a default parameters object
-        // <!-- TODO: value of 'untyped-port' for lims results in it being skipped -->
         let params = {};
         for (let pdef of this.definitions[type].inputs) {
-            if (pdef.lims !== 'untyped-port') {
+            if (pdef.mode !== 'untyped-port') { // Untyped ports omitted from params.
                 params[pdef.name] = pdef[field];
             }
         }

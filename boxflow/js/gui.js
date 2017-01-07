@@ -57,13 +57,14 @@ class GUI {
         let params = node.params;
         let plims = this.graph.defs.default_params(node.type, 'lims');
         let pstep = this.graph.defs.default_params(node.type, 'step');
+        let pmode = this.graph.defs.default_params(node.type, 'mode');
 
         if (!this.editor) {
             let editor = this.datgui.addFolder("Parameters");
             this.editor = editor;
         }
 
-        let unlocked = node.unlocked_params(plims);
+        let unlocked = node.unlocked_params(pmode);
         if (unlocked.length==0) {this.clear_params(); return}
 
         this.editor.open();

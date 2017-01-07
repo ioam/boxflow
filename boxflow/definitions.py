@@ -43,8 +43,12 @@ class ParamDefinitions(object):
         """
         if not cls.supported(p): return None
         value = str(p.default) if isinstance(p, param.ClassSelector) else p.default
-        lims = 'untyped-port' if isinstance(p, param.ClassSelector) else cls.param_lims(p)
-        return {'name': name, 'value': value, 'lims':lims, 'step': cls.param_step(p)}
+        mode = 'untyped-port' if isinstance(p, param.ClassSelector) else 'normal'
+        return {'name': name,
+                'value': value,
+                'mode': mode,
+                'lims':cls.param_lims(p),
+                'step': cls.param_step(p)}
 
     @classmethod
     def excluded(cls, k,v, excluded, min_precedence):
@@ -69,6 +73,6 @@ class ParamDefinitions(object):
                      if not cls.excluded(k,v, excluded, min_precedence) ]
             inputs = [cls.param_definition(name,p) for name,p in sorted(pairs)]
             specs[cls_name] = {'inputs': [el for el in inputs if el],
-                               'outputs':[{'name':'', 'lims':'untyped-port'}],
+                               'outputs':[{'name':'', 'lims':[], 'mode':'untyped-port'}],
                                'nodetype': nodetype }
         return specs
