@@ -63,7 +63,7 @@ html = """
 def index_html(js_dir):
     stag = "    <script src='{path}'></script>"
     files = ["utils.js", "commlink.js","nodes.js","boxes.js", "graph.js",
-             "view.js","tools.js", "connector.js","tests.js","gui.js"]
+             "view.js","tools.js", "connector.js", "gui.js"]
     stags = [stag.format(path='./{js_dir}/{f}'.format(js_dir=js_dir, f=f)) for f in files]
     return html.format(scripts='\n'.join(stags))
 
