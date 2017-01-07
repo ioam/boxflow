@@ -31,12 +31,14 @@ The boxflow GitHub repository can be found [here](https://github.com/ioam/boxflo
   ```bash
   $ git clone https://github.com/ioam/boxflow.git docs
   ```
+  
 2. Move into the new ``docs`` directory and checkout gh-pages.
 
   ```bash
   $ cd docs
   $ git checkout gh-pages
   ```
+  
 3. Generate/update the contents of the js-docs directory using:
 
   ```bash
