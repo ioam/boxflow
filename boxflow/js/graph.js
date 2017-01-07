@@ -146,20 +146,20 @@ class Definitions { //  Associates nodes to the input/output param definitions
     param(name, value=true, lims=[], mode='normal', step=null) { // A parameter definition
         // name:   The name of the parameter.
         // value:  The default parameter values.
-        // lims:   Limits or state i.e one of...
+        // lims:   Limits based on datgui constraints:
         //   + []         -  Mo limits specified.
         //   + [min, max] -  Minimum/maximum limits.
         //   + [min]      -  Minimum only.
         //   + [['a','b']] - Options
         //
-        //   In addition to these options (adapted from datgui lims) the states are:
+        // step:  The step size for numeric quantities
+        // mode: The mode of the port, ie one of...
         //
-        //   + 'untyped-port' - Port without GUI parameters.
+        //   + 'normal'       - Port with visual port and GUI parameter.
+        //   + 'untyped-port' - Port without GUI parameters
         //
         //   TODO: Support [undefined, max] for maximum limit only.
-        //
-        // step:  The step size for numeric quantities
-        return {name: name, value : value, lims:lims, step: step}
+        return {name: name, value : value, lims:lims, mode: mode, step: step}
     }
 
     default_params(type, field='value') { // Generate a default parameters object
