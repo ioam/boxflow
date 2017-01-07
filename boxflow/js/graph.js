@@ -1,7 +1,17 @@
 'use strict';
+// ### Introduction
+//
+
+// In this file, the ``Graph``, ``Edge`` and ``Definitions`` classes are
+// defined, designed to express the connectivity of the nodes and define
+// what parameters are expressed by the nodes.
+//
+// * ``Graph``: A collection of nodes and edges between them.
+// * ``Edge`` : A connection from a source node output to a dest node input.
+// * ``Definitions``: The default parameter definitions associated with nodes.
+
 
 class Graph {
-    // A graph is a collection of nodes and edges
     constructor({defs=undefined,  nodes=[], edges=[], commlink=undefined} = {} ) {
         this.defs = defs;
         this.nodes = nodes;
@@ -47,8 +57,7 @@ class Graph {
         return edge
     }
 
-    new_name(type) {
-        // Suggest a new name for an instance of the given type
+    new_name(type) {   // Suggest a new name for an instance of the given type
         let existing = [];
         let num = 0;
         for (let node of this.nodes) {
@@ -62,8 +71,7 @@ class Graph {
         return type.toLowerCase() + ':' +num
     }
 
-    node_edges(node, type) {
-        // Return either the 'input' or 'output' edges of a node
+    node_edges(node, type) { // Return either the 'input' or 'output' edges of a node
         let matches = [];
         for ( let edge of this.edges ) {
             if ( ( type === 'output') && ( edge.src === node ) ) {
@@ -74,14 +82,10 @@ class Graph {
         return matches
     }
 
-    remove(name) {
-        // Remove edge or node by name. If a node is removed, also remove edges
+    remove(name) { // Remove edge or node by name. If a node is removed, also remove edges
         if ( name.startsWith('edge-') ) {
             let edge = this.find_edge(name);
-            // Update GUI for newly unlocked parameters
             edge.dest.lock_param(edge.input, false);
-            // this.gui.populate(dest.node);
-
             this.commlink && this.commlink.remove_edge(edge);
             this.edges = _.difference(this.edges, [edge]);
         }
@@ -103,7 +107,6 @@ class Graph {
 
 
 class Edge {
-    // An Edge connects a source node output to a dest node input
     constructor(src, output, dest, input) {
 
         this.validate(src, output, dest, input);
@@ -126,27 +129,24 @@ class Edge {
 }
 
 
-class Definitions {
-    // Manages the graph node definitions:
-    //  * Associates node types to the input/output params and their properties
+class Definitions { //  Associates nodes to the input/output param definitions
 
     constructor(definitions={}, order=undefined) {
         this.definitions = definitions;
-        this.order = order; // TODO: Make use of order
+        // <!-- TODO: Make use of this order in the GUI -->
+        this.order = order;
 
         this.boxtypes={'Node': NodeBox,
                        'Viewport': ViewportBox,
                        'LabelledNode': LabelledBox}
     }
 
-    param(name, value=true, lims=[], step=null) {
-        // Using defaults, a boolean parameter (checkbox) is defined
+    param(name, value=true, lims=[], step=null) { // A parameter definition
         return {name: name, value : value, lims:lims, step: step}
     }
 
-    default_params(type, field='value') {
-        // Generate a default parameters object for the given type
-        // A value of 'untyped-port' for lims results in it being skipped
+    default_params(type, field='value') { // Generate a default parameters object
+        // <!-- TODO: value of 'untyped-port' for lims results in it being skipped -->
         let params = {};
         for (let pdef of this.definitions[type].inputs) {
             if (pdef.lims !== 'untyped-port') {
@@ -156,39 +156,31 @@ class Definitions {
         return params
     }
 
-    define(type, inputs, outputs) {
-        // Define the input and output params of a node type
+    define(type, inputs, outputs) { // Define the input and output params of a node type
         this.definitions[type] = {inputs: inputs, outputs : outputs}
-
     }
 
-    input_names(type) {
-        // Get the input param names for a node
+    input_names(type) {  // Get the input param names for a node
         return _.pluck(this.definitions[type].inputs, 'name')
     }
 
-    output_names(type) {
-        // Get the output param names for a node
+    output_names(type) { // Get the output param names for a node
         return _.pluck(this.definitions[type].outputs, 'name')
     }
 
-    types() {
-        // Returns an array of node types
+    types() {  // Returns an array of available node types
         let keys = Object.keys(this.definitions);
         return keys.sort()
     }
 
-    nodetype(type) {
-        // Return the node class
-        // (must support name, type, params, inputs, outputs)
-        // Currently returning the top-level Node unless the type is 'Viewer'
-        // TODO: Generalize!
+    nodetype(type) { // Return the appropriate node class for a given type name
+        // Note: All node types support: name, type, params, inputs, outputs
+        // <!-- TODO: Generalize -->
         if (type==='Viewport') {
             return Viewport
         }
-        // FIXME! Height seems to include image height somehow in demo graph
-        // if (type == 'Mul') {
-        //     return LabelledNode }
+        // <!-- FIXME! Height seems to include image height somehow in demo graph
+        // if (type == 'Mul') { return LabelledNode } -->
         return Node
     }
 
@@ -196,7 +188,7 @@ class Definitions {
         // Returns a box class (i.e a static class for rendering nodes)
         // Currently a 1-to-1 relation.
         // If you want a different boxtype for the same type of node,
-        // a trivial subclass is easy enough to make.
+        // a trivial subclass is easy enough to define.
         return this.boxtypes[this.nodetype(type).name]
     }
 
