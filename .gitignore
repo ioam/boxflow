@@ -3,5 +3,6 @@
 scratch.*
 *.pyc
 
+history/
 node_modules/
 *.org
