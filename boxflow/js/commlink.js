@@ -32,6 +32,7 @@ class CommLink {
         }
         if (json.command == 'image_update') {
             let node = this.graph.find_node(json['data']['name']);
+            if (!node) {console.log('Warning: node not found'); return }
             let boxtype = this.graph.defs.boxtype(node.type);
             if (node.image_opts) {
                 node.image_opts.imdata = json['data']['b64'];
