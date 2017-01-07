@@ -133,12 +133,14 @@ class Definitions { //  Associates nodes to the input/output param definitions
 
     constructor(definitions={},
                 order=undefined,
-                boxes = [LabelledBox, ImageBox, ViewportBox]) {
+                boxes = [LabelledBox, ImageBox, ViewportBox],
+                nodes = [LabelledNode, ImageNode, Viewport]) {
         this.definitions = definitions;
         // <!-- TODO: Make use of this order in the GUI -->
         this.order = order;
 
         this._boxtypes = _.object(_.map(boxes, (bx) => [bx.nodetype(), bx]));
+        this._node_names = _.object(_.map(nodes, (nd) => [nd.name, nd]));
     }
 
     param(name, value=true, lims=[], step=null) { // A parameter definition
@@ -179,13 +181,9 @@ class Definitions { //  Associates nodes to the input/output param definitions
 
     nodetype(type) { // Return the appropriate node class for a given type name
         // Note: All node types support: name, type, params, inputs, outputs
-        // <!-- TODO: Generalize -->
-        if (type==='Viewport') {
-            return Viewport
-        }
+        return this._node_names[this.definitions[type].nodetype]
         // <!-- FIXME! Height seems to include image height somehow in demo graph
         // if (type == 'Mul') { return LabelledNode } -->
-        return ImageNode
     }
 
     boxtype(type) {
