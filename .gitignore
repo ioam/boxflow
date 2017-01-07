@@ -2,3 +2,6 @@
 .ipynb_checkpoints/
 scratch.*
 *.pyc
+
+node_modules/
+*.org
