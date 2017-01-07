@@ -1,17 +1,20 @@
 'use strict';
 // ### Introduction
 //
-// In this file, ``Node`` classes are defined, designed to hold state
-// without any code directly related to rendering. For instance, methods
-// might specify the height of a node without offering any way to
-// concretely visualize that height.
+// In this file, the ``Node`` classes are defined, designed to hold
+// state without any code directly related to rendering. For instance,
+// methods might specify the height of a node without offering any way
+// to concretely visualize that height.
 //
 // The ``Node`` types are as follows:
 //
-// * BaseNode: A rectangle with input/output ports.
-// * LabelledNode : Extends BaseNode with a title and label state.
-// * ImageNode: Extends  LabelledNode with an attached image.
-// * Viewport: A special resizable image node without a title or labels.
+// * ``BaseNode``: A rectangle with input/output ports.
+// * ``LabelledNode`` : Extends BaseNode with a title and label state.
+// * ``ImageNode``: Extends  LabelledNode with an attached image.
+// * ``Viewport``: A special resizable image node without a title or labels.
+
+
+
 
 class BaseNode {
     // A Node has parameters and declares a style and in/out port styles
