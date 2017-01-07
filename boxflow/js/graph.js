@@ -9,13 +9,13 @@ class Graph {
         this.commlink = commlink;
     }
 
-    // Must be a shorter way...
-    find_node(name) {
-        // Find a node by name
-        for (let node of this.nodes) {
-            if (node.name === name) {
-                return node
-            }
+    find_node(name) { // Find a node by name
+        let matches = this.nodes.filter((n) => { return n.name === name});
+        if (matches.length > 1) {
+            console.log(`Multiple node matches found for '${name}'`);
+        }
+        else if (matches.length == 1) {
+            return matches[0]
         }
     }
 
