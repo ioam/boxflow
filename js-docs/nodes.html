@@ -11,74 +11,6 @@
   <div id="container">
     <div id="background"></div>
     
-      <ul id="jump_to">
-        <li>
-          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
-          <a class="small" href="javascript:void(0);">+</a>
-          <div id="jump_wrapper">
-          <div id="jump_page_wrapper">
-            <div id="jump_page">
-              
-                
-                <a class="source" href="boxes.html">
-                  boxes.js
-                </a>
-              
-                
-                <a class="source" href="commlink.html">
-                  commlink.js
-                </a>
-              
-                
-                <a class="source" href="connector.html">
-                  connector.js
-                </a>
-              
-                
-                <a class="source" href="graph.html">
-                  graph.js
-                </a>
-              
-                
-                <a class="source" href="gui.html">
-                  gui.js
-                </a>
-              
-                
-                <a class="source" href="main.html">
-                  main.js
-                </a>
-              
-                
-                <a class="source" href="nodes.html">
-                  nodes.js
-                </a>
-              
-                
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
-                <a class="source" href="tools.html">
-                  tools.js
-                </a>
-              
-                
-                <a class="source" href="utils.html">
-                  utils.js
-                </a>
-              
-                
-                <a class="source" href="view.html">
-                  view.js
-                </a>
-              
-            </div>
-          </div>
-        </li>
-      </ul>
-    
     <ul class="sections">
         
           <li id="title">
@@ -98,9 +30,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BaseNode</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;</pre></div></div>
             
         </li>
         
@@ -111,15 +41,23 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>A Node has parameters and declares a style and in/out port styles</p>
+              <h3 id="introduction">Introduction</h3>
+<p>In this file, <code>Node</code> classes are defined, designed to hold state
+without any code directly related to rendering. For instance, methods
+might specify the height of a node without offering any way to
+concretely visualize that height.</p>
+<p>The <code>Node</code> types are as follows:</p>
+<ul>
+<li>BaseNode: A rectangle with input/output ports.</li>
+<li>LabelledNode : Extends BaseNode with a title and label state.</li>
+<li>ImageNode: Extends  LabelledNode with an attached image.</li>
+<li>Viewport: A special resizable image node without a title or labels.</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">constructor</span>({ name = <span class="hljs-string">'default'</span>,
-                  type = <span class="hljs-string">'untyped'</span>,
-                  inputs=[],
-                  outputs=[],
-                  params = {},</pre></div></div>
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BaseNode</span> </span>{</pre></div></div>
             
         </li>
         
@@ -130,44 +68,21 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Geometry</p>
+              <p>A Node has parameters and declares a style and in/out port styles</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                  pos = [<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">constructor</span>({ name = <span class="hljs-string">'default'</span>,
+                  type = <span class="hljs-string">'untyped'</span>,
+                  inputs=[],                     <span class="hljs-comment">// Input/output parameter names</span>
+                  outputs=[],
+                  params = {},                    <span class="hljs-comment">// Parameter state</span>
+                  pos = [<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],                    <span class="hljs-comment">// Geometry</span>
                   width = <span class="hljs-number">100</span>,
-                  smooth = <span class="hljs-number">10</span>,</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>Node settings</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                  port_gap_ratio = <span class="hljs-number">0.25</span>,</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>Styles</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                  style     = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'Silver'</span>,
-                                <span class="hljs-attr">stroke</span> : <span class="hljs-string">'black'</span>,
+                  smooth = <span class="hljs-number">10</span>,
+                  port_gap_ratio = <span class="hljs-number">0.25</span>,          <span class="hljs-comment">// Port settings</span>
+                  style     = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'Silver'</span>,   <span class="hljs-comment">// Styles</span>
+                                stroke : <span class="hljs-string">'black'</span>,
                                 <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">3</span> },
                   input_style  = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'white'</span> },
                   output_style = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'DarkGoldenRod'</span> }
@@ -181,22 +96,9 @@
         <span class="hljs-keyword">this</span>.type = type,
         <span class="hljs-keyword">this</span>.inputs = inputs;
         <span class="hljs-keyword">this</span>.outputs = outputs;
-        <span class="hljs-keyword">this</span>.params = params;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>Parameters bound by connectors</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.locked_params = _.mapObject(<span class="hljs-keyword">this</span>.params, (k,v) =&gt; { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>});
+        <span class="hljs-keyword">this</span>.params = params;
+        <span class="hljs-keyword">this</span>.locked_params = _.mapObject(<span class="hljs-keyword">this</span>.params, <span class="hljs-comment">// Parameters 'locked' by connections</span>
+                                         (k,v) =&gt; { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>});
 
         <span class="hljs-keyword">this</span>.port_gap_ratio = port_gap_ratio;
 
@@ -208,23 +110,9 @@
             <span class="hljs-attr">left</span>: pos[<span class="hljs-number">0</span>], <span class="hljs-attr">top</span>: pos[<span class="hljs-number">1</span>],
             <span class="hljs-attr">width</span>: width,
             <span class="hljs-attr">port_radius</span> : <span class="hljs-number">7</span>,
-            <span class="hljs-attr">rx</span>: smooth, <span class="hljs-attr">ry</span>: smooth};</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>Unscaled height of header area
-Subclasses can set this property</p>
+            <span class="hljs-attr">rx</span>: smooth, <span class="hljs-attr">ry</span>: smooth};
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.header_height = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">this</span>.header_height = <span class="hljs-number">0</span>;  <span class="hljs-comment">// Unscaled height of header</span>
     }
 
     lock_param(param, state=<span class="hljs-literal">true</span>) {
@@ -247,22 +135,8 @@ Subclasses can set this property</p>
         <span class="hljs-keyword">return</span> unlocked
     }
 
-    ports_height() {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>Unscaled height of the parameter block</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.maxrows() * <span class="hljs-keyword">this</span>.port_spacing();
+    ports_height() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.maxrows() * <span class="hljs-keyword">this</span>.port_spacing(); <span class="hljs-comment">// Unscaled height of the ports</span>
     }
 
     port_spacing() {
@@ -276,19 +150,18 @@ Subclasses can set this property</p>
         <span class="hljs-keyword">return</span> [port_type == <span class="hljs-string">'input'</span> ? <span class="hljs-number">0</span>  : width, ypos];
     }
 
-    row(port, type) {</pre></div></div>
+    row(port, type) {         <span class="hljs-comment">// Given a port name, return the corresponding row</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-9">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Given a port name, return the corresponding row
-Note that dest nodes (inputs) are below the output rows</p>
+              <!-- Note that dest nodes (inputs) are below the output rows -->
 
             </div>
             
@@ -319,24 +192,10 @@ Note that dest nodes (inputs) are below the output rows</p>
         <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);
 
         <span class="hljs-keyword">this</span>.title_opts = title_opts;
-        <span class="hljs-keyword">this</span>.label_opts = label_opts;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>To be set by LabelledBox</p>
+        <span class="hljs-keyword">this</span>.label_opts = label_opts;
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.title_height = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">this</span>.title_height = <span class="hljs-number">0</span>  <span class="hljs-comment">// To be set by LabelledBox</span>
     }
-
 }
 
 
@@ -355,40 +214,8 @@ Note that dest nodes (inputs) are below the output rows</p>
                                }
                  }= {}) {
         <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);
-
-        <span class="hljs-keyword">this</span>.image_opts = image_opts;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>Blank image</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.image_opts.imdata == <span class="hljs-literal">undefined</span>) {
-            <span class="hljs-keyword">this</span>.image_opts.imdata = <span class="hljs-literal">undefined</span>;
-        }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <p>Actual image state</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.image = <span class="hljs-literal">undefined</span>;
+        <span class="hljs-keyword">this</span>.image_opts = image_opts;
+        <span class="hljs-keyword">this</span>.image = <span class="hljs-literal">undefined</span>;  <span class="hljs-comment">// Actual image state ( will be fabric.Image )</span>
     }
 
     image_scaleX() {
@@ -404,13 +231,13 @@ Note that dest nodes (inputs) are below the output rows</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Depends on whether left/right ports are present</p>
+              <p>Position depends on whether left/right ports are present</p>
 
             </div>
             
@@ -421,37 +248,69 @@ Note that dest nodes (inputs) are below the output rows</p>
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.geom.port_radius/<span class="hljs-number">4.0</span>
         }
     }
-}
-
-
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{
-
-}
-
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Viewport</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{
-
-    <span class="hljs-keyword">constructor</span>() {
-        <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);</pre></div></div>
+}</pre></div></div>
             
         </li>
         
         
-        <li id="section-14">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>FIXME should not be hardcoded, but odd results using geom.width/height</p>
+              <!-- Remove once mapping system complete -->
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.image_opts.width =  <span class="hljs-number">100</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{
+
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Viewport</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <!-- FIXME should not be hardcoded, but odd results using geom.width/height -->
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">constructor</span>() {
+        <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);
+        <span class="hljs-keyword">this</span>.image_opts.width =  <span class="hljs-number">100</span>;
         <span class="hljs-keyword">this</span>.image_opts.height = <span class="hljs-number">100</span>;
     }
 }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Docs Index</p>
+<p><a href="main.html">main.js</a> :  Toplevel entry point. <br>
+<a href="nodes.html">nodes.js</a> : Nodes hold semantic and visual state.<br>
+<a href="graph.html">graph.js</a> : A Graph holds nodes and edges.<br>
+<a href="commlink.html">commlink.js</a> : Commlink links the graph to the server.<br>
+<a href="utils.html">utils.js</a> : Simple set of utilities injected into underscore. <br>
+<a href="view.html">view.js</a> : The View manages graphical state.. <br>
+<a href="boxes.html">boxes.js</a> : Boxes are the visual representation of nodes. <br>
+<a href="tools.html">tools.js</a> : Tools respond to interactive events. <br>
+<a href="connector.html">connector.js</a> : The connection tool has its own file. <br></p>
+
+            </div>
             
         </li>
         
