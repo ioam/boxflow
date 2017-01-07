@@ -76,9 +76,10 @@ class Command(object):
 
         for name in updated:
             instance = self.graph.find_instance(name)
-            self.send('image_update',
-                      {'name': name,
-                       'b64': self.image_to_base64(instance())})
+            if instance:
+                self.send('image_update',
+                          {'name': name,
+                           'b64': self.image_to_base64(instance())})
 
     # Push commands
 
