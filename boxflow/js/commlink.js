@@ -8,7 +8,14 @@ class CommLink {
         this.gui = gui;
         this.graph = graph;
 
-        this.configure_callbacks(this.socket)
+        this.setup(this.socket)
+    }
+
+    setup(socket) {
+        socket.onopen =    (e) => this.socket_onopen;
+        socket.onerror =   (e) => this.socket_onerror;
+        socket.onmessage = (e) => this.socket_onmessage(e);
+        socket.onclose =   (e) => this.socket_onclose;
     }
 
     socket_onopen(e) {
@@ -39,13 +46,6 @@ class CommLink {
                 boxtype.update_image(node, this.view, true);
             }
         }
-    }
-
-    configure_callbacks(socket) {
-        socket.onopen =    (e) => this.socket_onopen;
-        socket.onerror =   (e) => this.socket_onerror;
-        socket.onmessage = (e) => this.socket_onmessage(e);
-        socket.onclose =   (e) => this.socket_onclose;
     }
 
     send_message(command, data) {
