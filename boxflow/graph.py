@@ -23,16 +23,23 @@ class Graph(object):
 
     def remove_link(self, src, output, dest, input):
         self.links.remove((src, output, dest, input))
-        # Set the dest parameter back to default
         instance = self.find_instance(dest)
-        parameter = instance.params()[input]
-        instance.set_param(**{input : parameter.default})
+        if instance:
+            # Set the dest parameter back to default
+            parameter = instance.params()[input]
+            instance.set_param(**{input : parameter.default})
+        else:
+            print('Warning (remove_link): Could not find instance %r' % name)
 
 
     def update_params(self, name, params):
         instance = self.find_instance(name)
-        instance.set_param(**params)
-        return [name] + self.update_downstream(instance)
+        if instance:
+            instance.set_param(**params)
+            return [name] + self.update_downstream(instance)
+        else:
+            print('Warning (update_params): Could not find instance %r' % name)
+            return [name]
 
     def find_instance(self, name):
         for instance in self.instances:
