@@ -57,7 +57,7 @@ class BaseNode {
 
 
     unlocked_params(plims=undefined) {
-        if (!(plims === undefined) && (Object.keys(plims).length == 0)) {
+        if ((plims !== undefined) && (Object.keys(plims).length == 0)) {
             return []
         }
         let unlocked = [];

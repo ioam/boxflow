@@ -148,7 +148,7 @@ class Definitions {
         // A value of 'untyped-port' for lims results in it being skipped
         let params = {};
         for (let pdef of this.definitions[type].inputs) {
-            if (!(pdef.lims === 'untyped-port')) {
+            if (pdef.lims !== 'untyped-port') {
                 params[pdef.name] = pdef[field];
             }
         }

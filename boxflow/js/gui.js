@@ -70,7 +70,7 @@ class GUI {
         this.clear_params(false);
         for (let key of unlocked) {
             let control = this.editor.add(params, key, ...plims[key]);
-            if (!(pstep[key]===null)) {
+            if (pstep[key]!==null) {
                 control.step(pstep[key])
             }
         }

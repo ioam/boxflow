@@ -178,7 +178,7 @@ class ImageBox extends LabelledBox {
     }
 
     static update_image(node, view) {
-        if (!(node.image===undefined)) {
+        if (node.image) {
             node.image.setSrc(node.image_opts.imdata,
                               (img) => {
                                   view.lookup(node).dirty = true;
