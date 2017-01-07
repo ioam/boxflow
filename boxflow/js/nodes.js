@@ -17,18 +17,14 @@ class BaseNode {
     // A Node has parameters and declares a style and in/out port styles
     constructor({ name = 'default',
                   type = 'untyped',
-                  inputs=[],
+                  inputs=[],                     // Input/output parameter names
                   outputs=[],
-                  params = {},
-                  // Geometry
-                  pos = [0,0],
+                  params = {},                    // Parameter state
+                  pos = [0,0],                    // Geometry
                   width = 100,
                   smooth = 10,
-                  // Node settings
-                  port_gap_ratio = 0.25,
-
-                  // Styles
-                  style     = { fill: 'Silver',
+                  port_gap_ratio = 0.25,          // Port settings
+                  style     = { fill: 'Silver',   // Styles
                                 stroke : 'black',
                                 strokeWidth : 3 },
                   input_style  = { fill: 'white' },
@@ -44,8 +40,8 @@ class BaseNode {
         this.inputs = inputs;
         this.outputs = outputs;
         this.params = params;
-        // 'Locked' parameters bound by connectors
-        this.locked_params = _.mapObject(this.params, (k,v) => { return false});
+        this.locked_params = _.mapObject(this.params, // Parameters 'locked' by connections
+                                         (k,v) => { return false});
 
         this.port_gap_ratio = port_gap_ratio;
 
@@ -59,9 +55,7 @@ class BaseNode {
             port_radius : 7,
             rx: smooth, ry: smooth};
 
-        // Unscaled height of header area
-        // Subclasses can set this property
-        this.header_height = 0;
+        this.header_height = 0;  // Unscaled height of header
     }
 
     lock_param(param, state=true) {
@@ -85,8 +79,7 @@ class BaseNode {
     }
 
     ports_height() {
-        // Unscaled height of the parameter block
-        return this.maxrows() * this.port_spacing();
+        return this.maxrows() * this.port_spacing(); // Unscaled height of the ports
     }
 
     port_spacing() {
@@ -100,9 +93,8 @@ class BaseNode {
         return [port_type == 'input' ? 0  : width, ypos];
     }
 
-    row(port, type) {
-        // Given a port name, return the corresponding row
-        // Note that dest nodes (inputs) are below the output rows
+    row(port, type) {         // Given a port name, return the corresponding row
+        // <!-- Note that dest nodes (inputs) are below the output rows -->
         if (type == 'input') {
             return this.inputs.indexOf(port) + this.outputs.length
         }
@@ -132,10 +124,8 @@ class LabelledNode extends BaseNode {
         this.title_opts = title_opts;
         this.label_opts = label_opts;
 
-        // To be set by LabelledBox
-        this.title_height = 0
+        this.title_height = 0  // To be set by LabelledBox
     }
-
 }
 
 
@@ -155,8 +145,7 @@ class ImageNode extends LabelledNode {
                  }= {}) {
         super(arguments[0]);
         this.image_opts = image_opts;
-        // Actual image state. I.e will be set to a fabric Image object.
-        this.image = undefined;
+        this.image = undefined;  // Actual image state ( will be fabric.Image )
     }
 
     image_scaleX() {
