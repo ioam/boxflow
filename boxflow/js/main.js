@@ -1,15 +1,17 @@
 'use strict';
+// ### Introduction
+//
+// In this file, instances of ``View``, ``Definitions``, ``Graph``,
+// ``Commlink`` and ``GUI`` are created and linked up appropriately.
+//
+// Once these are created, the tools are also instantiated and hooked up
+// to the appropriate events.
 
 let canvas = new fabric.Canvas('c', {'selection' : false});
 
 let view = new View(canvas);
-let defs = new Definitions(); // Node definitions
+let defs = new Definitions(); // Start with empty definitions
 let graph = new Graph({defs : defs});
-
-
-//=======//
-// TOOLS //
-//=======//
 
 
 let canvas_resize_tool = new CanvasResizeTool(canvas);
@@ -23,8 +25,10 @@ let commlink = new CommLink(view, gui, graph,
                             server_ip ? server_ip : 'localhost');
 graph.commlink = commlink;
 
-
-
+// ### Tools
+//
+// Some of these tools are linked: for instance KeyPressTool needs to
+// know what is highlighted to delete the right thing on 'Backspace'/'d'
 
 new RightClickDisableTool();
 
@@ -43,7 +47,6 @@ keypress_tool.listen(); // Start listening for keystrokes
 zoom_tool.mousezoom();  // Start zooming behavior
 
 
-// Update GUI on select and highlight
 canvas.on('object:selected', function(e) {
     gui_tool.object_selected(e);
     marker_tool.object_selected(e);
@@ -54,7 +57,6 @@ canvas.on('selection:cleared', function(e) {
 });
 
 
-// Object move with connector update
 canvas.on('object:moving', function(e) {
     motion_tool.object_moving(e);
 });
@@ -65,25 +67,28 @@ canvas.on('object:scaling', function(e) {
 });
 
 
-// Hover selection
 canvas.on('mouse:over', function(e) {
     highlight_tool.mouse_over(e);
 });
+
 
 canvas.on('mouse:out', function(e) {
     highlight_tool.mouse_out(e);
 });
 
 
-// Panning
 canvas.on('mouse:up', function (e) {
     pan_tool.mouse_up();
     connection_tool.mouse_up(e);
 });
+
+
 canvas.on('mouse:down', function (e) {
     pan_tool.mouse_down(e);
     connection_tool.mouse_down(e);
 });
+
+
 canvas.on('mouse:move', function (e) {
     pan_tool.mouse_move(e);
     connection_tool.mouse_move(e);
