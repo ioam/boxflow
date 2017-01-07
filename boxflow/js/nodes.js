@@ -43,8 +43,9 @@ class BaseNode {
         this.inputs = inputs;
         this.outputs = outputs;
         this.params = params;
-        this.locked_params = _.mapObject(this.params, // Parameters 'locked' by connections
-                                         (k,v) => { return false});
+        this.param_modes = param_modes;
+        this._locked_params = _.mapObject(this.params, // Parameters 'locked' by connections
+                                          (k,v) => { return false});
 
         this.port_gap_ratio = port_gap_ratio;
 
@@ -62,7 +63,7 @@ class BaseNode {
     }
 
     lock_param(param, state=true) {
-        this.locked_params[param]=state;
+        this._locked_params[param]=state;
     }
 
 
@@ -75,7 +76,7 @@ class BaseNode {
         for (let param of Object.keys(this.params)) {
             if (pmode[param]=='untyped-port') {
                 continue }
-            else if (!(this.locked_params[param])) {
+            else if (!(this._locked_params[param])) {
                 unlocked.push(param);
             }
         }
