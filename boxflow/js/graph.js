@@ -19,12 +19,13 @@ class Graph {
         }
     }
 
-    find_edge(name) {
-        // Find an edge by name
-        for (let edge of this.edges) {
-            if (edge.name === name) {
-                return edge
-            }
+    find_edge(name) { // Find an edge by name
+        let matches = this.edges.filter((e) => { return e.name === name});
+        if (matches.length > 1) {
+            console.log(`Multiple edge matches found for '${name}'`);
+        }
+        else if (matches.length == 1) {
+            return matches[0]
         }
     }
 
