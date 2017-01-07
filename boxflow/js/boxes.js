@@ -4,6 +4,8 @@
 class BaseBox {
     // A nodebox is the visual representation of a node
 
+    static nodetype() { return undefined }
+
     static make_nodebox(node) {
         // Make the nodebox by grouping everything together
         return new fabric.Group(this.grouped_objects(node),
@@ -88,6 +90,8 @@ class BaseBox {
 class LabelledBox extends BaseBox {
     // Extends Basebox with a title and labels
 
+    static nodetype() { return 'LabelledNode' }
+
     static make_title(node) {
         // Returns an array of fabric objects to group
         let title = new fabric.Text(node.name, {
@@ -149,6 +153,8 @@ class LabelledBox extends BaseBox {
 
 class ImageBox extends LabelledBox {
 
+    static nodetype() { return 'ImageNode' }
+
     static make_image(node, group, imopts={}) {
         // Makes a fabric Image and adds it to the supplied group when ready
         let half_height = (node.ports_height() + node.header_height)/2.0;
@@ -203,6 +209,8 @@ class NodeBox extends ImageBox {
 
 
 class ViewportBox extends ImageBox {
+
+    static nodetype() { return 'Viewport' }
 
     static make_rect_port(node, param) {
         // Return a single centered rectangle port
