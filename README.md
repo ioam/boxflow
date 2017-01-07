@@ -28,19 +28,17 @@ The boxflow GitHub repository can be found [here](https://github.com/ioam/boxflo
 
 1. Clone the repository into the top-level docs directory.
 
-```bash
-$ git clone https://github.com/ioam/boxflow.git docs
-```
-
+  ```bash
+  $ git clone https://github.com/ioam/boxflow.git docs
+  ```
 2. Move into the new ``docs`` directory and checkout gh-pages.
 
-```bash
-$ cd docs
-$ git checkout gh-pages
-```
+  ```bash
+  $ cd docs
+  $ git checkout gh-pages
+  ```
+3. Generate/update the contents of the js-docs directory using:
 
-4. Generate/update the contents of the js-docs directory using:
-
-```bash
-$ docco -o js-docs ../boxflow/js/*
-```
+  ```bash
+  $ docco -o js-docs ../boxflow/js/*
+  ```
