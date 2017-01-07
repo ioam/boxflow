@@ -200,3 +200,15 @@ class Definitions {
     }
 
 }
+
+// Docs Index
+//
+// [main.js](main.html) :  Toplevel entry point. <br>
+// [nodes.js](nodes.html) : Nodes hold semantic and visual state.<br>
+// [graph.js](graph.html) : A Graph holds nodes and edges.<br>
+// [commlink.js](commlink.html) : Commlink links the graph to the server.<br>
+// [utils.js](utils.html) : Simple set of utilities injected into underscore. <br>
+// [view.js](view.html) : The View manages graphical state.. <br>
+// [boxes.js](boxes.html) : Boxes are the visual representation of nodes. <br>
+// [tools.js](tools.html) : Tools respond to interactive events. <br>
+// [connector.js](connector.html) : The connection tool has its own file. <br>
