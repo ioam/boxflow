@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>nodes.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="boxes.html">
+                  boxes.js
+                </a>
+              
+                
+                <a class="source" href="commlink.html">
+                  commlink.js
+                </a>
+              
+                
+                <a class="source" href="connector.html">
+                  connector.js
+                </a>
+              
+                
+                <a class="source" href="graph.html">
+                  graph.js
+                </a>
+              
+                
+                <a class="source" href="gui.html">
+                  gui.js
+                </a>
+              
+                
+                <a class="source" href="main.html">
+                  main.js
+                </a>
+              
+                
+                <a class="source" href="nodes.html">
+                  nodes.js
+                </a>
+              
+                
+                <a class="source" href="tests.html">
+                  tests.js
+                </a>
+              
+                
+                <a class="source" href="tools.html">
+                  tools.js
+                </a>
+              
+                
+                <a class="source" href="utils.html">
+                  utils.js
+                </a>
+              
+                
+                <a class="source" href="view.html">
+                  view.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>nodes.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BaseNode</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>A Node has parameters and declares a style and in/out port styles</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">constructor</span>({ name = <span class="hljs-string">'default'</span>,
+                  type = <span class="hljs-string">'untyped'</span>,
+                  inputs=[],
+                  outputs=[],
+                  params = {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Geometry</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                  pos = [<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],
+                  width = <span class="hljs-number">100</span>,
+                  smooth = <span class="hljs-number">10</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Node settings</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                  port_gap_ratio = <span class="hljs-number">0.25</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Styles</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                  style     = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'Silver'</span>,
+                                <span class="hljs-attr">stroke</span> : <span class="hljs-string">'black'</span>,
+                                <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">3</span> },
+                  input_style  = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'white'</span> },
+                  output_style = { <span class="hljs-attr">fill</span>: <span class="hljs-string">'DarkGoldenRod'</span> }
+                } = {} ) {
+
+        <span class="hljs-keyword">if</span> ( (inputs.length + outputs.length) == <span class="hljs-number">0</span> ) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">'The number of inputs and output must not be zero.'</span>;
+        }
+
+        <span class="hljs-keyword">this</span>.name = name;
+        <span class="hljs-keyword">this</span>.type = type,
+        <span class="hljs-keyword">this</span>.inputs = inputs;
+        <span class="hljs-keyword">this</span>.outputs = outputs;
+        <span class="hljs-keyword">this</span>.params = params;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Parameters bound by connectors</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.locked_params = _.mapObject(<span class="hljs-keyword">this</span>.params, (k,v) =&gt; { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>});
+
+        <span class="hljs-keyword">this</span>.port_gap_ratio = port_gap_ratio;
+
+        <span class="hljs-keyword">this</span>.style = style ;
+        <span class="hljs-keyword">this</span>.input_style = input_style;
+        <span class="hljs-keyword">this</span>.output_style = output_style;
+
+        <span class="hljs-keyword">this</span>.geom = {
+            <span class="hljs-attr">left</span>: pos[<span class="hljs-number">0</span>], <span class="hljs-attr">top</span>: pos[<span class="hljs-number">1</span>],
+            <span class="hljs-attr">width</span>: width,
+            <span class="hljs-attr">port_radius</span> : <span class="hljs-number">7</span>,
+            <span class="hljs-attr">rx</span>: smooth, <span class="hljs-attr">ry</span>: smooth};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Unscaled height of header area
+Subclasses can set this property</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.header_height = <span class="hljs-number">0</span>;
+    }
+
+    lock_param(param, state=<span class="hljs-literal">true</span>) {
+        <span class="hljs-keyword">this</span>.locked_params[param]=state;
+    }
+
+
+    unlocked_params(plims=<span class="hljs-literal">undefined</span>) {
+        <span class="hljs-keyword">if</span> ((plims !== <span class="hljs-literal">undefined</span>) &amp;&amp; (<span class="hljs-built_in">Object</span>.keys(plims).length == <span class="hljs-number">0</span>)) {
+            <span class="hljs-keyword">return</span> []
+        }
+        <span class="hljs-keyword">let</span> unlocked = [];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> param <span class="hljs-keyword">of</span> <span class="hljs-built_in">Object</span>.keys(<span class="hljs-keyword">this</span>.params)) {
+            <span class="hljs-keyword">if</span> (plims &amp;&amp; plims[param]==<span class="hljs-string">'untyped-port'</span>) {
+                <span class="hljs-keyword">continue</span> }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span>.locked_params[param])) {
+                unlocked.push(param);
+            }
+        }
+        <span class="hljs-keyword">return</span> unlocked
+    }
+
+    ports_height() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Unscaled height of the parameter block</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.maxrows() * <span class="hljs-keyword">this</span>.port_spacing();
+    }
+
+    port_spacing() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.geom.width * <span class="hljs-keyword">this</span>.port_gap_ratio;
+    }
+
+    port_position(port, port_type=<span class="hljs-string">'input'</span>) {
+        <span class="hljs-keyword">let</span> width = <span class="hljs-keyword">this</span>.geom.width;
+        <span class="hljs-keyword">let</span> ypos =   ( <span class="hljs-keyword">this</span>.header_height + <span class="hljs-keyword">this</span>.port_spacing()/<span class="hljs-number">2.0</span>
+                       + <span class="hljs-keyword">this</span>.row(port, port_type) * <span class="hljs-keyword">this</span>.port_spacing());
+        <span class="hljs-keyword">return</span> [port_type == <span class="hljs-string">'input'</span> ? <span class="hljs-number">0</span>  : width, ypos];
+    }
+
+    row(port, type) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Given a port name, return the corresponding row
+Note that dest nodes (inputs) are below the output rows</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">'input'</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.inputs.indexOf(port) + <span class="hljs-keyword">this</span>.outputs.length
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.outputs.indexOf(port)
+        }
+    }
+
+    maxrows() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.inputs.length + <span class="hljs-keyword">this</span>.outputs.length
+    }
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LabelledNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">BaseNode</span> </span>{
+
+    <span class="hljs-keyword">constructor</span>({ title_opts = {<span class="hljs-attr">size</span> : <span class="hljs-number">12</span>,
+                                <span class="hljs-attr">width_ratio</span> : <span class="hljs-number">0.8</span>,
+                                <span class="hljs-attr">top_padding_ratio</span> : <span class="hljs-number">0.6</span>,
+                                <span class="hljs-attr">fontFamily</span> : <span class="hljs-string">'Monospace'</span>},
+
+                  label_opts = {<span class="hljs-attr">size</span>: <span class="hljs-number">12</span>,
+                                <span class="hljs-attr">fontFamily</span> : <span class="hljs-string">'Arial'</span>}
+                } = {}) {
+        <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);
+
+        <span class="hljs-keyword">this</span>.title_opts = title_opts;
+        <span class="hljs-keyword">this</span>.label_opts = label_opts;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>To be set by LabelledBox</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.title_height = <span class="hljs-number">0</span>
+    }
+
+}
+
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ImageNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">LabelledNode</span> </span>{
+
+    <span class="hljs-keyword">constructor</span>( {image_opts = { <span class="hljs-attr">imdata</span>: <span class="hljs-literal">undefined</span>,
+                                 <span class="hljs-attr">top</span>:  <span class="hljs-number">0</span>,
+                                 <span class="hljs-attr">left</span>: <span class="hljs-number">0</span>,
+                                 <span class="hljs-attr">width</span> : <span class="hljs-number">80</span>,
+                                 <span class="hljs-attr">height</span> : <span class="hljs-number">80</span>,
+                                 <span class="hljs-attr">xres</span> : <span class="hljs-number">256</span>,
+                                 <span class="hljs-attr">yres</span> : <span class="hljs-number">256</span>,
+                                 <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">5</span>,
+                                 <span class="hljs-attr">stroke</span> : <span class="hljs-string">'black'</span>
+                               }
+                 }= {}) {
+        <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);
+
+        <span class="hljs-keyword">this</span>.image_opts = image_opts;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Blank image</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.image_opts.imdata == <span class="hljs-literal">undefined</span>) {
+            <span class="hljs-keyword">this</span>.image_opts.imdata = <span class="hljs-literal">undefined</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Actual image state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.image = <span class="hljs-literal">undefined</span>;
+    }
+
+    image_scaleX() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.image_opts.width / <span class="hljs-keyword">this</span>.image_opts.xres;
+    }
+
+    image_scaleY() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.image_opts.height / <span class="hljs-keyword">this</span>.image_opts.yres;
+    }
+
+    image_left() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Depends on whether left/right ports are present</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.inputs.length&gt;<span class="hljs-number">0</span> &amp;&amp; <span class="hljs-keyword">this</span>.outputs.length==<span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.geom.port_radius/<span class="hljs-number">2.0</span>
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.inputs.length&gt;<span class="hljs-number">0</span> &amp;&amp; <span class="hljs-keyword">this</span>.outputs.length&gt;<span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.geom.port_radius/<span class="hljs-number">4.0</span>
+        }
+    }
+}
+
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{
+
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Viewport</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{
+
+    <span class="hljs-keyword">constructor</span>() {
+        <span class="hljs-keyword">super</span>(<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>FIXME should not be hardcoded, but odd results using geom.width/height</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.image_opts.width =  <span class="hljs-number">100</span>;
+        <span class="hljs-keyword">this</span>.image_opts.height = <span class="hljs-number">100</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

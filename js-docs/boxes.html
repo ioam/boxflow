@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>boxes.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="boxes.html">
+                  boxes.js
+                </a>
+              
+                
+                <a class="source" href="commlink.html">
+                  commlink.js
+                </a>
+              
+                
+                <a class="source" href="connector.html">
+                  connector.js
+                </a>
+              
+                
+                <a class="source" href="graph.html">
+                  graph.js
+                </a>
+              
+                
+                <a class="source" href="gui.html">
+                  gui.js
+                </a>
+              
+                
+                <a class="source" href="main.html">
+                  main.js
+                </a>
+              
+                
+                <a class="source" href="nodes.html">
+                  nodes.js
+                </a>
+              
+                
+                <a class="source" href="tests.html">
+                  tests.js
+                </a>
+              
+                
+                <a class="source" href="tools.html">
+                  tools.js
+                </a>
+              
+                
+                <a class="source" href="utils.html">
+                  utils.js
+                </a>
+              
+                
+                <a class="source" href="view.html">
+                  view.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>boxes.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>NodeBox is the top level box.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BaseBox</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>A nodebox is the visual representation of a node</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">static</span> make_nodebox(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Make the nodebox by grouping everything together</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> fabric.Group(<span class="hljs-keyword">this</span>.grouped_objects(node),
+                                { <span class="hljs-attr">node</span> : node,
+                                  <span class="hljs-attr">name</span> : node.name,
+                                  <span class="hljs-attr">left</span> : node.geom.left,
+                                  <span class="hljs-attr">top</span> :  node.geom.top,
+                                  <span class="hljs-attr">hoverCursor</span>: <span class="hljs-string">'pointer'</span>,
+                                  <span class="hljs-attr">subTargetCheck</span>: <span class="hljs-literal">true</span>,
+                                  <span class="hljs-attr">selectable</span>: <span class="hljs-literal">true</span>,
+                                  <span class="hljs-attr">hasControls</span>: <span class="hljs-literal">false</span>,
+                                  <span class="hljs-attr">hasBorders</span> : <span class="hljs-literal">false</span> });
+    }
+
+    <span class="hljs-keyword">static</span> grouped_objects(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Returns an array of fabric objects to group</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span>  [<span class="hljs-keyword">this</span>.make_box(node)]
+            .concat(<span class="hljs-keyword">this</span>.make_ports(node, <span class="hljs-string">'output'</span>))
+            .concat(<span class="hljs-keyword">this</span>.make_ports(node, <span class="hljs-string">'input'</span>))
+    }
+
+
+    <span class="hljs-keyword">static</span> make_ports(node, type) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Make an array of either the ‘input’ or ‘output’ ports</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = type == <span class="hljs-string">'input'</span> ? node.inputs : node.outputs;
+        <span class="hljs-keyword">let</span> offset = type == <span class="hljs-string">'input'</span> ? node.outputs.length : <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> params.map( <span class="hljs-function">(<span class="hljs-params">param, i</span>) =&gt;</span> <span class="hljs-keyword">this</span>.make_port(node, param, type, i+offset));
+    }
+
+
+    <span class="hljs-keyword">static</span> make_port(node, param, type) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Return a single port circle at the appropriate position</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> pos = node.port_position(param, type);
+        <span class="hljs-keyword">let</span> prefix = type === <span class="hljs-string">'input'</span> ? <span class="hljs-string">'inport-'</span> : <span class="hljs-string">'outport-'</span>;
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> fabric.Circle({
+            <span class="hljs-attr">name</span> :        prefix + _.UUID(),
+            <span class="hljs-attr">param</span> :       param,
+            <span class="hljs-attr">left</span> :        pos[<span class="hljs-number">0</span>],
+            <span class="hljs-attr">top</span> :         pos[<span class="hljs-number">1</span>],
+            <span class="hljs-attr">radius</span> :      node.geom.port_radius,
+            <span class="hljs-attr">originX</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">originY</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">stroke</span> :      <span class="hljs-string">'black'</span>,
+            <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">1</span>,
+            <span class="hljs-attr">fill</span>:         type == <span class="hljs-string">'input'</span>? node.input_style.fill : node.output_style.fill,
+            <span class="hljs-attr">scale</span>:        <span class="hljs-number">0.5</span>})
+    }
+
+    <span class="hljs-keyword">static</span> make_box(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Make the ‘box’ i.e the smoothed rectangle background</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> flags =  { <span class="hljs-attr">selectable</span>: <span class="hljs-literal">true</span>,
+                       <span class="hljs-attr">hasControls</span>: <span class="hljs-literal">false</span>,
+                       <span class="hljs-attr">hasBorders</span> : <span class="hljs-literal">false</span> }
+        <span class="hljs-keyword">let</span> height = node.ports_height() + node.header_height;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> fabric.Rect(_.extend({}, node.style, node.geom, flags,
+                                        { <span class="hljs-attr">height</span>: height,
+                                          <span class="hljs-attr">left</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">top</span>: <span class="hljs-number">0</span> }));
+    }
+
+    <span class="hljs-keyword">static</span> port_position(port, node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Currently unused and returns unscaled positions
+but could lookup the group and look for the
+ports inside (getObjects) and get the positions there.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> node.port_position(port, type);
+    }
+
+    <span class="hljs-keyword">static</span> update_node(view, graph, node, left, top) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Move a node and update the edges</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        node.geom.left = left;
+        node.geom.top = top;
+
+        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">let</span> in_edge <span class="hljs-keyword">of</span> graph.node_edges(node, <span class="hljs-string">'input'</span>) ) {
+            Connector.update_connector(view, in_edge) }
+
+        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">let</span> out_edge <span class="hljs-keyword">of</span> graph.node_edges(node, <span class="hljs-string">'output'</span>) ) {
+            Connector.update_connector(view, out_edge) }
+    }
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LabelledBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">BaseBox</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Extends Basebox with a title and labels</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">static</span> make_title(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Returns an array of fabric objects to group</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> title = <span class="hljs-keyword">new</span> fabric.Text(node.name, {
+            <span class="hljs-attr">fontFamily</span>: node.title_opts.fontFamily,
+            <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">0</span>,
+            <span class="hljs-attr">originX</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">originY</span> :     <span class="hljs-string">'top'</span>,
+            <span class="hljs-attr">fontSize</span>:      node.title_opts.size,
+            <span class="hljs-attr">left</span>: node.geom.width / <span class="hljs-number">2.0</span>,
+            <span class="hljs-attr">top</span>: <span class="hljs-number">0</span> });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Add 10% padding</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        title.top = title.height * node.title_opts.top_padding_ratio;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Scale to fit if necessary</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> allowed_title_width = node.geom.width*node.width_ratio;
+        <span class="hljs-keyword">if</span> (title.width &gt; allowed_title_width) {
+            title.scaleX = allowed_title_width/title.width;
+            title.scaleY = title.scaleX;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Allocate space in the node neader</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        node.title_height = title.top + (title.height * title.scaleY);
+        node.header_height += node.title_height;
+
+        <span class="hljs-keyword">return</span> title
+    }
+
+
+    <span class="hljs-keyword">static</span> make_label(name, node, type) {
+        <span class="hljs-keyword">let</span> [x,y] = node.port_position(name, type);
+        <span class="hljs-keyword">let</span> padding = node.geom.width * <span class="hljs-number">0.2</span>;
+        <span class="hljs-keyword">let</span> label = <span class="hljs-keyword">new</span> fabric.Text(name, {
+            <span class="hljs-attr">fontFamily</span>: node.label_opts.fontFamily,
+            <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">0</span>,
+            <span class="hljs-attr">originX</span> :     (type === <span class="hljs-string">'input'</span>) ? <span class="hljs-string">'left'</span> : <span class="hljs-string">'right'</span>,
+            <span class="hljs-attr">originY</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">fontSize</span>:      node.label_opts.size,
+            <span class="hljs-attr">left</span>: (type == <span class="hljs-string">'input'</span>) ? x + padding : x - padding ,
+            <span class="hljs-attr">top</span>: y });
+        <span class="hljs-keyword">return</span> label
+    }
+
+    <span class="hljs-keyword">static</span> make_labels(node) {
+        <span class="hljs-keyword">let</span> output_labels = _.map(node.outputs, (v) =&gt; <span class="hljs-keyword">this</span>.make_label(v, node, <span class="hljs-string">'output'</span>));
+        <span class="hljs-keyword">let</span> input_labels = _.map(node.inputs, (v) =&gt; <span class="hljs-keyword">this</span>.make_label(v, node, <span class="hljs-string">'input'</span>));
+        <span class="hljs-keyword">return</span> output_labels.concat(input_labels)
+    }
+
+    <span class="hljs-keyword">static</span> grouped_objects(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Note, compute elements before concat to allow base node modifications</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> title_text = <span class="hljs-keyword">this</span>.make_title(node);
+        <span class="hljs-keyword">let</span> labels = <span class="hljs-keyword">this</span>.make_labels(node);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.grouped_objects(node).concat([title_text]).concat(labels)
+    }
+}
+
+
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ImageBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">LabelledBox</span> </span>{
+
+    <span class="hljs-keyword">static</span> make_image(node, group, imopts={}) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Makes a fabric Image and adds it to the supplied group when ready</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> half_height = (node.ports_height() + node.header_height)/<span class="hljs-number">2.0</span>;
+        <span class="hljs-keyword">let</span> opts = _.extend( {
+            <span class="hljs-attr">top</span>: node.title_height - half_height,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Depends on whether left/right ports are present</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            left : node.image_left(),
+            <span class="hljs-attr">strokeWidth</span> : node.image_opts.strokeWidth,
+            <span class="hljs-attr">stroke</span> : node.image_opts.stroke,
+            <span class="hljs-attr">originX</span> : <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">selectable</span> : <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">hasBorders</span> : <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">hasControls</span>: <span class="hljs-literal">false</span>,
+        }, imopts)
+
+        fabric.Image.fromURL(node.image_opts.imdata, (image) =&gt;  {
+            node.image = image;
+            image.scaleX = node.image_scaleX();
+            image.scaleY = node.image_scaleY();
+
+            image.width = node.image_opts.xres;
+            image.height = node.image_opts.yres;
+
+            group.add(image);
+            canvas.renderAll();
+        }, opts);
+    }
+
+    <span class="hljs-keyword">static</span> update_image(node, view) {
+        <span class="hljs-keyword">if</span> (node.image) {
+            node.image.setSrc(node.image_opts.imdata,
+                              (img) =&gt; {
+                                  view.lookup(node).dirty = <span class="hljs-literal">true</span>;
+                                  canvas.renderAll() });
+        }
+    }
+
+    <span class="hljs-keyword">static</span> make_nodebox(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>title_height added when title created</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        node.header_height = node.image_opts.height;
+        <span class="hljs-keyword">let</span> group = <span class="hljs-keyword">super</span>.make_nodebox(node);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>The fabric.Image will add itself to the group when ready</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.make_image(node, group);
+        <span class="hljs-keyword">return</span> group
+    }
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NodeBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageBox</span> </span>{
+
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ViewportBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageBox</span> </span>{
+
+    <span class="hljs-keyword">static</span> make_rect_port(node, param) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Return a single centered rectangle port</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> fabric.Rect({
+            <span class="hljs-attr">name</span> :        <span class="hljs-string">'inport-'</span> + _.UUID(),
+            <span class="hljs-attr">param</span> :       param,
+            <span class="hljs-attr">left</span> :        - node.geom.width/<span class="hljs-number">2</span>,
+            <span class="hljs-attr">top</span> :         <span class="hljs-number">0</span>,
+            <span class="hljs-attr">height</span> :      node.geom.width,
+            <span class="hljs-attr">width</span> :       node.geom.port_radius+<span class="hljs-number">10</span>,
+            <span class="hljs-attr">originX</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">originY</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">stroke</span> :      <span class="hljs-string">'black'</span>,
+            <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">1</span>,
+            <span class="hljs-attr">fill</span>:         node.input_style.fill,
+            <span class="hljs-attr">scale</span>:        <span class="hljs-number">0.5</span>})
+    }
+
+    <span class="hljs-keyword">static</span> make_frame(node) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> fabric.Rect({
+            <span class="hljs-attr">name</span> :        <span class="hljs-string">'frame-'</span> + _.UUID(),
+            <span class="hljs-attr">left</span> :        <span class="hljs-number">0</span>,
+            <span class="hljs-attr">top</span> :         <span class="hljs-number">0</span>,
+            <span class="hljs-attr">height</span> :      node.geom.width,
+            <span class="hljs-attr">width</span> :       node.geom.width,
+            <span class="hljs-attr">originX</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">originY</span> :     <span class="hljs-string">'center'</span>,
+            <span class="hljs-attr">stroke</span> :      <span class="hljs-string">'red'</span>,
+            <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">1</span>,
+            <span class="hljs-attr">fill</span> : <span class="hljs-literal">undefined</span>
+        })
+    }
+
+
+    <span class="hljs-keyword">static</span> make_nodebox(node) {
+
+        <span class="hljs-keyword">let</span> center_port = <span class="hljs-keyword">this</span>.make_rect_port(node, <span class="hljs-string">'input'</span>);
+        <span class="hljs-keyword">let</span> group = <span class="hljs-keyword">new</span> fabric.Group([<span class="hljs-keyword">this</span>.make_frame(node), center_port],
+                                    { <span class="hljs-attr">node</span> : node,
+                                      <span class="hljs-attr">name</span> : node.name,
+                                      <span class="hljs-attr">left</span> : node.geom.left,
+                                      <span class="hljs-attr">top</span> :  node.geom.top,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Forcing square aspect ratio</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                      width :  node.geom.width+node.geom.port_radius+<span class="hljs-number">10</span>,
+                                      <span class="hljs-attr">height</span> : node.geom.width+ node.geom.port_radius+<span class="hljs-number">10</span>,
+                                      <span class="hljs-attr">padding</span> : <span class="hljs-number">0</span>,
+                                      <span class="hljs-attr">subTargetCheck</span>: <span class="hljs-literal">true</span>,
+                                    })
+
+        <span class="hljs-keyword">this</span>.make_image(node, group, { <span class="hljs-attr">top</span> : <span class="hljs-number">0</span>,
+                                       <span class="hljs-attr">originY</span> : <span class="hljs-string">'center'</span> });
+        group.hasControls = <span class="hljs-literal">true</span>;
+        group.hasRotatingPoint = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">let</span> disabled_controls = [<span class="hljs-string">'ml'</span>,<span class="hljs-string">'mr'</span>, <span class="hljs-string">'mt'</span>,<span class="hljs-string">'mb'</span>]
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> cntl <span class="hljs-keyword">of</span> disabled_controls) {
+            group.setControlVisible(cntl, <span class="hljs-literal">false</span>);
+        }
+        <span class="hljs-keyword">return</span> group;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

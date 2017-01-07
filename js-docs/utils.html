@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>utils.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="boxes.html">
+                  boxes.js
+                </a>
+              
+                
+                <a class="source" href="commlink.html">
+                  commlink.js
+                </a>
+              
+                
+                <a class="source" href="connector.html">
+                  connector.js
+                </a>
+              
+                
+                <a class="source" href="graph.html">
+                  graph.js
+                </a>
+              
+                
+                <a class="source" href="gui.html">
+                  gui.js
+                </a>
+              
+                
+                <a class="source" href="main.html">
+                  main.js
+                </a>
+              
+                
+                <a class="source" href="nodes.html">
+                  nodes.js
+                </a>
+              
+                
+                <a class="source" href="tests.html">
+                  tests.js
+                </a>
+              
+                
+                <a class="source" href="tools.html">
+                  tools.js
+                </a>
+              
+                
+                <a class="source" href="utils.html">
+                  utils.js
+                </a>
+              
+                
+                <a class="source" href="view.html">
+                  view.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>utils.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Utilities use underscore as a convenient namespace</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+_.mixin({
+
+    <span class="hljs-attr">UUID</span> : <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">b</span>(<span class="hljs-params">a</span>) </span>{
+        <span class="hljs-keyword">return</span> a ? (a ^ <span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">16</span> &gt;&gt; a / <span class="hljs-number">4</span>)
+            .toString(<span class="hljs-number">16</span>) : ([<span class="hljs-number">1e7</span>] + <span class="hljs-number">-1e3</span> + <span class="hljs-number">-4e3</span> + <span class="hljs-number">-8e3</span> + <span class="hljs-number">-1e11</span>)
+            .replace(<span class="hljs-regexp">/[018]/g</span>, b).slice(<span class="hljs-number">0</span>, <span class="hljs-number">8</span>)
+    },
+
+    <span class="hljs-attr">Base64ImageSize</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
+        <span class="hljs-keyword">let</span> img = <span class="hljs-keyword">new</span> Image(); <span class="hljs-comment">// HTML5 image</span>
+        img.src = data;
+        <span class="hljs-keyword">return</span> [img.width, img.height]
+    },
+
+
+    <span class="hljs-attr">blank_pixel</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> (<span class="hljs-string">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA"</span>
+                + <span class="hljs-string">"BCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH"</span>
+                + <span class="hljs-string">"4QECAQgQUglz5wAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEd"</span>
+                + <span class="hljs-string">"JTVBkLmUHAAAADElEQVQI12N49OgRAAVQAqe5fRrCAAAAAElFTkSuQmCC"</span>)
+    },
+
+    <span class="hljs-attr">getURLParameter</span> : <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">name, url</span>) </span>{
+        <span class="hljs-keyword">if</span> (!url) {
+            url = <span class="hljs-built_in">window</span>.location.href;
+        }
+        <span class="hljs-keyword">if</span> (!name) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+        }
+        name = name.replace(<span class="hljs-regexp">/[\[\]]/g</span>, <span class="hljs-string">"\\$&amp;"</span>);
+        <span class="hljs-keyword">let</span> regex = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"[?&amp;]"</span> + name + <span class="hljs-string">"(=([^&amp;#]*)|&amp;|#|$)"</span>);
+        <span class="hljs-keyword">let</span> results = regex.exec(url);
+        <span class="hljs-keyword">if</span> (!results) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">if</span> (!results[<span class="hljs-number">2</span>]) <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">decodeURIComponent</span>(results[<span class="hljs-number">2</span>].replace(<span class="hljs-regexp">/\+/g</span>, <span class="hljs-string">" "</span>));
+    },
+
+    <span class="hljs-attr">demo_graph</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">view, graph</span>) </span>{
+        view.add_node(graph, <span class="hljs-string">'Disk'</span>, <span class="hljs-string">'disk:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]});
+        view.add_node(graph, <span class="hljs-string">'Gaussian'</span>, <span class="hljs-string">'gaussian:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">180</span>,<span class="hljs-number">100</span>]});
+        view.add_node(graph,<span class="hljs-string">'Sub'</span>, <span class="hljs-string">'sub:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">400</span>,<span class="hljs-number">0</span>]});
+        view.add_node(graph, <span class="hljs-string">'Mul'</span>, <span class="hljs-string">'mul:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">700</span>,<span class="hljs-number">100</span>]});
+        view.add_node(graph, <span class="hljs-string">'Spiral'</span>, <span class="hljs-string">'spiral:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">400</span>,<span class="hljs-number">300</span>]});
+
+
+        <span class="hljs-keyword">let</span> disk = graph.find_node(<span class="hljs-string">'disk:0'</span>);
+        <span class="hljs-keyword">let</span> gaussian = graph.find_node(<span class="hljs-string">'gaussian:0'</span>);
+        <span class="hljs-keyword">let</span> spiral = graph.find_node(<span class="hljs-string">'spiral:0'</span>);
+        <span class="hljs-keyword">let</span> sub = graph.find_node(<span class="hljs-string">'sub:0'</span>);
+        <span class="hljs-keyword">let</span> mul = graph.find_node(<span class="hljs-string">'mul:0'</span>);
+
+        graph.add_edge(disk, <span class="hljs-string">''</span>, sub, <span class="hljs-string">'lhs'</span>);
+        graph.add_edge(gaussian, <span class="hljs-string">''</span>, sub, <span class="hljs-string">'rhs'</span>);
+        graph.add_edge(sub, <span class="hljs-string">''</span>, mul, <span class="hljs-string">'lhs'</span>);
+        graph.add_edge(spiral, <span class="hljs-string">''</span>, mul, <span class="hljs-string">'rhs'</span>);
+
+        disk.params[<span class="hljs-string">'aspect_ratio'</span>] = <span class="hljs-number">0.4</span>;
+        disk.params[<span class="hljs-string">'orientation'</span>] = <span class="hljs-number">0.55</span>;
+
+        gaussian.params[<span class="hljs-string">'aspect_ratio'</span>] = <span class="hljs-number">4</span>;
+        gaussian.params[<span class="hljs-string">'orientation'</span>] = <span class="hljs-number">2.31</span>;
+
+        spiral.params[<span class="hljs-string">'scale'</span>] = <span class="hljs-number">1.44</span>;
+
+
+        view.add_node(graph, <span class="hljs-string">'Viewport'</span>, <span class="hljs-string">'viewport:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">900</span>,<span class="hljs-number">100</span>]});
+        <span class="hljs-keyword">let</span> viewport = graph.find_node(<span class="hljs-string">'viewport:0'</span>);
+        graph.add_edge(mul, <span class="hljs-string">''</span>, viewport, <span class="hljs-string">'input'</span>);
+
+
+        view.canvas.clear();
+        view.render(graph);
+    }
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

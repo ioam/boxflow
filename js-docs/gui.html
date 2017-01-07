@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>gui.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="boxes.html">
+                  boxes.js
+                </a>
+              
+                
+                <a class="source" href="commlink.html">
+                  commlink.js
+                </a>
+              
+                
+                <a class="source" href="connector.html">
+                  connector.js
+                </a>
+              
+                
+                <a class="source" href="graph.html">
+                  graph.js
+                </a>
+              
+                
+                <a class="source" href="gui.html">
+                  gui.js
+                </a>
+              
+                
+                <a class="source" href="main.html">
+                  main.js
+                </a>
+              
+                
+                <a class="source" href="nodes.html">
+                  nodes.js
+                </a>
+              
+                
+                <a class="source" href="tests.html">
+                  tests.js
+                </a>
+              
+                
+                <a class="source" href="tools.html">
+                  tools.js
+                </a>
+              
+                
+                <a class="source" href="utils.html">
+                  utils.js
+                </a>
+              
+                
+                <a class="source" href="view.html">
+                  view.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>gui.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
+
+dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Augment dat GUI with ability to remove folders
+<a href="https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui">https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">let</span> folder = <span class="hljs-keyword">this</span>.__folders[name];
+    <span class="hljs-keyword">if</span> (!folder) {
+        <span class="hljs-keyword">return</span>;
+    }
+    folder.close();
+    <span class="hljs-keyword">this</span>.__ul.removeChild(folder.domElement.parentNode);
+    <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.__folders[name];
+    <span class="hljs-keyword">this</span>.onResize();
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GUI</span> </span>{
+    <span class="hljs-keyword">constructor</span>(graph, view) {
+        <span class="hljs-keyword">this</span>.graph = graph;
+        <span class="hljs-keyword">this</span>.view = view;
+
+        <span class="hljs-keyword">this</span>.datgui = <span class="hljs-keyword">new</span> dat.GUI();
+        <span class="hljs-keyword">this</span>.editor = <span class="hljs-literal">undefined</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Parameters</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.type = <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// Set on init()</span>
+        <span class="hljs-keyword">this</span>.node_name = <span class="hljs-literal">undefined</span>;
+
+        <span class="hljs-keyword">this</span>.instantiate = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-keyword">this</span>.view.add_node(<span class="hljs-keyword">this</span>.graph,
+                                                      <span class="hljs-keyword">this</span>.type,
+                                                      <span class="hljs-keyword">this</span>.node_name);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Suggest a new node name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                   <span class="hljs-keyword">this</span>.node_name=graph.new_name(<span class="hljs-keyword">this</span>.type) }
+    }
+
+
+    init() {
+        <span class="hljs-keyword">let</span> types = <span class="hljs-keyword">this</span>.graph.defs.types();
+        <span class="hljs-keyword">this</span>.type = types[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">this</span>.proposed_name = <span class="hljs-keyword">this</span>.graph.new_name(<span class="hljs-keyword">this</span>.type);
+
+        <span class="hljs-keyword">let</span> nodegen = <span class="hljs-keyword">this</span>.datgui.addFolder(<span class="hljs-string">"Create Node"</span>);
+        <span class="hljs-keyword">let</span> type_controller = nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'type'</span>, types).name(<span class="hljs-string">'Node type'</span>);
+
+        type_controller.onChange( <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+            <span class="hljs-keyword">this</span>.proposed_name = <span class="hljs-keyword">this</span>.graph.new_name(<span class="hljs-keyword">this</span>.type);
+        });
+
+        <span class="hljs-keyword">let</span> name_controller = nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'proposed_name'</span>).name(<span class="hljs-string">"Node name:"</span>);
+        name_controller.listen();
+        nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'instantiate'</span>).name(<span class="hljs-string">"Add Node"</span>);
+        nodegen.open();
+    }
+
+    populate(node) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Populate the GUI with the given parameters with optional limits and step</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = node.params;
+        <span class="hljs-keyword">let</span> plims = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'lims'</span>);
+        <span class="hljs-keyword">let</span> pstep = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'step'</span>);
+
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.editor) {
+            <span class="hljs-keyword">let</span> editor = <span class="hljs-keyword">this</span>.datgui.addFolder(<span class="hljs-string">"Parameters"</span>);
+            <span class="hljs-keyword">this</span>.editor = editor;
+        }
+
+        <span class="hljs-keyword">let</span> unlocked = node.unlocked_params(plims);
+        <span class="hljs-keyword">if</span> (unlocked.length==<span class="hljs-number">0</span>) {<span class="hljs-keyword">this</span>.clear_params(); <span class="hljs-keyword">return</span>}
+
+        <span class="hljs-keyword">this</span>.editor.open();
+        <span class="hljs-keyword">this</span>.clear_params(<span class="hljs-literal">false</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> unlocked) {
+            <span class="hljs-keyword">let</span> control = <span class="hljs-keyword">this</span>.editor.add(params, key, ...plims[key]);
+            <span class="hljs-keyword">if</span> (pstep[key]!==<span class="hljs-literal">null</span>) {
+                control.step(pstep[key])
+            }
+        }
+    }
+
+    clear_params(clear_folder=<span class="hljs-literal">true</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.editor) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Clone controllers as array changes in loop</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">let</span> clone = <span class="hljs-keyword">this</span>.editor.__controllers.slice(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Clear existing controllers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> el <span class="hljs-keyword">in</span> clone) {
+                <span class="hljs-keyword">this</span>.editor.remove(clone[el]);
+            }
+            <span class="hljs-keyword">if</span> (clear_folder) {
+                <span class="hljs-keyword">this</span>.datgui.removeFolder(<span class="hljs-string">"Parameters"</span>);
+                <span class="hljs-keyword">this</span>.editor = <span class="hljs-literal">undefined</span>;
+            }
+        }
+    }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
