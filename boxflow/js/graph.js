@@ -156,7 +156,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         return params
     }
 
-    define(type, inputs, outputs, nodetype='Node') {
+    define(type, inputs, outputs, nodetype='ImageNode') {
         // Define the input and output params of a node type
         // as well as the associated nodetype
         this.definitions[type] = {inputs: inputs,
