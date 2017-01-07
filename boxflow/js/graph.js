@@ -156,8 +156,12 @@ class Definitions { //  Associates nodes to the input/output param definitions
         return params
     }
 
-    define(type, inputs, outputs) { // Define the input and output params of a node type
-        this.definitions[type] = {inputs: inputs, outputs : outputs}
+    define(type, inputs, outputs, nodetype='Node') {
+        // Define the input and output params of a node type
+        // as well as the associated nodetype
+        this.definitions[type] = {inputs: inputs,
+                                  outputs : outputs,
+                                  nodetype:nodetype}
     }
 
     input_names(type) {  // Get the input param names for a node
