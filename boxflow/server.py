@@ -96,7 +96,7 @@ def main(js_dir):
                              js_handler,
                              static_handler,
                              assets_handler]).listen(8000)
-    print "Visit {host}:8000/index.html?server={host}".format(host=host)
+    print "Serving at:\n\n{host}:8000/index.html?server={host}\n".format(host=host)
     main_loop.start()
 
 
