@@ -58,8 +58,8 @@ class ConnectorMotionTool {
 
     object_moving(e) {
         if (e.target.node) {
-            // FIXME! (static ref to box type)
-            NodeBox.update_node(this.view,
+            let boxtype = this.graph.defs.boxtype(e.target.node.type);
+            boxtype.update_node(this.view,
                                this.graph, e.target.node,
                                e.target.left, e.target.top)
         }
@@ -67,7 +67,8 @@ class ConnectorMotionTool {
 
     object_scaling(e) {
         if (e.target.node) {
-            NodeBox.update_node(this.view,
+            let boxtype = this.graph.defs.boxtype(e.target.node.type);
+            boxtype.update_node(this.view,
                                 this.graph, e.target.node,
                                 e.target.left, e.target.top)
         }
