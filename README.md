@@ -1,6 +1,6 @@
 # Boxflow documentation
 
-Javascript documentation is generated with [docco](https://jashkenas.github.io/docco/).
+Javascript documentation is generated with [docco](https://jashkenas.github.io/docco/) viewable online [here](https://ioam.github.io/boxflow/).
 
 [main.js](https://ioam.github.io/boxflow/js-docs/main.html) : Toplevel entry point <br>
 
