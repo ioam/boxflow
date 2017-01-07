@@ -1,4 +1,17 @@
 'use strict';
+// ### Introduction
+//
+// In this file, ``Node`` classes are defined, designed to hold state
+// without any code directly related to rendering. For instance, methods
+// might specify the height of a node without offering any way to
+// concretely visualize that height.
+//
+// The ``Node`` types are as follows:
+//
+// * BaseNode: A rectangle with input/output ports.
+// * LabelledNode : Extends BaseNode with a title and label state.
+// * ImageNode: Extends  LabelledNode with an attached image.
+// * Viewport: A special resizable image node without a title or labels.
 
 class BaseNode {
     // A Node has parameters and declares a style and in/out port styles
@@ -31,7 +44,7 @@ class BaseNode {
         this.inputs = inputs;
         this.outputs = outputs;
         this.params = params;
-        // Parameters bound by connectors
+        // 'Locked' parameters bound by connectors
         this.locked_params = _.mapObject(this.params, (k,v) => { return false});
 
         this.port_gap_ratio = port_gap_ratio;
@@ -141,13 +154,8 @@ class ImageNode extends LabelledNode {
                                }
                  }= {}) {
         super(arguments[0]);
-
         this.image_opts = image_opts;
-        // Blank image
-        if (this.image_opts.imdata == undefined) {
-            this.image_opts.imdata = undefined;
-        }
-        // Actual image state
+        // Actual image state. I.e will be set to a fabric Image object.
         this.image = undefined;
     }
 
@@ -160,7 +168,7 @@ class ImageNode extends LabelledNode {
     }
 
     image_left() {
-        // Depends on whether left/right ports are present
+        // Position depends on whether left/right ports are present
         if (this.inputs.length>0 && this.outputs.length==0) {
             return this.geom.port_radius/2.0
         }
@@ -170,19 +178,29 @@ class ImageNode extends LabelledNode {
     }
 }
 
-
-
+// <!-- Remove once mapping system complete -->
 class Node extends ImageNode {
 
 }
 
 
 class Viewport extends ImageNode {
-
+// <!-- FIXME should not be hardcoded, but odd results using geom.width/height -->
     constructor() {
         super(arguments[0]);
-        // FIXME should not be hardcoded, but odd results using geom.width/height
         this.image_opts.width =  100;
         this.image_opts.height = 100;
     }
 }
+
+// Docs Index
+//
+// [main.js](main.html) :  Toplevel entry point. <br>
+// [nodes.js](nodes.html) : Nodes hold semantic and visual state.<br>
+// [graph.js](graph.html) : A Graph holds nodes and edges.<br>
+// [commlink.js](commlink.html) : Commlink links the graph to the server.<br>
+// [utils.js](utils.html) : Simple set of utilities injected into underscore. <br>
+// [view.js](view.html) : The View manages graphical state.. <br>
+// [boxes.js](boxes.html) : Boxes are the visual representation of nodes. <br>
+// [tools.js](tools.html) : Tools respond to interactive events. <br>
+// [connector.js](connector.html) : The connection tool has its own file. <br>
