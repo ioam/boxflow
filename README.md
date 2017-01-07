@@ -71,7 +71,7 @@ This project is written in ES6 using Chrome (with these experimental language fe
 - Update the contents of the es5 folder:
 
   ```
-  babel ./js/ --out-dir ./es5/
+  babel ./boxflow/js/ --out-dir ./boxflow/es5/
   ```
 
 ## About the code
