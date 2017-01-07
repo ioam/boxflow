@@ -144,6 +144,21 @@ class Definitions { //  Associates nodes to the input/output param definitions
     }
 
     param(name, value=true, lims=[], step=null) { // A parameter definition
+        // name:   The name of the parameter.
+        // value:  The default parameter values.
+        // lims:   Limits or state i.e one of...
+        //   + []         -  Mo limits specified.
+        //   + [min, max] -  Minimum/maximum limits.
+        //   + [min]      -  Minimum only.
+        //   + [['a','b']] - Options
+        //
+        //   In addition to these options (adapted from datgui lims) the states are:
+        //
+        //   + 'untyped-port' - Port without GUI parameters.
+        //
+        //   TODO: Support [undefined, max] for maximum limit only.
+        //
+        // step:  The step size for numeric quantities
         return {name: name, value : value, lims:lims, step: step}
     }
 
