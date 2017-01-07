@@ -170,10 +170,10 @@ class ImageNode extends LabelledNode {
     }
 }
 
-// <!-- Remove once mapping system complete -->
-class Node extends ImageNode {
+// // <!-- Remove once mapping system complete -->
+// class Node extends ImageNode {
 
-}
+// }
 
 
 class Viewport extends ImageNode {

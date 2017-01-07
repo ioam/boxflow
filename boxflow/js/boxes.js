@@ -203,9 +203,9 @@ class ImageBox extends LabelledBox {
 }
 
 
-class NodeBox extends ImageBox {
+// class NodeBox extends ImageBox {
 
-}
+// }
 
 
 class ViewportBox extends ImageBox {
