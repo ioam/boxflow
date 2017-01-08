@@ -39,6 +39,17 @@ _.mixin({
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
 
+    invert : function (obj) {
+        var new_obj = {};
+
+        for (var prop in obj) {
+            if(obj.hasOwnProperty(prop)) {
+                new_obj[obj[prop]] = prop;
+            }
+        }
+        return new_obj
+    },
+
     demo_graph : function(view, graph) {
 
         view.add_node(graph, 'Unit', 'unit:0', { pos: [0,0]});
