@@ -108,7 +108,7 @@ class LabelledBox extends BaseBox {
             left: node.geom.width / 2.0,
             top: 0 });
 
-        // Add 10% padding
+        // Add padding to title.
         title.top = title.height * node.title_opts.top_padding_ratio;
 
         // Scale to fit if necessary
@@ -205,11 +205,6 @@ class ImageBox extends LabelledBox {
         return group
     }
 }
-
-
-// class NodeBox extends ImageBox {
-
-// }
 
 
 class ViewportBox extends ImageBox {
