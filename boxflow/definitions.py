@@ -25,25 +25,29 @@ class ParamDefinitions(object):
             return None
 
     @classmethod
-    def supported(cls, p):
-        supported_types = (param.ClassSelector, param.Number,
-                           param.Integer, param.String, param.Boolean)
-        if not isinstance(p, supported_types):
-            return False
-        elif isinstance(p, param.ClassSelector):
-            return issubclass(p.class_, imagen.PatternGenerator)
+    def parameter_mode(cls, name, p, obj):
+        """
+        Return the parameter mode string and None if parameter unsupported.
+        """
+        supported_types = (param.Number, param.Integer, param.String, param.Boolean)
 
-        return True
+        untyped_ports = getattr(obj, 'untyped_ports', [])
+        no_ports = getattr(obj, 'no_ports', [])
+        if name in untyped_ports:
+            return 'untyped-port'
+        elif isinstance(p, supported_types):
+            return 'no-port' if name in no_ports else 'normal'
+        return None
 
 
     @classmethod
-    def param_definition(cls, name, p):
+    def param_definition(cls, name, p, obj):
         """
         Returns the appropriate JSON for a parameter
         """
-        if not cls.supported(p): return None
+        mode = cls.parameter_mode(name, p, obj)
+        if mode is None : return None
         value = str(p.default) if isinstance(p, param.ClassSelector) else p.default
-        mode = 'untyped-port' if isinstance(p, param.ClassSelector) else 'normal'
         return {'name': name,
                 'value': value,
                 'mode': mode,
@@ -71,7 +75,7 @@ class ParamDefinitions(object):
             nodetype = getattr(obj, 'nodetype', 'ImageNode')
             pairs = [(k,v) for k,v in obj.params().items()
                      if not cls.excluded(k,v, excluded, min_precedence) ]
-            inputs = [cls.param_definition(name,p) for name,p in sorted(pairs)]
+            inputs = [cls.param_definition(name,p, obj) for name,p in sorted(pairs)]
             specs[cls_name] = {'inputs': [el for el in inputs if el],
                                'outputs':[{'name':'', 'lims':[], 'mode':'untyped-port'}],
                                'nodetype': nodetype }

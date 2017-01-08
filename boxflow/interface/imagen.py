@@ -23,6 +23,7 @@ class Viewport(PatternGenerator):
     node.
     """
 
+    untyped_ports = ['input']
     nodetype = 'Viewport'
 
     input = param.ClassSelector(class_=PatternGenerator,
@@ -44,6 +45,8 @@ class Viewport(PatternGenerator):
 
 
 class BinaryOp(PatternGenerator):
+
+    untyped_ports = ['lhs','rhs']
 
     lhs = param.ClassSelector(class_=PatternGenerator,
                               default=imagen.Constant(), precedence=1)

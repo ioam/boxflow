@@ -7,6 +7,7 @@ import param
 
 class Number(param.Parameterized):
 
+    no_ports = ['number']
     nodetype = 'LabelledNode'
 
     number = param.Number(default=0)
