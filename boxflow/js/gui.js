@@ -22,21 +22,39 @@ class GUI {
         this.datgui = new dat.GUI();
         this.editor = undefined;
 
-        // Parameters
-        this.type = undefined; // Set on init()
-        this.instantiate = () => { this.view.add_node(this.graph,
-                                                      this.type,
-                                                      graph.new_name(this.type))
-                                 }
+        this.group = 'uninitialized';       // Group - can't be undefined for datgui
+        this.node_type = 'uninitialized';   // Can't be undefined for datgui
+
+        // TODO: Pass group through to add_node.
+        this.instantiate = () => {
+            this.view.add_node(this.graph,
+                               this.node_type,
+                               graph.new_name(this.node_type))
+        }
     }
 
     init() {
-        let types = this.graph.defs.types();
-        this.type = types[0];
+        let groups = this.graph.defs.groups();
+        this.group = groups[0]; // Pick the first group
+
         let nodegen = this.datgui.addFolder("Create Node");
-        let type_controller = nodegen.add(this, 'type', types).name('Node type');
+        let group_controller = nodegen.add(this, 'group', groups).name('Group');
+        group_controller.onChange(set_types);
+
+        let type_controller =  nodegen.add(this, 'node_type').name('Node Type');
+        type_controller.listen(); // Update when group changed
+
+        let self = this; // Needed to have access inside following callback
+        function set_types(group) {
+            let node_types = self.graph.defs.types(group);
+            self.node_type = node_types[0];
+            type_controller = type_controller.options(node_types).name('Node Type');
+        }
+        set_types(groups[0]);  // Initialize dropdown
+
         nodegen.add(this, 'instantiate').name("Add Node");
         nodegen.open();
+
     }
 
     populate(node) {
