@@ -18,15 +18,16 @@ from command import Command
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 
-    classes = (interface.param_classes()
-               + interface.imagen_classes()
-               + interface.holoviews_classes() )
+    # TODO: Support OrderedDict
+    groups = {'param':interface.param_classes(),
+              'imagen': interface.imagen_classes(),
+              'holoviews': interface.holoviews_classes()}
 
     def open(self):
         print('New websocket connection')
 
         excluded = ['enforce_minimal_thickness', 'size']
-        self.command = Command(self, self.classes,
+        self.command = Command(self, self.groups,
                                excluded=excluded,
                                display_handlers = [interface.param_display,
                                                    interface.imagen_display])

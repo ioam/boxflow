@@ -7,8 +7,8 @@ from definitions import ParamDefinitions
 
 class Command(object):
 
-    def __init__(self, handler, classes, excluded, display_handlers):
-        self.classes = classes
+    def __init__(self, handler, groups, excluded, display_handlers):
+        self.groups = groups
         self.handler = handler
         self.excluded = excluded
         self.display_handlers = display_handlers
@@ -44,7 +44,8 @@ class Command(object):
     # Receive commands
 
     def add_node(self, data):
-        cls_map = {cls.name:cls for cls in self.classes}
+        # TODO: Assuming class names unique between groups
+        cls_map = {cls.name:cls for group in self.groups.values() for cls in group}
         cls = cls_map.get(data['type'], None)
         if cls is None: return
 
@@ -78,5 +79,5 @@ class Command(object):
     # Push commands
 
     def push_definitions(self):
-        definitions = ParamDefinitions.generate(self.classes, self.excluded)
+        definitions = ParamDefinitions.generate(self.groups, self.excluded)
         self.send('definitions', definitions)

@@ -63,20 +63,22 @@ class ParamDefinitions(object):
         return (v.precedence<=min_precedence)
 
     @classmethod
-    def generate(cls, objs, excluded, min_precedence=0):
+    def generate(cls, groups, excluded, min_precedence=0):
         """
         Generate JSON parameter definitions for the given parameterized
         objects.
         """
         # TODO: lims: 'no-port' for param but no port.
         specs = {}
-        for obj in objs:
-            cls_name = obj.__name__
-            nodetype = getattr(obj, 'nodetype', 'ImageNode')
-            pairs = [(k,v) for k,v in obj.params().items()
-                     if not cls.excluded(k,v, excluded, min_precedence) ]
-            inputs = [cls.param_definition(name,p, obj) for name,p in sorted(pairs)]
-            specs[cls_name] = {'inputs': [el for el in inputs if el],
-                               'outputs':[{'name':'', 'lims':[], 'mode':'untyped-port'}],
-                               'nodetype': nodetype }
+        for group in groups:
+            for obj in groups[group]:
+                cls_name = obj.__name__
+                nodetype = getattr(obj, 'nodetype', 'ImageNode')
+                pairs = [(k,v) for k,v in obj.params().items()
+                         if not cls.excluded(k,v, excluded, min_precedence) ]
+                inputs = [cls.param_definition(name,p, obj) for name,p in sorted(pairs)]
+                specs[cls_name] = {'inputs': [el for el in inputs if el],
+                                   'outputs':[{'name':'', 'lims':[], 'mode':'untyped-port'}],
+                                   'nodetype': nodetype,
+                                   'group': group}
         return specs
