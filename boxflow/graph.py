@@ -18,7 +18,8 @@ class Graph(object):
         # Set the dest parameter to the value of the source parameter
         src_instance = self.find_instance(src)
         dest_instance = self.find_instance(dest)
-        dest_instance.set_param(**{input: src_instance})
+        val = src_instance.propagate() if hasattr(src_instance, 'propagate') else src_instance
+        dest_instance.set_param(**{input: val})
 
 
     def remove_link(self, src, output, dest, input):
@@ -64,5 +65,6 @@ class Graph(object):
         outlinks = self.outlinks(instance)
         for (s,o,d,i) in outlinks:
             # Currently assuming single output 'self'
-            updated_names += self.update_params(d, {i:instance})
+            val = instance.propagate() if hasattr(instance, 'propagate') else instance
+            updated_names += self.update_params(d, {i:val})
         return updated_names
