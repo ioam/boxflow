@@ -24,30 +24,17 @@ class GUI {
 
         // Parameters
         this.type = undefined; // Set on init()
-        this.node_name = undefined;
-
         this.instantiate = () => { this.view.add_node(this.graph,
                                                       this.type,
-                                                      this.node_name);
-                                   // Suggest a new node name
-                                   this.node_name=graph.new_name(this.type) }
+                                                      graph.new_name(this.type))
+                                 }
     }
-
 
     init() {
         let types = this.graph.defs.types();
         this.type = types[0];
-        this.proposed_name = this.graph.new_name(this.type);
-
         let nodegen = this.datgui.addFolder("Create Node");
         let type_controller = nodegen.add(this, 'type', types).name('Node type');
-
-        type_controller.onChange( (value) => {
-            this.proposed_name = this.graph.new_name(this.type);
-        });
-
-        let name_controller = nodegen.add(this, 'proposed_name').name("Node name:");
-        name_controller.listen();
         nodegen.add(this, 'instantiate').name("Add Node");
         nodegen.open();
     }
