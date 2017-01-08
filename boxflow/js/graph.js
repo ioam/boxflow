@@ -187,9 +187,15 @@ class Definitions { //  Associates nodes to the input/output param definitions
         return unique.sort()
     }
 
-    types() {  // Returns an array of available node types
-        let keys = Object.keys(this.definitions);
-        return keys.sort()
+    types(group) {  // Returns an array of node types in given group
+        let types = [];
+        let all_types = Object.keys(this.definitions);
+        for (let type of all_types) {
+            if (this.definitions[type].group === group) {
+                types.push(type);
+            }
+        }
+        return types.sort()
     }
 
     input_names(type) {  // Get the input param names for a node
