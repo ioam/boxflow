@@ -25,8 +25,25 @@ class String(ParamBox):
     no_ports = ['string']
     string = param.String(default='')
 
+
+
+class Unit(ParamBox):
+    no_ports = ['number']
+    number = param.Number(default=0, bounds=(0,1))
+
+
+class Multiply(param.Parameterized):
+    nodetype = 'LabelledNode'
+
+    input = param.Number(default=0)
+
+    multiplier = param.Number(default=1)
+
+    def propagate(self):
+        return self.input * self.multiplier
+
 def param_classes():
-    return [Number, Integer, String]
+    return [Number, Integer, String, Unit, Multiply]
 
 def param_display(instance):
     return {}
