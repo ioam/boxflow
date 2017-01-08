@@ -4,24 +4,25 @@
 from __future__ import absolute_import
 import param
 
-
-class Number(param.Parameterized):
-
-    no_ports = ['number']
+class ParamBox(param.Parameterized):
+    no_ports=[]
     nodetype = 'LabelledNode'
 
+    def propagate(self):
+        return getattr(self, self.no_ports[0])
+
+class Number(ParamBox):
+    no_ports = ['number']
     number = param.Number(default=0)
 
-class Integer(param.Parameterized):
 
+class Integer(ParamBox):
     no_ports = ['integer']
-    nodetype = 'LabelledNode'
     integer = param.Integer(default=0)
 
-class String(param.Parameterized):
 
+class String(ParamBox):
     no_ports = ['string']
-    nodetype = 'LabelledNode'
     string = param.String(default='')
 
 def param_classes():
