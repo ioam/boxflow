@@ -26,7 +26,10 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         print('New websocket connection')
 
         excluded = ['enforce_minimal_thickness', 'size']
-        self.command = Command(self, self.classes, excluded=excluded)
+        self.command = Command(self, self.classes,
+                               excluded=excluded,
+                               display_handlers = [interface.param_display,
+                                                   interface.imagen_display])
         self.command.push_definitions()
 
     def on_message(self, message):

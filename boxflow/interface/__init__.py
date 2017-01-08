@@ -7,13 +7,13 @@ def unsupported():
 
 try:
     import param
-    from .param import param_classes
+    from .param import param_classes, param_display
 except:
     param_classes = unsupported
 
 try:
     import imagen
-    from .imagen import imagen_classes
+    from .imagen import imagen_classes, imagen_display
 except:
     imagen_classes = unsupported
 
@@ -26,4 +26,7 @@ except:
 
 __all__ = ['imagen_classes',
            'param_classes',
-           'holoviews_classes']
+           'holoviews_classes',
+
+           'param_display',
+           'imagen_display']

@@ -1,8 +1,4 @@
-import base64
 import json
-
-from PIL import Image
-from StringIO import StringIO
 
 from graph import Graph
 from definitions import ParamDefinitions
@@ -11,24 +7,17 @@ from definitions import ParamDefinitions
 
 class Command(object):
 
-    def __init__(self, handler, classes, excluded ):
+    def __init__(self, handler, classes, excluded, display_handlers):
         self.classes = classes
         self.handler = handler
         self.excluded = excluded
+        self.display_handlers = display_handlers
 
         self.graph = Graph()
 
     def send(self, command, data):
         self.handler.write_message(
             json.dumps({'command':command, 'data':data}))
-
-
-    def image_to_base64(self, arr):
-        im = Image.fromarray((arr * 255))
-        buff = StringIO()
-        im.convert('RGBA').save(buff, format='png')
-        buff.seek(0)
-        return 'data:image/png;base64,' + base64.b64encode(buff.read())
 
     def dispatch(self, json):
         if json['command'] == 'add_node':
@@ -43,6 +32,14 @@ class Command(object):
         if json['command'] == 'update_params':
             self.update_params(json['data'])
 
+    # Utility methods
+
+    def display_data(self, instance): # Grab base64 data if applicable.
+        for handler in self.display_handlers:
+            data = handler(instance)
+            if 'b64' in data:
+                return data
+        return {}
 
     # Receive commands
 
@@ -54,8 +51,7 @@ class Command(object):
         instance = cls(name=data['name'], **data['params'])
         self.graph.add_instance(instance)
         self.send('image_update',
-                  {'name': data['name'],
-                   'b64':self.image_to_base64(instance())})
+                  dict(self.display_data(instance), name=data['name']))
 
     def remove_node(self, data):
         self.graph.remove_instance(data['name'])
@@ -78,9 +74,7 @@ class Command(object):
             instance = self.graph.find_instance(name)
             if instance:
                 self.send('image_update',
-                          {'name': name,
-                           'b64': self.image_to_base64(instance())})
-
+                          dict(self.display_data(instance), name=name))
     # Push commands
 
     def push_definitions(self):

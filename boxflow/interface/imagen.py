@@ -2,6 +2,11 @@
 #
 #
 from __future__ import absolute_import
+
+import base64
+from PIL import Image
+from StringIO import StringIO
+
 import imagen
 from imagen import PatternGenerator
 import param
@@ -85,3 +90,23 @@ vanilla_classes = [ imagen.Disk,
 
 def imagen_classes():
     return vanilla_classes + binary_ops + support_classes
+
+
+def image_to_base64(arr):
+    im = Image.fromarray((arr * 255))
+    buff = StringIO()
+    im.convert('RGBA').save(buff, format='png')
+    buff.seek(0)
+    return 'data:image/png;base64,' + base64.b64encode(buff.read())
+
+
+def imagen_display(instance):
+    """
+    Similar to a display hook. Returns a dictionary of extra content if
+    applicable.
+    """
+    if isinstance(instance, PatternGenerator):
+        return {'b64':image_to_base64(instance())}
+    else:
+        return {}
+
