@@ -40,12 +40,19 @@ _.mixin({
     },
 
     demo_graph : function(view, graph) {
-        view.add_node(graph, 'Disk', 'disk:0', { pos: [0,0]});
-        view.add_node(graph, 'Gaussian', 'gaussian:0', { pos: [180,100]});
-        view.add_node(graph,'Sub', 'sub:0', { pos: [400,0]});
-        view.add_node(graph, 'Mul', 'mul:0', { pos: [700,100]});
-        view.add_node(graph, 'Spiral', 'spiral:0', { pos: [400,300]});
 
+        view.add_node(graph, 'Unit', 'unit:0', { pos: [0,0]});
+        view.add_node(graph, 'Multiply', 'multiply:0', { pos: [150,350]});
+
+        view.add_node(graph, 'Disk', 'disk:0', { pos: [200,0]});
+        view.add_node(graph, 'Gaussian', 'gaussian:0', { pos: [380,100]});
+        view.add_node(graph,'Sub', 'sub:0', { pos: [600,0]});
+        view.add_node(graph, 'Mul', 'mul:0', { pos: [900,100]});
+        view.add_node(graph, 'Spiral', 'spiral:0', { pos: [600,300]});
+
+
+        let unit = graph.find_node('unit:0');
+        let multiply = graph.find_node('multiply:0');
 
         let disk = graph.find_node('disk:0');
         let gaussian = graph.find_node('gaussian:0');
@@ -53,10 +60,16 @@ _.mixin({
         let sub = graph.find_node('sub:0');
         let mul = graph.find_node('mul:0');
 
+        graph.add_edge(unit, '', disk, 'x');
+        graph.add_edge(unit, '', multiply, 'input');
+        graph.add_edge(multiply, '', spiral, 'orientation');
+
         graph.add_edge(disk, '', sub, 'lhs');
         graph.add_edge(gaussian, '', sub, 'rhs');
         graph.add_edge(sub, '', mul, 'lhs');
         graph.add_edge(spiral, '', mul, 'rhs');
+
+        multiply.params['multiplier'] = 3.14;
 
         disk.params['aspect_ratio'] = 0.4;
         disk.params['orientation'] = 0.55;
@@ -67,7 +80,7 @@ _.mixin({
         spiral.params['scale'] = 1.44;
 
 
-        view.add_node(graph, 'Viewport', 'viewport:0', { pos: [900,100]});
+        view.add_node(graph, 'Viewport', 'viewport:0', { pos: [1100,100]});
         let viewport = graph.find_node('viewport:0');
         graph.add_edge(mul, '', viewport, 'input');
 
