@@ -12,8 +12,20 @@ class Number(param.Parameterized):
 
     number = param.Number(default=0)
 
+class Integer(param.Parameterized):
+
+    no_ports = ['integer']
+    nodetype = 'LabelledNode'
+    integer = param.Integer(default=0)
+
+class String(param.Parameterized):
+
+    no_ports = ['string']
+    nodetype = 'LabelledNode'
+    string = param.String(default='')
+
 def param_classes():
-    return [Number]
+    return [Number, Integer, String]
 
 def param_display(instance):
     return {}
