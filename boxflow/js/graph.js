@@ -173,12 +173,23 @@ class Definitions { //  Associates nodes to the input/output param definitions
         return params
     }
 
-    define(type, inputs, outputs, nodetype='ImageNode') {
+    define(type, inputs, outputs, nodetype='ImageNode', group='Default') {
         // Define the input and output params of a node type
         // as well as the associated nodetype
         this.definitions[type] = {inputs: inputs,
                                   outputs : outputs,
-                                  nodetype:nodetype}
+                                  nodetype:nodetype,
+                                  group: group }
+    }
+
+    groups() { // Set of groups (currently alphabetically sorted)
+        let unique = _.uniq(_.pluck(defs.definitions, 'group'))
+        return unique.sort()
+    }
+
+    types() {  // Returns an array of available node types
+        let keys = Object.keys(this.definitions);
+        return keys.sort()
     }
 
     input_names(type) {  // Get the input param names for a node
@@ -189,9 +200,8 @@ class Definitions { //  Associates nodes to the input/output param definitions
         return _.pluck(this.definitions[type].outputs, 'name')
     }
 
-    types() {  // Returns an array of available node types
-        let keys = Object.keys(this.definitions);
-        return keys.sort()
+    group(type) { // Group name of a node
+        return this.definitions[type].group
     }
 
     nodetype(type) { // Return the appropriate node class for a given type name
