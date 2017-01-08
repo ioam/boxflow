@@ -18,7 +18,7 @@ class ParamDefinitions(object):
     @classmethod
     def param_step(cls, p):
         if isinstance(p, param.Integer):
-            step = 1
+            return 1
         elif isinstance(p, param.Number):
             return 0.01
         else:
