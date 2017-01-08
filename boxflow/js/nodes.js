@@ -60,7 +60,12 @@ class BaseNode {
             port_radius : 7,
             rx: smooth, ry: smooth};
 
-        this.header_height = 0;  // Unscaled height of header
+        this.header_heights = {};
+    }
+
+    header_height() { // Sums the entries in header_heights
+        return _.reduce(Object.values(this.header_heights),
+                        (a, b) => { return a+b }, 0);
     }
 
     lock_param(param, state=true) {
@@ -94,7 +99,7 @@ class BaseNode {
 
     port_position(port, port_type='input') {
         let width = this.geom.width;
-        let ypos =   ( this.header_height + this.port_spacing()/2.0
+        let ypos =   ( this.header_height() + this.port_spacing()/2.0
                        + this.row(port, port_type) * this.port_spacing());
         return [port_type == 'input' ? 0  : width, ypos];
     }

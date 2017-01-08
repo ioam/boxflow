@@ -65,7 +65,7 @@ class BaseBox {
         let flags =  { selectable: true,
                        hasControls: false,
                        hasBorders : false }
-        let height = node.ports_height() + node.header_height;
+        let height = node.ports_height() + node.header_height();
         return new fabric.Rect(_.extend({}, node.style, node.geom, flags,
                                         { height: height,
                                           left: 0, top: 0 }));
@@ -117,9 +117,8 @@ class LabelledBox extends BaseBox {
             title.scaleX = allowed_title_width/title.width;
             title.scaleY = title.scaleX;
         }
-        // Allocate space in the node neader
-        node.title_height = title.top + (title.height * title.scaleY);
-        node.header_height += node.title_height;
+        // Allocate space in the node neader for the title
+        node.header_heights['title'] = title.top + (title.height * title.scaleY);
         return title
     }
 
@@ -161,9 +160,9 @@ class ImageBox extends LabelledBox {
 
     static make_image(node, group, imopts={}) {
         // Makes a fabric Image and adds it to the supplied group when ready
-        let half_height = (node.ports_height() + node.header_height)/2.0;
+        let half_height = (node.ports_height() + node.header_height())/2.0;
         let opts = _.extend( {
-            top: node.title_height - half_height,
+            top: node.header_heights['title'] - half_height,
             // Depends on whether left/right ports are present
             left : node.image_left(),
             strokeWidth : node.image_opts.strokeWidth,
@@ -198,7 +197,7 @@ class ImageBox extends LabelledBox {
 
     static make_nodebox(node) {
         // title_height added when title created
-        node.header_height = node.image_opts.height;
+        node.header_heights['image'] = node.image_opts.height;
         let group = super.make_nodebox(node);
         // The fabric.Image will add itself to the group when ready
         this.make_image(node, group);
