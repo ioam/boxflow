@@ -27,10 +27,15 @@ class BaseBox {
             .concat(this.make_ports(node, 'input'))
     }
 
+    static port_filter(node, type) { // Filter by type and mode (ensure visible)
+        let params = type == 'input' ? node.inputs : node.outputs;
+        return _.filter(params, (p) => {return node.param_modes[p] != 'no-port' });
+    }
+
 
     static make_ports(node, type) {
         // Make an array of either the 'input' or 'output' ports
-        let params = type == 'input' ? node.inputs : node.outputs;
+        let params = this.port_filter(node, type);
         let offset = type == 'input' ? node.outputs.length : 0;
         return params.map( (param, i) => this.make_port(node, param, type, i+offset));
     }

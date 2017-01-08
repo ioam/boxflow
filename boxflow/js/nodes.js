@@ -23,6 +23,7 @@ class BaseNode {
                   inputs=[],                     // Input/output parameter names
                   outputs=[],
                   params = {},                    // Parameter state
+                  param_modes = {},
                   pos = [0,0],                    // Geometry
                   width = 100,
                   smooth = 10,

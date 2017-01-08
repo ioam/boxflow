@@ -157,6 +157,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         //
         //   + 'normal'       - Port with visual port and GUI parameter.
         //   + 'untyped-port' - Port without GUI parameters
+        //   + 'no-port'      - GUI parameter but no visual port.
         //
         //   TODO: Support [undefined, max] for maximum limit only.
         return {name: name, value : value, lims:lims, mode: mode, step: step}

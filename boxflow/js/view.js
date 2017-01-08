@@ -87,11 +87,14 @@ class View {
     }
 
     add_node(graph, type, name, options={}) {
-        let opts = {name: name,
-                    type : type,
-                    params : graph.defs.default_params(type),
-                    inputs : graph.defs.input_names(type),
-                    outputs: graph.defs.output_names(type)}
+        let opts = {
+            name: name,
+            type : type,
+            params : graph.defs.default_params(type),
+            inputs : graph.defs.input_names(type),
+            outputs: graph.defs.output_names(type),
+            param_modes: graph.defs.default_params(type, 'mode')
+        }
 
         let nodetype = graph.defs.nodetype(type);
         graph.add_node( new nodetype(_.extend(opts, options)));
