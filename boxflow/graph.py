@@ -27,7 +27,17 @@ class Graph(object):
         Predicate to see if the proposed connection is valid (i.e
         accepted by param).
         """
-        return True
+        src = self.find_instance(src)
+        dest = self.find_instance(dest)
+
+        original_value = getattr(dest, input)
+        new_value = src.propagate() if hasattr(src, 'propagate') else src
+        try:
+            dest.set_param(**{input: new_value})
+            dest.set_param(**{input: original_value})
+            return True
+        except:
+            return False
 
 
     def remove_link(self, src, output, dest, input):
