@@ -22,6 +22,14 @@ class Graph(object):
         dest_instance.set_param(**{input: val})
 
 
+    def allowed_link(self, src, output, dest, input):
+        """
+        Predicate to see if the proposed connection is valid (i.e
+        accepted by param).
+        """
+        return True
+
+
     def remove_link(self, src, output, dest, input):
         self.links.remove((src, output, dest, input))
         instance = self.find_instance(dest)

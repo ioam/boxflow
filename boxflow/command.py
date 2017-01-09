@@ -58,9 +58,13 @@ class Command(object):
         self.graph.remove_instance(data['name'])
 
     def add_edge(self, data):
-        self.graph.add_link(data['src'], data['output'],
-                            data['dest'], data['input'])
-        self.update_params({'name':data['dest'], 'params':{}})
+        (s,o,d,i) =(data['src'], data['output'], data['dest'], data['input'])
+
+        if self.graph.allowed_link(s,o,d,i):
+            self.graph.add_link(s,o,d,i)
+            self.update_params({'name':d, 'params':{}}) # Update destination
+        else:
+            pass # Remove link from client-side.
 
     def remove_edge(self, data):
         self.graph.remove_link(data['src'], data['output'],
