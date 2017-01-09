@@ -64,7 +64,9 @@ class Command(object):
             self.graph.add_link(s,o,d,i)
             self.update_params({'name':d, 'params':{}}) # Update destination
         else:
-            pass # Remove link from client-side.
+            # Remove link from client-side.
+            print('Warning: Proposed link is invalid')
+            self.send('invalid_edge', data['name'])
 
     def remove_edge(self, data):
         self.graph.remove_link(data['src'], data['output'],
