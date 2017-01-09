@@ -82,16 +82,18 @@ class Graph {
         return matches
     }
 
-    remove(name) { // Remove edge or node by name. If a node is removed, also remove edges
+    remove(name, comm=true) {
+        // Remove edge or node by name. If a node is removed, also remove edges
+        // If comm is false, do not update Python over commlink (used for invalid edges).
         if ( name.startsWith('edge-') ) {
             let edge = this.find_edge(name);
             edge.dest.lock_param(edge.input, false);
-            this.commlink && this.commlink.remove_edge(edge);
+            this.commlink && comm && this.commlink.remove_edge(edge);
             this.edges = _.difference(this.edges, [edge]);
         }
         else {
             let node = _.findWhere(this.nodes, {'name':name});
-            this.commlink && this.commlink.remove_node(node);
+            this.commlink && comm && this.commlink.remove_node(node);
             this.nodes = _.difference(this.nodes, [node]);
 
             let removed_edges = this.node_edges(node, 'input')
