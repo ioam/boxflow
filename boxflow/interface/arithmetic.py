@@ -14,14 +14,14 @@ class Percentage(param.Parameterized):
         return self.percent
 
 
-class Ratio(param.Parameterized):
-    no_ports = ['ratio']
+class Magnitude(param.Parameterized):
+    no_ports = ['magnitude']
     nodetype = 'LabelledNode'
 
-    ratio = param.Number(default=0.5, bounds=(0,1))
+    magnitude = param.Number(default=0.5, bounds=(0,1))
 
     def propagate(self):
-        return self.ratio
+        return self.magnitude
 
 
 class Multiply(param.Parameterized):
@@ -70,7 +70,7 @@ class Subtract(param.Parameterized):
 
 
 def arithmetic_classes():
-    return [Percentage, Ratio, Multiply, Divide, Add, Subtract]
+    return [Percentage, Magnitude, Multiply, Divide, Add, Subtract]
 
 def arithmetic_display(instance):
     return {}
