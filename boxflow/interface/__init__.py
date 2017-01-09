@@ -5,11 +5,9 @@ from __future__ import absolute_import
 def unsupported():
     return []
 
-try:
-    import param
-    from .param import param_classes, param_display
-except:
-    param_classes = unsupported
+
+from .param import param_classes, param_display # Param is a core dependency
+from .arithmetic import  arithmetic_classes, arithmetic_display
 
 try:
     import imagen

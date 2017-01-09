@@ -21,7 +21,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     # TODO: Support OrderedDict
     groups = {'param':interface.param_classes(),
               'imagen': interface.imagen_classes(),
-              'holoviews': interface.holoviews_classes()}
+              'holoviews': interface.holoviews_classes(),
+              'arithmetic': interface.arithmetic_classes() }
 
     def open(self):
         print('New websocket connection')
@@ -30,7 +31,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.command = Command(self, self.groups,
                                excluded=excluded,
                                display_handlers = [interface.param_display,
-                                                   interface.imagen_display])
+                                                   interface.imagen_display,
+                                                   interface.arithmetic_display])
         self.command.push_definitions()
 
     def on_message(self, message):
