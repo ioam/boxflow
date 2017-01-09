@@ -74,7 +74,8 @@ class CommLink {
 
     add_edge(edge) {
         this.send_message('add_edge',
-                          {'src':edge.src.name,
+                          {'name': edge.name,
+                           'src':edge.src.name,
                            'output': edge.output,
                            'dest' : edge.dest.name,
                            'input': edge.input});
