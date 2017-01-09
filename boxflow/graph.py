@@ -5,7 +5,7 @@ class Graph(object):
 
     def __init__(self):
         self.instances = []
-        self.links = []
+        self.links = set()
 
     def add_instance(self, instance):
         self.instances.append(instance)
@@ -14,7 +14,7 @@ class Graph(object):
         self.instances.remove(self.find_instance(name))
 
     def add_link(self, src, output, dest, input):
-        self.links.append((src, output, dest, input))
+        self.links.add((src, output, dest, input))
         # Set the dest parameter to the value of the source parameter
         src_instance = self.find_instance(src)
         dest_instance = self.find_instance(dest)
