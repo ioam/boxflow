@@ -37,7 +37,7 @@ class CommLink {
             this.gui.init();
             _.demo_graph(this.view, this.graph);
         }
-        if (json.command == 'image_update') {
+        else if (json.command == 'image_update') {
             let node = this.graph.find_node(json['data']['name']);
             if (!node) {console.log('Warning: node not found'); return }
             let boxtype = this.graph.defs.boxtype(node.type);
@@ -45,6 +45,10 @@ class CommLink {
                 node.image_opts.imdata = json['data']['b64'];
                 boxtype.update_image(node, this.view, true);
             }
+        }
+        else if (json.command == 'invalid_edge') {
+            console.log('Invalid edge: ' + json['data']);
+            this.view.remove(this.graph, json['data'], false); // Avoid looping back
         }
     }
 
