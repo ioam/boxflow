@@ -45,10 +45,23 @@ class Graph(object):
         instance = self.find_instance(name)
         if instance:
             instance.set_param(**params)
-            return [name] + self.update_downstream(instance)
+            return [name] + self._update_downstream(instance)
         else:
             print('Warning (update_params): Could not find instance %r' % name)
             return [name]
+
+    def _update_downstream(self, instance):
+        """
+        Co-routine of update_params that takes an instance and updates
+        downstream instances, returning a list of names for all the
+        updates instances.
+        """
+        updated_names = []
+        outlinks = self.outlinks(instance)
+        for (s,o,d,i) in outlinks:
+            val = instance.propagate() if hasattr(instance, 'propagate') else instance
+            updated_names += self.update_params(d, {i:val})
+        return updated_names
 
     def find_instance(self, name):
         for instance in self.instances:
@@ -62,17 +75,3 @@ class Graph(object):
     def outlinks(self, instance):
         return [ (s, o, d, i) for (s, o, d, i) in self.links
                  if s==instance.name ]
-
-
-    def update_downstream(self, instance):
-        """
-        Takes an instance and updates downstream instances, returning a
-        list of names for all the updates instances.
-        """
-        updated_names = []
-        outlinks = self.outlinks(instance)
-        for (s,o,d,i) in outlinks:
-            # Currently assuming single output 'self'
-            val = instance.propagate() if hasattr(instance, 'propagate') else instance
-            updated_names += self.update_params(d, {i:val})
-        return updated_names
