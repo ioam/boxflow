@@ -115,7 +115,7 @@ class View {
         }
     }
 
-    remove(graph, name) {
+    remove(graph, name, comm=true) {
         let object = this.lookup(name);
         if (object === undefined) { return}
         if ('node' in object ) {
@@ -126,6 +126,6 @@ class View {
             }
         }
         this.canvas.remove(object);
-        graph.remove(name)
+        graph.remove(name, comm)
     }
 }
