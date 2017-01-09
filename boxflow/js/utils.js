@@ -52,7 +52,7 @@ _.mixin({
 
     demo_graph : function(view, graph) {
 
-        view.add_node(graph, 'Unit', 'unit:0', { pos: [0,0]});
+        view.add_node(graph, 'Ratio', 'ratio:0', { pos: [0,100]});
         view.add_node(graph, 'Multiply', 'multiply:0', { pos: [150,350]});
 
         view.add_node(graph, 'Disk', 'disk:0', { pos: [200,0]});
@@ -62,7 +62,7 @@ _.mixin({
         view.add_node(graph, 'Spiral', 'spiral:0', { pos: [600,300]});
 
 
-        let unit = graph.find_node('unit:0');
+        let ratio = graph.find_node('ratio:0');
         let multiply = graph.find_node('multiply:0');
 
         let disk = graph.find_node('disk:0');
@@ -71,8 +71,8 @@ _.mixin({
         let sub = graph.find_node('sub:0');
         let mul = graph.find_node('mul:0');
 
-        graph.add_edge(unit, '', disk, 'x');
-        graph.add_edge(unit, '', multiply, 'input');
+        graph.add_edge(ratio, '', disk, 'x');
+        graph.add_edge(ratio, '', multiply, 'input');
         graph.add_edge(multiply, '', spiral, 'orientation');
 
         graph.add_edge(disk, '', sub, 'lhs');
