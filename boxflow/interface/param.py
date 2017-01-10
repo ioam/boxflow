@@ -6,7 +6,6 @@ import param
 
 class ParamBox(param.Parameterized):
     no_ports=[]
-    nodetype = 'LabelledNode'
 
     def propagate(self):
         return getattr(self, self.no_ports[0])
@@ -26,8 +25,8 @@ class String(ParamBox):
     string = param.String(default='')
 
 
-def param_classes():
-    return [Number, Integer, String]
+def param_nodes():
+    return {'LabelledNode': [Number, Integer, String]}
 
 def param_display(instance):
     return {}

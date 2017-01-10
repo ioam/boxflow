@@ -24,7 +24,6 @@ class Viewport(PatternGenerator):
     """
 
     untyped_ports = ['input']
-    nodetype = 'Viewport'
 
     input = param.ClassSelector(class_=PatternGenerator,
                                 default=imagen.Constant(), precedence=1)
@@ -85,15 +84,14 @@ class Mul(BinaryOp):
 
 
 binary_ops = [Sub, Mul]
-support_classes = [Viewport]
 vanilla_classes = [ imagen.Disk,
                     imagen.Gaussian,
                     imagen.Line,
                     imagen.Spiral ]
 
-def imagen_classes():
-    return vanilla_classes + binary_ops + support_classes
-
+def imagen_nodes():
+    return { 'ImageNode': vanilla_classes + binary_ops,
+             'Viewport':[Viewport] }
 
 def image_to_base64(arr):
     im = Image.fromarray((arr * 255))

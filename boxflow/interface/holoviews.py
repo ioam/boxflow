@@ -4,5 +4,5 @@
 from __future__ import absolute_import
 import holoviews
 
-def holoviews_classes():
-    return []
+def holoviews_nodes():
+    return {}

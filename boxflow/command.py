@@ -34,6 +34,13 @@ class Command(object):
 
     # Utility methods
 
+    def lookup_class(self, name):
+        for spec in self.groups.values():
+            for clslist in spec.values():
+                for cls in clslist:
+                    if cls.name == name:
+                        return cls
+
     def display_data(self, instance): # Grab base64 data if applicable.
         for handler in self.display_handlers:
             data = handler(instance)
@@ -45,8 +52,7 @@ class Command(object):
 
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
-        cls_map = {cls.name:cls for group in self.groups.values() for cls in group}
-        cls = cls_map.get(data['type'], None)
+        cls = self.lookup_class(data['type'])
         if cls is None: return
 
         instance = cls(name=data['name'], **data['params'])

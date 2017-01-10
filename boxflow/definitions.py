@@ -68,17 +68,17 @@ class ParamDefinitions(object):
         Generate JSON parameter definitions for the given parameterized
         objects.
         """
-        # TODO: lims: 'no-port' for param but no port.
         specs = {}
-        for group in groups:
-            for obj in groups[group]:
-                cls_name = obj.__name__
-                nodetype = getattr(obj, 'nodetype', 'ImageNode')
-                pairs = [(k,v) for k,v in obj.params().items()
-                         if not cls.excluded(k,v, excluded, min_precedence) ]
-                inputs = [cls.param_definition(name,p, obj) for name,p in sorted(pairs)]
-                specs[cls_name] = {'inputs': [el for el in inputs if el],
-                                   'outputs':[{'name':'', 'lims':[], 'mode':'untyped-port'}],
-                                   'nodetype': nodetype,
-                                   'group': group}
+        for group, spec in groups.items():
+            for nodetype, clslist in spec.items():
+                for pobj in clslist:
+                    cls_name = pobj.__name__
+                    pairs = [(k,v) for k,v in pobj.params().items()
+                             if not cls.excluded(k,v, excluded, min_precedence) ]
+                    inputs = [cls.param_definition(name,p, pobj) for name,p in sorted(pairs)]
+                    specs[cls_name] = {'inputs': [el for el in inputs if el],
+                                       'outputs':[{'name':'', 'lims':[],
+                                                   'mode':'untyped-port'}],
+                                       'nodetype': nodetype,
+                                       'group': group }
         return specs

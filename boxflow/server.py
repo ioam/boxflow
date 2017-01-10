@@ -19,10 +19,10 @@ from command import Command
 class WSHandler(tornado.websocket.WebSocketHandler):
 
     # TODO: Support OrderedDict
-    groups = {'param':interface.param_classes(),
-              'imagen': interface.imagen_classes(),
-              'holoviews': interface.holoviews_classes(),
-              'arithmetic': interface.arithmetic_classes() }
+    groups = { 'param':      interface.param_nodes(),
+               'imagen':     interface.imagen_nodes(),
+               'holoviews':  interface.holoviews_nodes(),
+               'arithmetic': interface.arithmetic_nodes() }
 
     def open(self):
         print('New websocket connection')

@@ -6,7 +6,6 @@ import param
 
 class Percentage(param.Parameterized):
     no_ports = ['percent']
-    nodetype = 'LabelledNode'
 
     percent = param.Number(default=50, bounds=(0,100))
 
@@ -16,7 +15,6 @@ class Percentage(param.Parameterized):
 
 class Magnitude(param.Parameterized):
     no_ports = ['magnitude']
-    nodetype = 'LabelledNode'
 
     magnitude = param.Number(default=0.5, bounds=(0,1))
 
@@ -25,7 +23,6 @@ class Magnitude(param.Parameterized):
 
 
 class Multiply(param.Parameterized):
-    nodetype = 'LabelledNode'
 
     input = param.Number(default=0)
 
@@ -36,7 +33,6 @@ class Multiply(param.Parameterized):
 
 
 class Divide(param.Parameterized):
-    nodetype = 'LabelledNode'
 
     input = param.Number(default=0)
 
@@ -47,7 +43,6 @@ class Divide(param.Parameterized):
 
 
 class Add(param.Parameterized):
-    nodetype = 'LabelledNode'
 
     lhs = param.Number(default=0)
 
@@ -59,8 +54,6 @@ class Add(param.Parameterized):
 
 class Subtract(param.Parameterized):
 
-    nodetype = 'LabelledNode'
-
     lhs = param.Number(default=0)
 
     rhs = param.Number(default=1)
@@ -69,8 +62,8 @@ class Subtract(param.Parameterized):
         return self.lhs - self.rhs
 
 
-def arithmetic_classes():
-    return [Percentage, Magnitude, Multiply, Divide, Add, Subtract]
+def arithmetic_nodes():
+    return {'LabelledNode':[Percentage, Magnitude, Multiply, Divide, Add, Subtract]}
 
 def arithmetic_display(instance):
     return {}

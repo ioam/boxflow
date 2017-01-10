@@ -3,28 +3,29 @@
 from __future__ import absolute_import
 
 def unsupported():
-    return []
+    return {}
 
 
-from .param import param_classes, param_display # Param is a core dependency
-from .arithmetic import  arithmetic_classes, arithmetic_display
+from .param import param_nodes, param_display # Param is a core dependency
+from .arithmetic import  arithmetic_nodes, arithmetic_display
+
 
 try:
     import imagen
-    from .imagen import imagen_classes, imagen_display
+    from .imagen import imagen_nodes, imagen_display
 except:
-    imagen_classes = unsupported
+    imagen_nodes = unsupported
 
 
 try:
     import holoviews
-    from .holoviews import holoviews_classes
+    from .holoviews import holoviews_nodes
 except:
-    holoviews_classes = unsupported
+    holoviews_nodes = unsupported
 
-__all__ = ['imagen_classes',
-           'param_classes',
-           'holoviews_classes',
+__all__ = ['imagen_nodes',
+           'param_nodes',
+           'holoviews_nodes',
 
            'param_display',
            'imagen_display']
