@@ -12,15 +12,13 @@ from imagen import PatternGenerator
 import param
 
 
-from .interface import Interface
+from .interface import Interface, BoxType
 
 class Viewport(PatternGenerator):
     """
     Trivial wrapper around a pattern generator used to define a viewport
     node.
     """
-
-    untyped_ports = ['input']
 
     input = param.ClassSelector(class_=PatternGenerator,
                                 default=imagen.Constant(), precedence=1)
@@ -41,8 +39,6 @@ class Viewport(PatternGenerator):
 
 
 class BinaryOp(PatternGenerator):
-
-    untyped_ports = ['lhs','rhs']
 
     lhs = param.ClassSelector(class_=PatternGenerator,
                               default=imagen.Constant(), precedence=1)
@@ -80,7 +76,9 @@ class Mul(BinaryOp):
 
 
 
-binary_ops = [Sub, Mul]
+binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
+               BoxType(Mul, untyped = ['lhs','rhs'])]
+
 vanilla_classes = [ imagen.Disk,
                     imagen.Gaussian,
                     imagen.Line,
@@ -88,7 +86,7 @@ vanilla_classes = [ imagen.Disk,
 
 def load_imagen():
     Interface.add('imagen', vanilla_classes + binary_ops, 'ImageNode')
-    Interface.add('imagen',  [Viewport], 'Viewport')
+    Interface.add('imagen',  BoxType(Viewport, untyped=['input']), 'Viewport')
 
 
 def image_to_base64(arr):

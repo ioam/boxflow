@@ -5,20 +5,21 @@ from __future__ import absolute_import
 
 class BoxType(object):
 
-    def __init__(self, typeobj):
+    def __init__(self, typeobj, untyped=[], hidden=[]):
         self.typeobj = typeobj
         self.name = typeobj.name
+
+        self.untyped = set(getattr(typeobj, 'untyped', [])) | set(untyped)
+        self.hidden = set(getattr(typeobj, 'hidden', [])) | set(hidden)
 
 
     def mode(self, name):
         """
         Return the port mode of the given parameter by name.
         """
-        untyped_ports = getattr(self.typeobj, 'untyped_ports', [])
-        no_ports = getattr(self.typeobj, 'no_ports', [])
-        if name in untyped_ports:
+        if name in self.untyped:
             return 'untyped-port'
-        return 'no-port' if name in no_ports else 'normal'
+        return 'no-port' if name in self.hidden else 'normal'
 
     def __call__(self, *args, **kwargs):
         # Return an instance

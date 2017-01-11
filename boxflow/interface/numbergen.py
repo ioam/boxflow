@@ -6,10 +6,9 @@ import param
 import numbergen
 import operator
 
-from .interface import Interface
+from .interface import Interface, BoxType
 
 class Percentage(param.Parameterized):
-    no_ports = ['percent']
 
     percent = param.Number(default=50, bounds=(0,100))
 
@@ -18,7 +17,6 @@ class Percentage(param.Parameterized):
 
 
 class Magnitude(param.Parameterized):
-    no_ports = ['magnitude']
 
     magnitude = param.Number(default=0.5, bounds=(0,1))
 
@@ -83,7 +81,8 @@ class BinaryOperator(numbergen.NumberGenerator):
 
 
 def load_numbergen():
-    Interface.add('numbergen', [Percentage, Magnitude,
+    Interface.add('numbergen', [BoxType(Percentage, hidden=['percent']),
+                                BoxType(Magnitude,  hidden=['magnitude']),
                                 Multiply, Divide, Add, Subtract])
 
 def numbergen_display(instance):
