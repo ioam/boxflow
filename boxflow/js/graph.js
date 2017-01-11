@@ -46,10 +46,10 @@ class Graph {
 
     add_edge(src, output, dest, input) {
         if ( !_.contains(this.nodes, src) ) {
-            throw 'Source node not in graph.';
+            throw `Source node ${src} not in graph: ${this.nodes}`;
         }
         if ( !_.contains(this.nodes, dest) ) {
-            throw 'Destination node not in graph.';
+            throw `Destination node ${dest} not in graph: ${this.nodes}`;
         }
         let edge = new Edge(src,output,dest, input);
         this.edges.push(edge);
@@ -122,10 +122,10 @@ class Edge {
 
     validate(src, output, dest, input) {
         if ( !_.contains(src.outputs, output) ) {
-            throw 'Specified output not in source node outputs.';
+            throw `Specified output ${output} not in source outputs: ${src.outputs}`;
         }
         if ( !_.contains(dest.inputs, input) )  {
-            throw 'Specified input not in source node inputs.';
+            throw `Specified input ${input} not in dest inputs: ${dest.outputs}`;
         }
     }
 }
