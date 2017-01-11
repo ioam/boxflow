@@ -29,7 +29,7 @@ class BaseBox {
 
     static port_filter(node, type) { // Filter by type and mode (ensure visible)
         let params = type == 'input' ? node.inputs : node.outputs;
-        return _.filter(params, (p) => {return node.param_modes[p] != 'no-port' });
+        return _.filter(params, (p) => {return node.param_modes[p] != 'hidden' });
     }
 
 

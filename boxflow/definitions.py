@@ -31,7 +31,7 @@ class ParamDefinitions(object):
         """
         supported_types = (param.Number, param.Integer, param.String, param.Boolean)
 
-        if mode != 'untyped-port' and not isinstance(p, supported_types):
+        if mode != 'untyped' and not isinstance(p, supported_types):
             return None
         value = str(p.default) if isinstance(p, param.ClassSelector) else p.default
         return {'name': name,

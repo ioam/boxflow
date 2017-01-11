@@ -157,9 +157,9 @@ class Definitions { //  Associates nodes to the input/output param definitions
         // step:  The step size for numeric quantities
         // mode: The mode of the port, ie one of...
         //
-        //   + 'normal'       - Port with visual port and GUI parameter.
-        //   + 'untyped-port' - Port without GUI parameters
-        //   + 'no-port'      - GUI parameter but no visual port.
+        //   + 'normal'    - Port with visual port and GUI parameter.
+        //   + 'untyped'   - Port without GUI parameters
+        //   + 'hidden'    - GUI parameter but no visual port.
         //
         //   TODO: Support [undefined, max] for maximum limit only.
         return {name: name, value : value, lims:lims, mode: mode, step: step}
@@ -168,7 +168,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
     default_params(type, field='value') { // Generate a default parameters object
         let params = {};
         for (let pdef of this.definitions[type].inputs) {
-            if (pdef.mode !== 'untyped-port') { // Untyped ports omitted from params.
+            if (pdef.mode !== 'untyped') { // Untyped ports omitted from params.
                 params[pdef.name] = pdef[field];
             }
         }

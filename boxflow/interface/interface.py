@@ -18,8 +18,8 @@ class BoxType(object):
         Return the port mode of the given parameter by name.
         """
         if name in self.untyped:
-            return 'untyped-port'
-        return 'no-port' if name in self.hidden else 'normal'
+            return 'untyped'
+        return 'hidden' if name in self.hidden else 'normal'
 
     def __call__(self, *args, **kwargs):
         # Return an instance

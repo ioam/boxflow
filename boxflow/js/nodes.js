@@ -80,7 +80,7 @@ class BaseNode {
         }
         let unlocked = [];
         for (let param of Object.keys(this.params)) {
-            if (pmode[param]=='untyped-port') {
+            if (pmode[param]=='untyped') {
                 continue }
             else if (!(this._locked_params[param])) {
                 unlocked.push(param);
