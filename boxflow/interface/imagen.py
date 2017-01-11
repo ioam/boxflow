@@ -88,10 +88,7 @@ def imagen_display(instance):
     Similar to a display hook. Returns a dictionary of extra content if
     applicable.
     """
-    if isinstance(instance, PatternGenerator):
-        return {'b64':image_to_base64(instance())}
-    else:
-        return {}
+    return {'b64':image_to_base64(instance())}
 
 
 binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
