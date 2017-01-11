@@ -13,10 +13,13 @@ class Interface(object):
         if nodetype is None:
             nodetype = cls.default_nodetype
 
+        if not isinstance(definition, list):
+            definition = [definition]
+
         if group not in cls.registry:
             cls.registry[group] = {}
 
         if nodetype in cls.registry[group]:
             cls.registry[group][nodetype] += definition
         else:
-            cls.registry[group][nodetype] =definition
+            cls.registry[group][nodetype] = definition
