@@ -9,6 +9,17 @@ class BoxType(object):
         self.typeobj = typeobj
         self.name = typeobj.name
 
+
+    def mode(self, name):
+        """
+        Return the port mode of the given parameter by name.
+        """
+        untyped_ports = getattr(self.typeobj, 'untyped_ports', [])
+        no_ports = getattr(self.typeobj, 'no_ports', [])
+        if name in untyped_ports:
+            return 'untyped-port'
+        return 'no-port' if name in no_ports else 'normal'
+
     def __call__(self, *args, **kwargs):
         # Return an instance
         return self.typeobj(*args, **kwargs)

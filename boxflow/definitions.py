@@ -25,28 +25,14 @@ class ParamDefinitions(object):
             return None
 
     @classmethod
-    def parameter_mode(cls, name, p, obj):
+    def param_definition(cls, name, p, mode):
         """
         Return the parameter mode string and None if parameter unsupported.
         """
         supported_types = (param.Number, param.Integer, param.String, param.Boolean)
 
-        untyped_ports = getattr(obj, 'untyped_ports', [])
-        no_ports = getattr(obj, 'no_ports', [])
-        if name in untyped_ports:
-            return 'untyped-port'
-        elif isinstance(p, supported_types):
-            return 'no-port' if name in no_ports else 'normal'
-        return None
-
-
-    @classmethod
-    def param_definition(cls, name, p, obj):
-        """
-        Returns the appropriate JSON for a parameter
-        """
-        mode = cls.parameter_mode(name, p, obj)
-        if mode is None : return None
+        if mode != 'untyped-port' and not isinstance(p, supported_types):
+            return None
         value = str(p.default) if isinstance(p, param.ClassSelector) else p.default
         return {'name': name,
                 'value': value,
@@ -74,7 +60,7 @@ class ParamDefinitions(object):
                 for boxtype in boxlist:
                     pairs = [(k,v) for k,v in boxtype.typeobj.params().items()
                              if not cls.excluded(k,v, excluded, min_precedence) ]
-                    inputs = [cls.param_definition(name,p, boxtype.typeobj)
+                    inputs = [cls.param_definition(name, p, boxtype.mode(name))
                               for name,p in sorted(pairs)]
                     specs[boxtype.name] = {'inputs': [el for el in inputs if el],
                                            'outputs':[{'name':'', 'lims':[],
