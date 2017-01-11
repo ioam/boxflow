@@ -7,11 +7,10 @@ from definitions import ParamDefinitions
 
 class Command(object):
 
-    def __init__(self, handler, groups, excluded, display_handlers):
+    def __init__(self, handler, groups, excluded):
         self.groups = groups
         self.handler = handler
         self.excluded = excluded
-        self.display_handlers = display_handlers
 
         self.graph = Graph()
 
@@ -33,7 +32,6 @@ class Command(object):
             self.update_params(json['data'])
 
     # Utility methods
-
     def lookup_boxtype(self, name):
         for spec in self.groups.values():
             for boxlist in spec.values():
@@ -41,24 +39,15 @@ class Command(object):
                     if boxtype.name == name:
                         return boxtype
 
-    def display_data(self, instance): # Grab base64 data if applicable.
-        for handler in self.display_handlers:
-            data = handler(instance)
-            if 'b64' in data:
-                return data
-        return {}
-
     # Receive commands
 
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
         boxtype = self.lookup_boxtype(data['type'])
-        if boxtype is None: return
-
         instance = boxtype(name=data['name'], **data['params'])
         self.graph.add_instance(instance)
         self.send('image_update',
-                  dict(self.display_data(instance), name=data['name']))
+                  dict(boxtype.display_fn(instance), name=data['name']))
 
     def remove_node(self, data):
         self.graph.remove_instance(data['name'])
@@ -86,8 +75,9 @@ class Command(object):
         for name in updated:
             instance = self.graph.find_instance(name)
             if instance:
+                boxtype = self.lookup_boxtype(instance.__class__.__name__)
                 self.send('image_update',
-                          dict(self.display_data(instance), name=name))
+                          dict(boxtype.display_fn(instance), name=name))
     # Push commands
 
     def push_definitions(self):

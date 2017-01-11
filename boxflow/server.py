@@ -11,9 +11,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
-import interface
 from interface import Interface
-
 from command import Command
 
 
@@ -24,11 +22,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         print('New websocket connection')
 
         excluded = ['enforce_minimal_thickness', 'size']
-        self.command = Command(self, Interface.definitions,
-                               excluded=excluded,
-                               display_handlers = [interface.param_display,
-                                                   interface.imagen_display,
-                                                   interface.numbergen_display])
+        self.command = Command(self, Interface.definitions, excluded=excluded)
         self.command.push_definitions()
 
     def on_message(self, message):

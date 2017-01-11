@@ -6,9 +6,11 @@ from collections import defaultdict
 
 class BoxType(object):
 
-    def __init__(self, typeobj, nodetype='LabelledNode', untyped=[], hidden=[]):
+    def __init__(self, typeobj, nodetype='LabelledNode',
+                 untyped=[], hidden=[], display_fn = None):
         self.typeobj = typeobj
         self.nodetype = nodetype
+        self.display_fn = display_fn if display_fn else lambda x: {}
 
         self.name = typeobj.name
 

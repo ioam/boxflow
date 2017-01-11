@@ -27,6 +27,3 @@ class String(ParamBox):
 def load_param():
     boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, String]]
     Interface.add('param', boxtypes)
-
-def param_display(instance):
-    return {}

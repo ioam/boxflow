@@ -78,12 +78,7 @@ class BinaryOperator(numbergen.NumberGenerator):
         return op(self.lhs() if callable(self.lhs) else self.lhs,
                   self.rhs() if callable(self.rhs) else self.rhs)
 
-
-
 def load_numbergen():
     Interface.add('numbergen', [BoxType(Percentage, hidden=['percent']),
                                 BoxType(Magnitude,  hidden=['magnitude']),
                                 Multiply, Divide, Add, Subtract])
-
-def numbergen_display(instance):
-    return {}

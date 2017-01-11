@@ -75,18 +75,6 @@ class Mul(BinaryOp):
 
 
 
-
-binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
-               BoxType(Mul, untyped = ['lhs','rhs'])]
-
-vanilla_classes = [ BoxType(patgen, nodetype='ImageNode') for patgen in
-                    [imagen.Disk, imagen.Gaussian, imagen.Line, imagen.Spiral ]]
-
-def load_imagen():
-    Interface.add('imagen', vanilla_classes + binary_ops)
-    Interface.add('imagen',  BoxType(Viewport, nodetype='Viewport', untyped=['input']))
-
-
 def image_to_base64(arr):
     im = Image.fromarray((arr * 255))
     buff = StringIO()
@@ -104,3 +92,22 @@ def imagen_display(instance):
         return {'b64':image_to_base64(instance())}
     else:
         return {}
+
+
+binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
+               BoxType(Mul, untyped = ['lhs','rhs'])]
+
+patterngenerators = [imagen.Disk, imagen.Gaussian, imagen.Line, imagen.Spiral ]
+vanilla_classes = [ BoxType(patgen,
+                            nodetype='ImageNode',
+                            display_fn=imagen_display)
+                    for patgen in patterngenerators ]
+
+def load_imagen():
+    Interface.add('imagen', vanilla_classes + binary_ops)
+    Interface.add('imagen',  BoxType(Viewport,
+                                     nodetype='Viewport',
+                                     untyped=['input'],
+                                     display_fn=imagen_display))
+
+

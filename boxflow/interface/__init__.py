@@ -3,13 +3,13 @@
 from __future__ import absolute_import
 from.interface import Interface
 
-from .param import load_param, param_display               # Param is a core dependency
-from .numbergen import  load_numbergen, numbergen_display  # Numbergen is included
+from .param import load_param            # Param is a core dependency
+from .numbergen import  load_numbergen   # Numbergen is included
 
 
 try:
     import imagen
-    from .imagen import load_imagen, imagen_display
+    from .imagen import load_imagen
 except:
     load_imagen = None
 
@@ -29,7 +29,4 @@ if load_imagen:
 if load_holoviews:
     load_holoviews()
 
-__all__ = ['Interface',
-           'param_display',
-           'imagen_display',
-           'numbergen_display']
+__all__ = ['Interface']
