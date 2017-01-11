@@ -2,11 +2,14 @@
 #
 #
 from __future__ import absolute_import
+from collections import defaultdict
 
 class BoxType(object):
 
-    def __init__(self, typeobj, untyped=[], hidden=[]):
+    def __init__(self, typeobj, nodetype='LabelledNode', untyped=[], hidden=[]):
         self.typeobj = typeobj
+        self.nodetype = nodetype
+
         self.name = typeobj.name
 
         self.untyped = set(getattr(typeobj, 'untyped', [])) | set(untyped)
@@ -28,7 +31,6 @@ class BoxType(object):
 
 class Interface(object):
 
-    default_nodetype = 'LabelledNode'
     definitions = {}
 
     @classmethod
@@ -36,16 +38,13 @@ class Interface(object):
         return [el if isinstance(el, BoxType) else BoxType(el) for el in blist]
 
     @classmethod
-    def add(cls, group, definition, nodetype=None):
+    def add(cls, group, definition):
 
         definition = definition if isinstance(definition, list) else [definition]
-        nodetype = cls.default_nodetype if nodetype is None else nodetype
-        boxes = cls._boxlist(definition)
+        boxtypes = cls._boxlist(definition)
 
         if group not in cls.definitions:
-            cls.definitions[group] = {}
+            cls.definitions[group] = defaultdict(list)
 
-        if nodetype in cls.definitions[group]:
-            cls.definitions[group][nodetype] += boxes
-        else:
-            cls.definitions[group][nodetype] = boxes
+        for boxtype in boxtypes:
+            cls.definitions[group][boxtype.nodetype].append(boxtype)
