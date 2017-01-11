@@ -7,8 +7,9 @@ from definitions import ParamDefinitions
 
 class Command(object):
 
-    def __init__(self, handler, groups, excluded):
-        self.groups = groups
+    def __init__(self, handler, interface, excluded):
+        self.interface = interface
+        self.definitions = interface.definitions
         self.handler = handler
         self.excluded = excluded
 
@@ -33,7 +34,7 @@ class Command(object):
 
     # Utility methods
     def lookup_boxtype(self, name):
-        for spec in self.groups.values():
+        for spec in self.definitions.values():
             for boxlist in spec.values():
                 for boxtype in boxlist:
                     if boxtype.name == name:
@@ -81,5 +82,5 @@ class Command(object):
     # Push commands
 
     def push_definitions(self):
-        definitions = ParamDefinitions.generate(self.groups, self.excluded)
+        definitions = ParamDefinitions.generate(self.definitions, self.excluded)
         self.send('definitions', definitions)
