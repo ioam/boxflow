@@ -70,15 +70,15 @@ class ParamDefinitions(object):
         """
         specs = {}
         for group, spec in groups.items():
-            for nodetype, clslist in spec.items():
-                for pobj in clslist:
-                    cls_name = pobj.__name__
-                    pairs = [(k,v) for k,v in pobj.params().items()
+            for nodetype, boxlist in spec.items():
+                for boxtype in boxlist:
+                    pairs = [(k,v) for k,v in boxtype.typeobj.params().items()
                              if not cls.excluded(k,v, excluded, min_precedence) ]
-                    inputs = [cls.param_definition(name,p, pobj) for name,p in sorted(pairs)]
-                    specs[cls_name] = {'inputs': [el for el in inputs if el],
-                                       'outputs':[{'name':'', 'lims':[],
-                                                   'mode':'untyped-port'}],
-                                       'nodetype': nodetype,
-                                       'group': group }
+                    inputs = [cls.param_definition(name,p, boxtype.typeobj)
+                              for name,p in sorted(pairs)]
+                    specs[boxtype.name] = {'inputs': [el for el in inputs if el],
+                                           'outputs':[{'name':'', 'lims':[],
+                                                       'mode':'untyped-port'}],
+                                           'nodetype': nodetype,
+                                           'group': group }
         return specs

@@ -34,12 +34,12 @@ class Command(object):
 
     # Utility methods
 
-    def lookup_class(self, name):
+    def lookup_boxtype(self, name):
         for spec in self.groups.values():
-            for clslist in spec.values():
-                for cls in clslist:
-                    if cls.name == name:
-                        return cls
+            for boxlist in spec.values():
+                for boxtype in boxlist:
+                    if boxtype.name == name:
+                        return boxtype
 
     def display_data(self, instance): # Grab base64 data if applicable.
         for handler in self.display_handlers:
@@ -52,10 +52,10 @@ class Command(object):
 
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
-        cls = self.lookup_class(data['type'])
-        if cls is None: return
+        boxtype = self.lookup_boxtype(data['type'])
+        if boxtype is None: return
 
-        instance = cls(name=data['name'], **data['params'])
+        instance = boxtype(name=data['name'], **data['params'])
         self.graph.add_instance(instance)
         self.send('image_update',
                   dict(self.display_data(instance), name=data['name']))
