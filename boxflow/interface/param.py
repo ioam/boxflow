@@ -4,6 +4,8 @@
 from __future__ import absolute_import
 import param
 
+from .interface import Interface
+
 class ParamBox(param.Parameterized):
     no_ports=[]
 
@@ -25,8 +27,9 @@ class String(ParamBox):
     string = param.String(default='')
 
 
-def param_nodes():
-    return {'LabelledNode': [Number, Integer, String]}
+
+def load_param():
+    Interface.add('param', [ Number, Integer, String])
 
 def param_display(instance):
     return {}

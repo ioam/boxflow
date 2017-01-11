@@ -12,10 +12,7 @@ from imagen import PatternGenerator
 import param
 
 
-supressed = ['bounds','xdensity','ydensity','x','y','z','group',
-             'position','orientation','size','scale',
-             'offset','mask','mask_shape','output_fns', 'name']
-
+from .interface import Interface
 
 class Viewport(PatternGenerator):
     """
@@ -89,9 +86,10 @@ vanilla_classes = [ imagen.Disk,
                     imagen.Line,
                     imagen.Spiral ]
 
-def imagen_nodes():
-    return { 'ImageNode': vanilla_classes + binary_ops,
-             'Viewport':[Viewport] }
+def load_imagen():
+    Interface.add('imagen', vanilla_classes + binary_ops, 'ImageNode')
+    Interface.add('imagen',  [Viewport], 'Viewport')
+
 
 def image_to_base64(arr):
     im = Image.fromarray((arr * 255))
@@ -110,4 +108,3 @@ def imagen_display(instance):
         return {'b64':image_to_base64(instance())}
     else:
         return {}
-

@@ -12,23 +12,19 @@ import tornado.ioloop
 import tornado.web
 
 import interface
+from interface import Interface
+
 from command import Command
 
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 
-    # TODO: Support OrderedDict
-    groups = { 'param':      interface.param_nodes(),
-               'imagen':     interface.imagen_nodes(),
-               'holoviews':  interface.holoviews_nodes(),
-               'numbergen': interface.numbergen_nodes() }
-
     def open(self):
         print('New websocket connection')
 
         excluded = ['enforce_minimal_thickness', 'size']
-        self.command = Command(self, self.groups,
+        self.command = Command(self, Interface.registry,
                                excluded=excluded,
                                display_handlers = [interface.param_display,
                                                    interface.imagen_display,

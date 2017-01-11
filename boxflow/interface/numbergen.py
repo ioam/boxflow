@@ -6,6 +6,7 @@ import param
 import numbergen
 import operator
 
+from .interface import Interface
 
 class Percentage(param.Parameterized):
     no_ports = ['percent']
@@ -80,8 +81,10 @@ class BinaryOperator(numbergen.NumberGenerator):
                   self.rhs() if callable(self.rhs) else self.rhs)
 
 
-def numbergen_nodes():
-    return {'LabelledNode':[Percentage, Magnitude, Multiply, Divide, Add, Subtract]}
+
+def load_numbergen():
+    Interface.add('numbergen', [Percentage, Magnitude,
+                                Multiply, Divide, Add, Subtract])
 
 def numbergen_display(instance):
     return {}

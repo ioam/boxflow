@@ -3,30 +3,33 @@
 from __future__ import absolute_import
 
 def unsupported():
-    return {}
+    return
 
+from.interface import Interface
 
-from .param import param_nodes, param_display               # Param is a core dependency
-from .numbergen import  numbergen_nodes, numbergen_display  # Numbergen is included
+from .param import load_param, param_display               # Param is a core dependency
+from .numbergen import  load_numbergen, numbergen_display  # Numbergen is included
 
 
 try:
     import imagen
-    from .imagen import imagen_nodes, imagen_display
+    from .imagen import load_imagen, imagen_display
 except:
-    imagen_nodes = unsupported
+    load_imagen = unsupported
 
 
 try:
     import holoviews
-    from .holoviews import holoviews_nodes
+    from .holoviews import load_holoviews
 except:
-    holoviews_nodes = unsupported
+    load_holoviews = unsupported
 
-__all__ = ['imagen_nodes',
-           'param_nodes',
-           'numbergen_nodes',
-           'holoviews_nodes',
+load_param()
+load_numbergen()
+load_imagen()
+load_holoviews()
 
+__all__ = ['Interface',
            'param_display',
-           'imagen_display']
+           'imagen_display',
+           'numbergen_display']
