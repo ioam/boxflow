@@ -17,7 +17,7 @@ class BoxType(object):
 class Interface(object):
 
     default_nodetype = 'LabelledNode'
-    registry = {}
+    definitions = {}
 
     @classmethod
     def _boxlist(cls, blist):
@@ -30,10 +30,10 @@ class Interface(object):
         nodetype = cls.default_nodetype if nodetype is None else nodetype
         boxes = cls._boxlist(definition)
 
-        if group not in cls.registry:
-            cls.registry[group] = {}
+        if group not in cls.definitions:
+            cls.definitions[group] = {}
 
-        if nodetype in cls.registry[group]:
-            cls.registry[group][nodetype] += boxes
+        if nodetype in cls.definitions[group]:
+            cls.definitions[group][nodetype] += boxes
         else:
-            cls.registry[group][nodetype] = boxes
+            cls.definitions[group][nodetype] = boxes
