@@ -4,32 +4,29 @@
 from __future__ import absolute_import
 import param
 
-from .interface import Interface
+from .interface import Interface, BoxType
 
 class ParamBox(param.Parameterized):
-    no_ports=[]
 
     def propagate(self):
-        return getattr(self, self.no_ports[0])
+        return getattr(self, self.__class__.__name__.lower())
 
 class Number(ParamBox):
-    no_ports = ['number']
     number = param.Number(default=0)
 
 
 class Integer(ParamBox):
-    no_ports = ['integer']
     integer = param.Integer(default=0)
 
 
 class String(ParamBox):
-    no_ports = ['string']
     string = param.String(default='')
 
 
 
 def load_param():
-    Interface.add('param', [ Number, Integer, String])
+    boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, String]]
+    Interface.add('param', boxtypes)
 
 def param_display(instance):
     return {}
