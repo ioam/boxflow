@@ -51,22 +51,22 @@ class ParamDatGUI(object):
         return (v.precedence<=min_precedence)
 
     @classmethod
-    def json(cls, groups, excluded, min_precedence=0):
+    def json(cls, definitions, excluded, min_precedence=0):
         """
-        Generate JSON parameter definitions for the given parameterized
-        objects.
+        Generate a JSON-serializable parameter definitions for the given
+        parameterized objects.
         """
-        specs = {}
-        for group, spec in groups.items():
-            for nodetype, boxlist in spec.items():
+        json_obj = {}
+        for group, defs in definitions.items():
+            for nodetype, boxlist in defs.items():
                 for boxtype in boxlist:
                     pairs = [(k,v) for k,v in boxtype.typeobj.params().items()
                              if not cls.excluded(k,v, excluded, min_precedence) ]
                     inputs = [cls.param_definition(name, p, boxtype.mode(name))
                               for name,p in sorted(pairs)]
-                    specs[boxtype.name] = {'inputs': [el for el in inputs if el],
-                                           'outputs':[{'name':'', 'lims':[],
-                                                       'mode':'untyped-port'}],
-                                           'nodetype': nodetype,
-                                           'group': group }
-        return specs
+                    json_obj[boxtype.name] = {'inputs': [el for el in inputs if el],
+                                              'outputs':[{'name':'', 'lims':[],
+                                                          'mode':'untyped-port'}],
+                                              'nodetype': nodetype,
+                                              'group': group }
+        return json_obj
