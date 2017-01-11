@@ -4,6 +4,8 @@
 from __future__ import absolute_import
 from collections import defaultdict
 
+from .paramDatGUI import ParamDatGUI
+
 class BoxType(object):
 
     def __init__(self, typeobj, nodetype='LabelledNode',
@@ -35,6 +37,8 @@ class Interface(object):
 
     definitions = {}
 
+    guis = {'datgui': ParamDatGUI }
+
     @classmethod
     def _boxlist(cls, blist):
         return [el if isinstance(el, BoxType) else BoxType(el) for el in blist]
@@ -50,3 +54,8 @@ class Interface(object):
 
         for boxtype in boxtypes:
             cls.definitions[group][boxtype.nodetype].append(boxtype)
+
+    @classmethod
+    def json(cls, gui, excluded):
+        gui_interface = cls.guis[gui]
+        return gui_interface.json(cls.definitions, excluded)

@@ -1,8 +1,10 @@
-# Module to inspect parameterized object and generate JSON param specs
+# Module to convert parameters into specs usable by datGUI
+
+from __future__ import absolute_import
 import param
 import imagen
 
-class ParamDefinitions(object):
+class ParamDatGUI(object):
 
     @classmethod
     def param_lims(cls, p):
@@ -49,7 +51,7 @@ class ParamDefinitions(object):
         return (v.precedence<=min_precedence)
 
     @classmethod
-    def generate(cls, groups, excluded, min_precedence=0):
+    def json(cls, groups, excluded, min_precedence=0):
         """
         Generate JSON parameter definitions for the given parameterized
         objects.
