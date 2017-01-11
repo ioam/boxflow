@@ -1,8 +1,11 @@
-# Module offering basic arithmetic classes
+# Module offering basic numbergen classes
 #
 #
 from __future__ import absolute_import
 import param
+import numbergen
+import operator
+
 
 class Percentage(param.Parameterized):
     no_ports = ['percent']
@@ -62,8 +65,9 @@ class Subtract(param.Parameterized):
         return self.lhs - self.rhs
 
 
-def arithmetic_nodes():
+
+def numbergen_nodes():
     return {'LabelledNode':[Percentage, Magnitude, Multiply, Divide, Add, Subtract]}
 
-def arithmetic_display(instance):
+def numbergen_display(instance):
     return {}

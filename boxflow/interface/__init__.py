@@ -6,8 +6,8 @@ def unsupported():
     return {}
 
 
-from .param import param_nodes, param_display # Param is a core dependency
-from .arithmetic import  arithmetic_nodes, arithmetic_display
+from .param import param_nodes, param_display               # Param is a core dependency
+from .numbergen import  numbergen_nodes, numbergen_display  # Numbergen is included
 
 
 try:
@@ -25,6 +25,7 @@ except:
 
 __all__ = ['imagen_nodes',
            'param_nodes',
+           'numbergen_nodes',
            'holoviews_nodes',
 
            'param_display',

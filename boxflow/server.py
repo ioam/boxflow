@@ -22,7 +22,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     groups = { 'param':      interface.param_nodes(),
                'imagen':     interface.imagen_nodes(),
                'holoviews':  interface.holoviews_nodes(),
-               'arithmetic': interface.arithmetic_nodes() }
+               'numbergen': interface.numbergen_nodes() }
 
     def open(self):
         print('New websocket connection')
@@ -32,7 +32,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
                                excluded=excluded,
                                display_handlers = [interface.param_display,
                                                    interface.imagen_display,
-                                                   interface.arithmetic_display])
+                                                   interface.numbergen_display])
         self.command.push_definitions()
 
     def on_message(self, message):
