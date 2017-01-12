@@ -8,6 +8,9 @@ import operator
 
 from .interface import Interface, BoxType
 
+param.Dynamic.time_dependent = True
+numbergen.UniformRandom.time_dependent = True
+
 class Percentage(param.Parameterized):
 
     percent = param.Number(default=50, bounds=(0,100))
@@ -41,4 +44,6 @@ class BinaryOp(numbergen.NumberGenerator):
 def load_numbergen():
     Interface.add('numbergen', [BoxType(Percentage, hidden=['percent']),
                                 BoxType(Magnitude,  hidden=['magnitude']),
+                                BoxType(numbergen.UniformRandom,
+                                        hidden=['lbound','ubound','seed']),
                                 BinaryOp])
