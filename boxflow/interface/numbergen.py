@@ -24,46 +24,6 @@ class Magnitude(param.Parameterized):
         return self.magnitude
 
 
-class Multiply(param.Parameterized):
-
-    input = param.Number(default=0)
-
-    multiplier = param.Number(default=1)
-
-    def propagate(self):
-        return self.input * self.multiplier
-
-
-class Divide(param.Parameterized):
-
-    input = param.Number(default=0)
-
-    divisor = param.Number(default=1)
-
-    def propagate(self):
-        return self.input / self.divisor
-
-
-class Add(param.Parameterized):
-
-    lhs = param.Number(default=0)
-
-    rhs = param.Number(default=1)
-
-    def propagate(self):
-        return self.lhs + self.rhs
-
-
-class Subtract(param.Parameterized):
-
-    lhs = param.Number(default=0)
-
-    rhs = param.Number(default=1)
-
-    def propagate(self):
-        return self.lhs - self.rhs
-
-
 class BinaryOp(numbergen.NumberGenerator):
 
     lhs = param.Number(default=0)
@@ -81,4 +41,4 @@ class BinaryOp(numbergen.NumberGenerator):
 def load_numbergen():
     Interface.add('numbergen', [BoxType(Percentage, hidden=['percent']),
                                 BoxType(Magnitude,  hidden=['magnitude']),
-                                Multiply, Divide, Add, Subtract, BinaryOp])
+                                BinaryOp])
