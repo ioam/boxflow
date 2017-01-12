@@ -82,5 +82,5 @@ class Command(object):
     # Push commands
 
     def push_definitions(self):
-        definitions = self.interface.json('datgui', self.excluded)
+        definitions = self.interface.json(self.excluded, 'datgui')
         self.send('definitions', definitions)

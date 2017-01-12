@@ -6,8 +6,13 @@ import imagen
 
 class ParamDatGUI(object):
 
+    supported_types = (param.Number, param.Integer, param.String, param.Boolean)
+
     @classmethod
     def param_lims(cls, p):
+        """
+        Given a parameter, return a datGUI lims constraint.
+        """
         # Could support object selectors?
         supported = (param.Number, param.Integer)
         if isinstance(p, supported):
@@ -19,6 +24,9 @@ class ParamDatGUI(object):
 
     @classmethod
     def param_step(cls, p):
+        """
+        Given a parameter, return a datGUI step constraint.
+        """
         if isinstance(p, param.Integer):
             return 1
         elif isinstance(p, param.Number):
@@ -27,46 +35,30 @@ class ParamDatGUI(object):
             return None
 
     @classmethod
-    def param_definition(cls, name, p, mode):
+    def param_default(cls, p):
         """
-        Return the parameter mode string and None if parameter unsupported.
+        Given a parameter, return a suitable default value usable by datGUI
         """
-        supported_types = (param.Number, param.Integer, param.String, param.Boolean)
+        return str(p.default) if isinstance(p, param.ClassSelector) else p.default
 
-        if mode != 'untyped' and not isinstance(p, supported_types):
-            return None
-        value = str(p.default) if isinstance(p, param.ClassSelector) else p.default
-        return {'name': name,
-                'value': value,
-                'mode': mode,
-                'lims':cls.param_lims(p),
-                'step': cls.param_step(p)}
 
     @classmethod
-    def excluded(cls, k,v, excluded, min_precedence):
-        if (k == 'name') or (k in excluded):
-            return True
-        if v.precedence is None:
+    def paramlist(cls, typeobj, min_precedence):
+        """
+        Given a parameterized object, return a (name, parameter) pairs list.
+        """
+        return [(n,p) for n,p in typeobj.params().items()
+                if not (cls.excluded(p, min_precedence) or n=='name')]
+
+    @classmethod
+    def excluded(cls, p, min_precedence):
+        """
+        Predicate specifying if a parameter should be excluded from the GUI or not.
+        """
+        if p.precedence is None:
             return False
-        return (v.precedence<=min_precedence)
+        return (p.precedence<=min_precedence)
 
     @classmethod
-    def json(cls, definitions, excluded, min_precedence=0):
-        """
-        Generate a JSON-serializable parameter definitions for the given
-        parameterized objects.
-        """
-        json_obj = {}
-        for group, defs in definitions.items():
-            for nodetype, boxlist in defs.items():
-                for boxtype in boxlist:
-                    pairs = [(k,v) for k,v in boxtype.typeobj.params().items()
-                             if not cls.excluded(k,v, excluded, min_precedence) ]
-                    inputs = [cls.param_definition(name, p, boxtype.mode(name))
-                              for name,p in sorted(pairs)]
-                    json_obj[boxtype.name] = {'inputs': [el for el in inputs if el],
-                                              'outputs':[{'name':'', 'lims':[],
-                                                          'mode':'untyped-port'}],
-                                              'nodetype': nodetype,
-                                              'group': group }
-        return json_obj
+    def supported(cls, p):
+        return isinstance(p, cls.supported_types)
