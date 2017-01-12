@@ -13,13 +13,14 @@ class ParamDatGUI(object):
         """
         Given a parameter, return a datGUI lims constraint.
         """
-        # Could support object selectors?
-        supported = (param.Number, param.Integer)
-        if isinstance(p, supported):
+        numeric = (param.Number, param.Integer)
+        if isinstance(p, numeric):
             bounds = p.get_soft_bounds()
             if (bounds[0] is None) and (bounds[1] is not None):
                 print("FIXME: Bounded max not supported yet")
             return [el for el in bounds if el is not None]
+        elif isinstance(p, param.ObjectSelector):
+            return [p.objects]
         return []
 
     @classmethod
@@ -39,7 +40,12 @@ class ParamDatGUI(object):
         """
         Given a parameter, return a suitable default value usable by datGUI
         """
-        return str(p.default) if isinstance(p, param.ClassSelector) else p.default
+        if isinstance(p, param.ObjectSelector):
+            return p.objects[0]
+        elif isinstance(p, param.ClassSelector):
+            return str(p.default)
+        else:
+            return p.default
 
 
     @classmethod
@@ -61,4 +67,9 @@ class ParamDatGUI(object):
 
     @classmethod
     def supported(cls, p):
-        return isinstance(p, cls.supported_types)
+        if isinstance(p, cls.supported_types):
+            return True
+        if isinstance(p, param.ObjectSelector):
+            # Currently supporting ObjectSelector if all objects are strings
+            return all(isinstance(el, str) for el in p.objects)
+        return False
