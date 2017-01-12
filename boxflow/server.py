@@ -21,7 +21,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         print('New websocket connection')
 
-        excluded = ['enforce_minimal_thickness', 'size']
+        # seed/time_dependent probably have an issue with None...
+        excluded = ['enforce_minimal_thickness', 'size', 'time_dependent', 'seed']
         self.command = Command(self, Interface, excluded=excluded)
         self.command.push_definitions()
 
