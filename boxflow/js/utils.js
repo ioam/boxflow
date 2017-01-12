@@ -53,7 +53,7 @@ _.mixin({
     demo_graph : function(view, graph) {
 
         view.add_node(graph, 'Magnitude', 'magnitude:0', { pos: [0,100]});
-        view.add_node(graph, 'Multiply', 'multiply:0', { pos: [150,350]});
+        view.add_node(graph, 'BinaryOp', 'binaryop:0', { pos: [150,350]});
 
         view.add_node(graph, 'Disk', 'disk:0', { pos: [200,0]});
         view.add_node(graph, 'Gaussian', 'gaussian:0', { pos: [380,100]});
@@ -63,7 +63,7 @@ _.mixin({
 
 
         let mag = graph.find_node('magnitude:0');
-        let multiply = graph.find_node('multiply:0');
+        let binmul = graph.find_node('binaryop:0');
 
         let disk = graph.find_node('disk:0');
         let gaussian = graph.find_node('gaussian:0');
@@ -72,15 +72,17 @@ _.mixin({
         let mul = graph.find_node('mul:0');
 
         graph.add_edge(mag, '', disk, 'x');
-        graph.add_edge(mag, '', multiply, 'input');
-        graph.add_edge(multiply, '', spiral, 'orientation');
+        graph.add_edge(mag, '', binmul, 'rhs');
+        graph.add_edge(binmul, '', spiral, 'orientation');
 
         graph.add_edge(disk, '', sub, 'lhs');
         graph.add_edge(gaussian, '', sub, 'rhs');
         graph.add_edge(sub, '', mul, 'lhs');
         graph.add_edge(spiral, '', mul, 'rhs');
 
-        multiply.params['multiplier'] = 3.14;
+
+        binmul.params['operator'] = 'mul'
+        binmul.params['lhs'] = 3.14;
 
         disk.params['aspect_ratio'] = 0.4;
         disk.params['orientation'] = 0.55;
