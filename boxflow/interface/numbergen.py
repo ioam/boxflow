@@ -64,7 +64,7 @@ class Subtract(param.Parameterized):
         return self.lhs - self.rhs
 
 
-class BinaryOperator(numbergen.NumberGenerator):
+class BinaryOp(numbergen.NumberGenerator):
 
     lhs = param.Number(default=0)
 
@@ -81,4 +81,4 @@ class BinaryOperator(numbergen.NumberGenerator):
 def load_numbergen():
     Interface.add('numbergen', [BoxType(Percentage, hidden=['percent']),
                                 BoxType(Magnitude,  hidden=['magnitude']),
-                                Multiply, Divide, Add, Subtract])
+                                Multiply, Divide, Add, Subtract, BinaryOp])
