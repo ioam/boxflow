@@ -41,7 +41,7 @@ class ParamDatGUI(object):
         Given a parameter, return a suitable default value usable by datGUI
         """
         if isinstance(p, param.ObjectSelector):
-            return p.objects[0]
+            return p.default if p.default else p.objects[0]
         elif isinstance(p, param.ClassSelector):
             return str(p.default)
         else:
