@@ -67,6 +67,7 @@ class Box(object):
         return self.instance.params()
 
     def __getitem__(self, name):
+        "Convenience method to access a parameter value from the instance"
         return getattr(self.instance, name)
 
 
