@@ -48,7 +48,7 @@ class Graph(object):
             parameter = instance.params()[input]
             instance.set_param(**{input : parameter.default})
         else:
-            print('Warning (remove_link): Could not find instance %r' % name)
+            print('Warning (remove_link): Could not find instance %r' % dest)
 
 
     def update_params(self, name, params):
