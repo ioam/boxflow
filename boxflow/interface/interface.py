@@ -7,6 +7,10 @@ from collections import defaultdict
 from .paramDatGUI import ParamDatGUI
 
 class BoxType(object):
+    """
+    A BoxType is a type of Box. A BoxType is to a Box what a
+    parameterized class is to a parameterized instance.
+    """
 
     def __init__(self, typeobj, nodetype='LabelledNode',
                  untyped=[], hidden=[], display_fn = None):
@@ -28,10 +32,38 @@ class BoxType(object):
             return 'untyped'
         return 'hidden' if name in self.hidden else 'normal'
 
-    def __call__(self, *args, **kwargs):
-        # Return an instance
-        return self.typeobj(*args, **kwargs)
+    def __call__(self, interface, *args, **kwargs):
+        return Box(self, interface, *args, **kwargs)
 
+
+class Box(object):
+    """
+    A Box is an instance of a BoxType. A Box is to a BoxType what a
+    parameterized instance is to a parameterized class.
+    """
+    def __init__(self, boxtype, interface, *args, **kwargs):
+        self.boxtype = boxtype
+        self.interface = interface
+
+        self.instance = boxtype.typeobj(*args, **kwargs)
+        self.name = self.instance.name
+
+
+    def display(self):
+        return self.boxtype.display_fn(self.instance)
+
+    def propagate(self):
+        return (self.instance.propagate()
+                if hasattr(self.instance, 'propagate') else self.instance)
+
+    def set_param(self, *args, **kwargs):
+        self.instance.set_param(*args, **kwargs)
+
+    def params(self):
+        return self.instance.params()
+
+    def __getitem__(self, name):
+        return getattr(self.instance, name)
 
 class Interface(object):
 
