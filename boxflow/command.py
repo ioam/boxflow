@@ -45,13 +45,13 @@ class Command(object):
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
         boxtype = self.lookup_boxtype(data['type'])
-        instance = boxtype(name=data['name'], **data['params'])
-        self.graph.add_instance(instance)
+        box = boxtype(self.interface, name=data['name'], **data['params'])
+        self.graph.add_box(box)
         self.send('image_update',
-                  dict(boxtype.display_fn(instance), name=data['name']))
+                  dict(box.display(), name=data['name']))
 
     def remove_node(self, data):
-        self.graph.remove_instance(data['name'])
+        self.graph.remove_box(data['name'])
 
     def add_edge(self, data):
         (s,o,d,i) =(data['src'], data['output'], data['dest'], data['input'])
@@ -74,11 +74,10 @@ class Command(object):
         updated = self.graph.update_params(data['name'], data['params'])
 
         for name in updated:
-            instance = self.graph.find_instance(name)
-            if instance:
-                boxtype = self.lookup_boxtype(instance.__class__.__name__)
+            box = self.graph.find_box(name)
+            if box:
                 self.send('image_update',
-                          dict(boxtype.display_fn(instance), name=name))
+                          dict(box.display(), name=name))
     # Push commands
 
     def push_definitions(self):
