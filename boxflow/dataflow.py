@@ -1,7 +1,7 @@
-# Module handling the graph structure
+# Module handling the dataflow structure
 
 
-class Graph(object):
+class DataFlow(object):
 
     def __init__(self):
         self.boxes = []

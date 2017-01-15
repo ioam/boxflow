@@ -1,6 +1,6 @@
 import json
 
-from graph import Graph
+from dataflow import DataFlow
 from definitions import ParamDefinitions
 
 
@@ -13,7 +13,7 @@ class Command(object):
         self.handler = handler
         self.excluded = excluded
 
-        self.graph = Graph()
+        self.dataflow = DataFlow()
 
     def send(self, command, data):
         self.handler.write_message(
@@ -46,18 +46,18 @@ class Command(object):
         # TODO: Assuming class names unique between groups
         boxtype = self.lookup_boxtype(data['type'])
         box = boxtype(self.interface, name=data['name'], **data['params'])
-        self.graph.add_box(box)
+        self.dataflow.add_box(box)
         self.send('image_update',
                   dict(box.display(), name=data['name']))
 
     def remove_node(self, data):
-        self.graph.remove_box(data['name'])
+        self.dataflow.remove_box(data['name'])
 
     def add_edge(self, data):
         (s,o,d,i) =(data['src'], data['output'], data['dest'], data['input'])
 
-        if self.graph.allowed_link(s,o,d,i):
-            self.graph.add_link(s,o,d,i)
+        if self.dataflow.allowed_link(s,o,d,i):
+            self.dataflow.add_link(s,o,d,i)
             self.update_params({'name':d, 'params':{}}) # Update destination
         else:
             # Remove link from client-side.
@@ -65,16 +65,16 @@ class Command(object):
             self.send('invalid_edge', data['name'])
 
     def remove_edge(self, data):
-        self.graph.remove_link(data['src'], data['output'],
-                               data['dest'], data['input'])
+        self.dataflow.remove_link(data['src'], data['output'],
+                                  data['dest'], data['input'])
         self.update_params({'name':data['dest'], 'params':{}})
 
 
     def update_params(self, data):
-        updated = self.graph.update_params(data['name'], data['params'])
+        updated = self.dataflow.update_params(data['name'], data['params'])
 
         for name in updated:
-            box = self.graph.find_box(name)
+            box = self.dataflow.find_box(name)
             if box:
                 self.send('image_update',
                           dict(box.display(), name=name))
