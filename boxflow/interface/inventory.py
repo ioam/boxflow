@@ -40,6 +40,10 @@ class Box(object):
     """
     A Box is an instance of a BoxType. A Box is to a BoxType what a
     parameterized instance is to a parameterized class.
+
+    The purpose of a Box is to define the necessary portion of the param
+    API needed from parameterized instance and to allow additional
+    processing when setting parameters.
     """
     def __init__(self, boxtype, inventory, *args, **kwargs):
         self.boxtype = boxtype
