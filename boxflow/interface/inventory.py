@@ -68,6 +68,10 @@ class Box(object):
 
 
 class Inventory(object):
+    """
+    The Inventory holds all available BoxType definitions and offers the
+    means to serialize these definitions to JSON.
+    """
 
     definitions = {}
 
