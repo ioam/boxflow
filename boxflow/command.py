@@ -6,6 +6,10 @@ from definitions import ParamDefinitions
 
 
 class Command(object):
+    """
+    The Command class links the messages sent of the websocket to the
+    associated operations on the dataflow graph.
+    """
 
     def __init__(self, handler, interface, excluded):
         self.interface = interface

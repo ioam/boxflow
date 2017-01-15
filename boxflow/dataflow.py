@@ -2,6 +2,10 @@
 
 
 class DataFlow(object):
+    """
+    The DataFlow object represents a dataflow graph consisting of links
+    between boxes.
+    """
 
     def __init__(self):
         self.boxes = []
