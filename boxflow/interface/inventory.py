@@ -120,7 +120,7 @@ class Inventory(object):
         for group, defs in cls.definitions.items():
             for nodetype, boxlist in defs.items():
                 for boxtype in boxlist:
-                    inputs = cls._json_params(boxtype, excluded, gui)
+                    inputs = cls.guis[gui].json(boxtype, excluded)
                     json_obj[boxtype.name] = {'inputs'  : inputs,
                                               'outputs' : [ {'name':'', 'lims':[],
                                                              'mode':'untyped-port'}],
@@ -128,28 +128,3 @@ class Inventory(object):
                                               'group'   : group }
         return json_obj
 
-    @classmethod
-    def _json_params(cls, boxtype, excluded, gui, min_precedence=0):
-        """
-        Return JSON-serializable list of parameter definitions using the
-        chosen gui interface.
-        """
-        paramlist = cls.guis[gui].paramlist(boxtype.typeobj, min_precedence)
-        json_params= [cls._json_param(name, p, boxtype.mode(name), gui=gui)
-                      for (name, p) in paramlist if name not in excluded ]
-        return [el for el in json_params if el]
-
-
-    @classmethod
-    def _json_param(cls, name, p, mode, gui):
-        """
-        Return the parameter mode string and None if parameter unsupported.
-        """
-        if mode != 'untyped' and not cls.guis[gui].supported(p):
-            return None
-
-        return {'name': name,
-                'mode':  mode,
-                'value': cls.guis[gui].param_default(p),
-                'lims':  cls.guis[gui].param_lims(p),
-                'step':  cls.guis[gui].param_step(p)}

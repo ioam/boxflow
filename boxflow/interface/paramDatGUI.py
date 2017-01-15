@@ -9,6 +9,15 @@ class ParamDatGUI(object):
     supported_types = (param.Number, param.Integer, param.String, param.Boolean)
 
     @classmethod
+    def supported(cls, p):
+        if isinstance(p, cls.supported_types):
+            return True
+        if isinstance(p, param.ObjectSelector):
+            # Currently supporting ObjectSelector if all objects are strings
+            return all(isinstance(el, str) for el in p.objects)
+        return False
+
+    @classmethod
     def param_lims(cls, p):
         """
         Given a parameter, return a datGUI lims constraint.
@@ -65,11 +74,28 @@ class ParamDatGUI(object):
             return False
         return (p.precedence<=min_precedence)
 
+
     @classmethod
-    def supported(cls, p):
-        if isinstance(p, cls.supported_types):
-            return True
-        if isinstance(p, param.ObjectSelector):
-            # Currently supporting ObjectSelector if all objects are strings
-            return all(isinstance(el, str) for el in p.objects)
-        return False
+    def json(cls, boxtype, excluded, min_precedence=0):
+        """
+        Return JSON-serializable list of parameter definitions.
+        """
+        paramlist = cls.paramlist(boxtype.typeobj, min_precedence)
+        json_params= [cls._json_param(name, p, boxtype.mode(name))
+                      for (name, p) in paramlist if name not in excluded ]
+        return [el for el in json_params if el]
+
+
+    @classmethod
+    def _json_param(cls, name, p, mode):
+        """
+        Return the parameter mode string and None if parameter unsupported.
+        """
+        if mode != 'untyped' and not cls.supported(p):
+            return None
+
+        return {'name': name,
+                'mode':  mode,
+                'value': cls.param_default(p),
+                'lims':  cls.param_lims(p),
+                'step':  cls.param_step(p)}
