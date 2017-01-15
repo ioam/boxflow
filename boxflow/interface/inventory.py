@@ -1,4 +1,4 @@
-# Module offering interface class for registering BoxTypes
+# Module offering inventory class for registering BoxTypes
 #
 #
 from __future__ import absolute_import
@@ -32,8 +32,8 @@ class BoxType(object):
             return 'untyped'
         return 'hidden' if name in self.hidden else 'normal'
 
-    def __call__(self, interface, *args, **kwargs):
-        return Box(self, interface, *args, **kwargs)
+    def __call__(self, inventory, *args, **kwargs):
+        return Box(self, inventory, *args, **kwargs)
 
 
 class Box(object):
@@ -41,9 +41,9 @@ class Box(object):
     A Box is an instance of a BoxType. A Box is to a BoxType what a
     parameterized instance is to a parameterized class.
     """
-    def __init__(self, boxtype, interface, *args, **kwargs):
+    def __init__(self, boxtype, inventory, *args, **kwargs):
         self.boxtype = boxtype
-        self.interface = interface
+        self.inventory = inventory
 
         self.instance = boxtype.typeobj(*args, **kwargs)
         self.name = self.instance.name

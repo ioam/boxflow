@@ -11,8 +11,8 @@ class Command(object):
     associated operations on the dataflow graph.
     """
 
-    def __init__(self, handler, interface, excluded):
-        self.interface = interface
+    def __init__(self, handler, inventory, excluded):
+        self.inventory = inventory
         self.handler = handler
         self.excluded = excluded
 
@@ -39,8 +39,8 @@ class Command(object):
 
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
-        boxtype = self.interface.lookup_boxtype(data['type'])
-        box = boxtype(self.interface, name=data['name'], **data['params'])
+        boxtype = self.inventory.lookup_boxtype(data['type'])
+        box = boxtype(self.inventory, name=data['name'], **data['params'])
         self.dataflow.add_box(box)
         self.send('image_update',
                   dict(box.display(), name=data['name']))
@@ -76,5 +76,5 @@ class Command(object):
     # Push commands
 
     def push_definitions(self):
-        definitions = self.interface.json(self.excluded, 'datgui')
+        definitions = self.inventory.json(self.excluded, 'datgui')
         self.send('definitions', definitions)
