@@ -61,6 +61,7 @@ class Box(object):
                 if hasattr(self.instance, 'propagate') else self.instance)
 
     def set_param(self, *args, **kwargs):
+        # Can get button definition from boxtype.
         self.instance.set_param(*args, **kwargs)
 
     def params(self):
@@ -120,10 +121,10 @@ class Inventory(object):
         for group, defs in cls.definitions.items():
             for nodetype, boxlist in defs.items():
                 for boxtype in boxlist:
-                    inputs = cls.guis[gui].json(boxtype, excluded)
+                    inputs = cls.guis[gui].json_inputs(boxtype, excluded)
+                    outputs = cls.guis[gui].json_outputs(boxtype)
                     json_obj[boxtype.name] = {'inputs'  : inputs,
-                                              'outputs' : [ {'name':'', 'lims':[],
-                                                             'mode':'untyped-port'}],
+                                              'outputs' : outputs,
                                               'nodetype': nodetype,
                                               'group'   : group }
         return json_obj

@@ -76,14 +76,18 @@ class ParamDatGUI(object):
 
 
     @classmethod
-    def json(cls, boxtype, excluded, min_precedence=0):
+    def json_inputs(cls, boxtype, excluded, min_precedence=0):
         """
         Return JSON-serializable list of parameter definitions.
         """
-        paramlist = cls.paramlist(boxtype.typeobj, min_precedence)
+        inputs = cls.paramlist(boxtype.typeobj, min_precedence)
         json_params= [cls._json_param(name, p, boxtype.mode(name))
-                      for (name, p) in paramlist if name not in excluded ]
+                      for (name, p) in inputs if name not in excluded ]
         return [el for el in json_params if el]
+
+    @classmethod
+    def json_outputs(cls, boxtype):
+        return  [ {'name':'', 'lims':[], 'mode':'untyped-port'}]
 
 
     @classmethod
