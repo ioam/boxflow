@@ -89,6 +89,17 @@ class Interface(object):
 
 
     @classmethod
+    def lookup_boxtype(cls, name):
+        """
+        Find the appropriate BoxType associated with the given name.
+        """
+        for spec in cls.definitions.values():
+            for boxlist in spec.values():
+                for boxtype in boxlist:
+                    if boxtype.name == name:
+                        return boxtype
+
+    @classmethod
     def json(cls, excluded, gui):
         """
         Generate a JSON-serializable parameter definitions for the given

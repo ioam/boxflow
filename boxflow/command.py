@@ -9,7 +9,6 @@ class Command(object):
 
     def __init__(self, handler, interface, excluded):
         self.interface = interface
-        self.definitions = interface.definitions
         self.handler = handler
         self.excluded = excluded
 
@@ -32,19 +31,11 @@ class Command(object):
         if json['command'] == 'update_params':
             self.update_params(json['data'])
 
-    # Utility methods
-    def lookup_boxtype(self, name):
-        for spec in self.definitions.values():
-            for boxlist in spec.values():
-                for boxtype in boxlist:
-                    if boxtype.name == name:
-                        return boxtype
-
     # Receive commands
 
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
-        boxtype = self.lookup_boxtype(data['type'])
+        boxtype = self.interface.lookup_boxtype(data['type'])
         box = boxtype(self.interface, name=data['name'], **data['params'])
         self.dataflow.add_box(box)
         self.send('image_update',
