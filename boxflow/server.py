@@ -11,7 +11,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
-from interface import Interface
+from interface import Inventory
 from command import Command
 
 
@@ -23,7 +23,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
         # seed/time_dependent probably have an issue with None...
         excluded = ['enforce_minimal_thickness', 'size', 'time_dependent', 'seed']
-        self.command = Command(self, Interface, excluded=excluded)
+        self.command = Command(self, Inventory, excluded=excluded)
         self.command.push_definitions()
 
     def on_message(self, message):

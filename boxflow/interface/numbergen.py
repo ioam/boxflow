@@ -6,7 +6,7 @@ import param
 import numbergen
 import operator
 
-from .interface import Interface, BoxType
+from .inventory import Inventory, BoxType
 
 param.Dynamic.time_dependent = True
 numbergen.UniformRandom.time_dependent = True
@@ -42,7 +42,7 @@ class BinaryOp(numbergen.NumberGenerator):
                   self.rhs() if callable(self.rhs) else self.rhs)
 
 def load_numbergen():
-    Interface.add('numbergen', [BoxType(Percentage, hidden=['percent']),
+    Inventory.add('numbergen', [BoxType(Percentage, hidden=['percent']),
                                 BoxType(Magnitude,  hidden=['magnitude']),
                                 BoxType(numbergen.UniformRandom,
                                         hidden=['lbound','ubound','seed']),

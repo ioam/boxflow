@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import param
 import fractions
 
-from .interface import Interface, BoxType
+from .inventory import Inventory, BoxType
 
 param.Dynamic.time_fn(val=0.0, time_type=fractions.Fraction)
 param.Dynamic.time_dependent = True
@@ -37,4 +37,4 @@ class Time(param.Parameterized):
 
 def load_param():
     boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, String]]
-    Interface.add('param', boxtypes + [Time])
+    Inventory.add('param', boxtypes + [Time])

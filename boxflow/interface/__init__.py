@@ -1,7 +1,7 @@
 # Loads extension classes from supported libraries
 
 from __future__ import absolute_import
-from.interface import Interface
+from .inventory import Inventory
 
 from .param import load_param            # Param is a core dependency
 from .numbergen import  load_numbergen   # Numbergen is included
@@ -29,4 +29,4 @@ if load_imagen:
 if load_holoviews:
     load_holoviews()
 
-__all__ = ['Interface']
+__all__ = ['Inventory']

@@ -12,7 +12,7 @@ from imagen import PatternGenerator
 import param
 
 
-from .interface import Interface, BoxType
+from .inventory import Inventory, BoxType
 
 class Viewport(PatternGenerator):
     """
@@ -101,8 +101,8 @@ vanilla_classes = [ BoxType(patgen,
                     for patgen in patterngenerators ]
 
 def load_imagen():
-    Interface.add('imagen', vanilla_classes + binary_ops)
-    Interface.add('imagen',  BoxType(Viewport,
+    Inventory.add('imagen', vanilla_classes + binary_ops)
+    Inventory.add('imagen',  BoxType(Viewport,
                                      nodetype='Viewport',
                                      untyped=['input'],
                                      display_fn=imagen_display))

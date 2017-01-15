@@ -65,7 +65,9 @@ class Box(object):
     def __getitem__(self, name):
         return getattr(self.instance, name)
 
-class Interface(object):
+
+
+class Inventory(object):
 
     definitions = {}
 
