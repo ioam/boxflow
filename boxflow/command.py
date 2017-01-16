@@ -78,3 +78,7 @@ class Command(object):
     def push_definitions(self):
         definitions = self.inventory.json(self.excluded, 'datgui')
         self.send('definitions', definitions)
+
+    def push_params(self, name, params):
+        " Push updated parameter values to the frontend "
+        self.send('param_update', {'name':name, 'params':params})
