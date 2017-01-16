@@ -86,11 +86,12 @@ class View {
         }
     }
 
-    add_node(graph, type, name, options={}) {
+    add_node(graph, type, name, options={}) { // TODO: Work by group
         let opts = {
             name: name,
             type : type,
             params : graph.defs.default_params(type),
+            buttons : graph.defs.default_buttons(type),
             inputs : graph.defs.input_names(type),
             outputs: graph.defs.output_names(type),
             param_modes: graph.defs.default_params(type, 'mode')
