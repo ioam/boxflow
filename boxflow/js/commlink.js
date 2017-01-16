@@ -50,7 +50,7 @@ class CommLink {
             let params = json['data']['params'];
             let node = this.graph.find_node(json['data']['name']);
             if (node) {
-                WatchJS.noMore = true;
+                WatchJS.noMore = true; // Set params without triggering watch.js
                 for (let key of Object.keys(params)) {
                     node.params[key] = params[key];
                 }
@@ -113,8 +113,8 @@ class CommLink {
 
     update_params(node) {  // Send updated param values to Python
         this.send_message('update_params',
-                          {'name':node.name,
-                           'params':node.params})
+                          {'name'   : node.name,
+                           'params' : node.params })
     }
 
     unwatch_params(node) {
