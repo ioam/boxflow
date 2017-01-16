@@ -76,6 +76,8 @@ class GUI {
         this.clear_params(false);
         for (let key of unlocked) {
             let control = this.editor.add(params, key, ...plims[key]);
+            // There seems to be a bug in datGUI with numbers becoming strings for
+            // named value selections as well as multi-selections (lists).
             if (pstep[key]!==null) {
                 control.step(pstep[key])
             }
