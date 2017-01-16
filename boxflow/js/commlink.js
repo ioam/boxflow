@@ -46,6 +46,21 @@ class CommLink {
                 boxtype.update_image(node, this.view, true);
             }
         }
+        else if (json.command == 'param_update') {
+            let params = json['data']['params'];
+            let node = this.graph.find_node(json['data']['name']);
+            if (node) {
+                WatchJS.noMore = true;
+                for (let key of Object.keys(params)) {
+                    node.params[key] = params[key];
+                }
+                WatchJS.noMore = false;
+                this.gui.refresh_params();
+            }
+            else {
+                console.log('Could not find node to update params')
+            }
+        }
         else if (json.command == 'invalid_edge') {
             console.log('Invalid edge: ' + json['data']);
             this.view.remove(this.graph, json['data'], false); // Avoid looping back
