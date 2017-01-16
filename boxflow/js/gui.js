@@ -80,6 +80,10 @@ class GUI {
                 control.step(pstep[key])
             }
         }
+    refresh_params() {
+        // Refresh the value of the parameters shown in the GUI
+        for (let controller of this.editor.__controllers) {
+            controller.updateDisplay() }
     }
 
     clear_params(clear_folder=true) {
