@@ -23,6 +23,7 @@ class BaseNode {
                   inputs=[],                     // Input/output parameter names
                   outputs=[],
                   params = {},                    // Parameter state
+                  buttons = {},                   // Button state
                   param_modes = {},
                   pos = [0,0],                    // Geometry
                   width = 100,
@@ -44,6 +45,7 @@ class BaseNode {
         this.inputs = inputs;
         this.outputs = outputs;
         this.params = params;
+        this.buttons = buttons;
         this.param_modes = param_modes;
         this._locked_params = _.mapObject(this.params, // Parameters 'locked' by connections
                                           (k,v) => { return false});
