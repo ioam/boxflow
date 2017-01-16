@@ -110,6 +110,20 @@ class CommLink {
         this.update_params(edge.dest);
     }
 
+    trigger_button(node) { // Communicate which buttons have been triggered
+        let triggered = [];
+        for (let button of this.graph.defs.buttons(node.type)) {
+            if (node.buttons[button.callback]) {
+                triggered.push(button.callback);
+                WatchJS.noMore = true; // Reset state back to untriggered (false)
+                node.buttons[button.callback] = false;
+                WatchJS.noMore = false;
+            }
+        }
+        this.send_message('trigger_button',
+                          {'name':    node.name,
+                           'buttons': triggered })
+    }
 
     update_params(node) {  // Send updated param values to Python
         this.send_message('update_params',

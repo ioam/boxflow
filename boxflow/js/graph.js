@@ -181,7 +181,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
             buttons[button.callback] = false;
             buttons[button.callback + '_trigger'] = function() {
                 this[button.callback] = true } ;
-        }g
+        }
         return buttons
     }
 
