@@ -175,6 +175,16 @@ class Definitions { //  Associates nodes to the input/output param definitions
         return params
     }
 
+    default_buttons(type) {  // Returns object to hold button state
+        let buttons = {};
+        for (let button of this.definitions[type].buttons) {
+            buttons[button.callback] = false;
+            buttons[button.callback + '_trigger'] = function() {
+                this[button.callback] = true } ;
+        }g
+        return buttons
+    }
+
     define(type, inputs, outputs, nodetype='ImageNode', group='Default') {
         // Define the input and output params of a node type
         // as well as the associated nodetype
@@ -198,6 +208,10 @@ class Definitions { //  Associates nodes to the input/output param definitions
             }
         }
         return types.sort()
+    }
+
+    buttons(type) {
+        return this.definitions[type].buttons
     }
 
     input_names(type) {  // Get the input param names for a node
