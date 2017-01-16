@@ -84,6 +84,11 @@ class CommLink {
         watch(node.params, () => {
             this.update_params(node);
         });
+
+        watch(node.buttons, () => {
+            this.trigger_button(node);
+        });
+
     }
 
     remove_node(node) {
