@@ -91,6 +91,7 @@ class View {
             name: name,
             type : type,
             params : graph.defs.default_params(type),
+            labels : graph.defs.default_params(type, 'label'),
             buttons : graph.defs.default_buttons(type),
             inputs : graph.defs.input_names(type),
             outputs: graph.defs.output_names(type),

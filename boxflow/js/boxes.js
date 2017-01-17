@@ -126,7 +126,8 @@ class LabelledBox extends BaseBox {
     static make_label(name, node, type) {
         let [x,y] = node.port_position(name, type);
         let padding = node.geom.width * 0.2;
-        let label = new fabric.Text(name, {
+        let label = new fabric.Text(
+            node.labels[name]? node.labels[name] : name, {
             fontFamily: node.label_opts.fontFamily,
             strokeWidth : 0,
             originX :     (type === 'input') ? 'left' : 'right',
