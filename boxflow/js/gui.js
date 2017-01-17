@@ -63,6 +63,7 @@ class GUI {
         let plims = this.graph.defs.default_params(node.type, 'lims');
         let pstep = this.graph.defs.default_params(node.type, 'step');
         let pmode = this.graph.defs.default_params(node.type, 'mode');
+        let plabel = this.graph.defs.default_params(node.type, 'label');
 
         if (!this.editor) {
             let editor = this.datgui.addFolder("Parameters");
@@ -74,10 +75,11 @@ class GUI {
 
         this.editor.open();
         this.clear_params(false);
+
         for (let key of unlocked) {
-            let control = this.editor.add(params, key, ...plims[key]);
             // There seems to be a bug in datGUI with numbers becoming strings for
             // named value selections as well as multi-selections (lists).
+            let control = this.editor.add(params, key, ...plims[key]).name(plabel[key]);
             if (pstep[key]!==null) {
                 control.step(pstep[key])
             }

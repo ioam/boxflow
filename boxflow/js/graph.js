@@ -145,7 +145,9 @@ class Definitions { //  Associates nodes to the input/output param definitions
         this._node_names = _.object(_.map(nodes, (nd) => [nd.name, nd]));
     }
 
-    param(name, value=true, lims=[], mode='normal', step=null) { // A parameter definition
+    param(name, value=true, lims=[], mode='normal', step=null, label=null) {
+        // A parameter definition
+        //
         // name:   The name of the parameter.
         // value:  The default parameter values.
         // lims:   Limits based on datgui constraints:
@@ -155,6 +157,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         //   + [['a','b']] - Options
         //
         // step:  The step size for numeric quantities
+        // label: Text label in the GUI
         // mode: The mode of the port, ie one of...
         //
         //   + 'normal'    - Port with visual port and GUI parameter.
@@ -162,7 +165,8 @@ class Definitions { //  Associates nodes to the input/output param definitions
         //   + 'hidden'    - GUI parameter but no visual port.
         //
         //   TODO: Support [undefined, max] for maximum limit only.
-        return {name: name, value : value, lims:lims, mode: mode, step: step}
+        return {name:name, value:value, lims:lims,
+                mode:mode, step:step, label: label ? label : name}
     }
 
     default_params(type, field='value') { // Generate a default parameters object

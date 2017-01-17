@@ -98,8 +98,9 @@ class ParamDatGUI(object):
         if mode != 'untyped' and not cls.supported(p):
             return None
 
-        return {'name': name,
-                'mode':  mode,
+        return {'name' : name,
+                'label': name,
+                'mode' : mode,
                 'value': cls.param_default(p),
-                'lims':  cls.param_lims(p),
-                'step':  cls.param_step(p)}
+                'lims' : cls.param_lims(p),
+                'step' : cls.param_step(p)}
