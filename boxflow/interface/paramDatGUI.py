@@ -81,7 +81,7 @@ class ParamDatGUI(object):
         Return JSON-serializable list of parameter definitions.
         """
         inputs = cls.paramlist(boxtype.typeobj, min_precedence)
-        json_params= [cls._json_param(name, p, boxtype.mode(name))
+        json_params= [cls._json_param(name, p, boxtype)
                       for (name, p) in inputs if name not in excluded ]
         return [el for el in json_params if el]
 
@@ -91,15 +91,16 @@ class ParamDatGUI(object):
 
 
     @classmethod
-    def _json_param(cls, name, p, mode):
+    def _json_param(cls, name, p, boxtype):
         """
         Return the parameter mode string and None if parameter unsupported.
         """
+        mode = boxtype.mode(name)
         if mode != 'untyped' and not cls.supported(p):
             return None
 
         return {'name' : name,
-                'label': name,
+                'label': boxtype.label(name),
                 'mode' : mode,
                 'value': cls.param_default(p),
                 'lims' : cls.param_lims(p),
