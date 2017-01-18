@@ -84,6 +84,13 @@ class GUI {
                 control.step(pstep[key])
             }
         }
+
+        for (let button of this.graph.defs.buttons(node.type)) {
+            this.editor.add(node.buttons, button.callback+'_trigger').name(button.label);
+        }
+
+    }
+
     refresh_params() {
         // Refresh the value of the parameters shown in the GUI
         for (let controller of this.editor.__controllers) {
