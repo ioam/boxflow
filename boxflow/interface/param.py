@@ -6,6 +6,7 @@ import param
 import fractions
 
 from .inventory import Inventory, BoxType
+from collections import OrderedDict
 
 param.Dynamic.time_fn(val=0.0, time_type=fractions.Fraction)
 param.Dynamic.time_dependent = True
@@ -31,10 +32,20 @@ class Time(param.Parameterized):
 
     time = param.Number(default=0)
 
+    step = param.Number(default=1)
+
     def propagate(self):
         return float(param.Dynamic.time_fn(fractions.Fraction(self.time)))
+
+    def increment(self):
+        self.time += self.step
+
+    def decrement(self):
+        self.time -= self.step
 
 
 def load_param():
     boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, String]]
-    Inventory.add('param', boxtypes + [Time])
+    Inventory.add('param', boxtypes +
+                  [BoxType(Time, buttons=OrderedDict([('increment','+'),
+                                                      ('decrement','-')]))])
