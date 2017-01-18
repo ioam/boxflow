@@ -76,6 +76,13 @@ class ParamDatGUI(object):
 
 
     @classmethod
+    def json_buttons(cls, boxtype):
+        """
+        Given a boxtype, return the JSON representation of its buttons.
+        """
+        return [{'callback':cb, 'label':l} for (cb, l) in boxtype.buttons.items()]
+
+    @classmethod
     def json_inputs(cls, boxtype, excluded, min_precedence=0):
         """
         Return JSON-serializable list of parameter definitions.
