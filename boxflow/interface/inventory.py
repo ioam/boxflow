@@ -13,14 +13,14 @@ class BoxType(object):
     """
 
     def __init__(self, typeobj, nodetype='LabelledNode',
-                 untyped=[], hidden=[], relabel={}, display_fn = None):
+                 untyped=[], hidden=[], relabel={}, buttons={}, display_fn = None):
         self.typeobj = typeobj
         self.nodetype = nodetype
         self.relabel = relabel
+        self.buttons = buttons
         self.display_fn = display_fn if display_fn else lambda x: {}
 
         self.name = typeobj.name
-
         self.untyped = set(getattr(typeobj, 'untyped', [])) | set(untyped)
         self.hidden = set(getattr(typeobj, 'hidden', [])) | set(hidden)
 
@@ -39,6 +39,8 @@ class BoxType(object):
         """
         if name in self.relabel:
             return self.relabel[name]
+        elif name in self.buttons:
+            return self.buttons[name]
         else:
             return name.replace('_',' ')
 
