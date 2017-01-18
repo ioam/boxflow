@@ -34,6 +34,8 @@ class Command(object):
             self.remove_edge(json['data'])
         if json['command'] == 'update_params':
             self.update_params(json['data'])
+        if json['command'] == 'trigger_button':
+            self.trigger_button(json['data'])
 
     # Receive commands
 
@@ -73,6 +75,12 @@ class Command(object):
             if box:
                 self.send('image_update',
                           dict(box.display(), name=name))
+
+    def trigger_button(self, data):
+        box = self.dataflow.find_box(data['name'])
+        if box is None: return
+        self.push_params(data['name'], box.trigger(data['button']))
+
     # Push commands
 
     def push_definitions(self):
