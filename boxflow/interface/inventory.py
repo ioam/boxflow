@@ -80,6 +80,18 @@ class Box(object):
     def params(self):
         return self.instance.params()
 
+    def trigger(self, button):
+        """
+        Triggering a button invokes the associated method and returns
+        the parameters (which might have changed).
+        """
+        registered = button in self.boxtype.buttons
+        if not registered:
+            print('Warning: Could not find button %r' % button)
+            return
+        getattr(self.instance, button)() # Call button method without arguments
+        return {k:v for k,v in self.instance.get_param_values() if k!='name'}
+
     def __getitem__(self, name):
         "Convenience method to access a parameter value from the instance"
         return getattr(self.instance, name)
