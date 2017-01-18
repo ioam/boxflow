@@ -125,9 +125,15 @@ class CommLink {
                 WatchJS.noMore = false;
             }
         }
-        this.send_message('trigger_button',
-                          {'name':    node.name,
-                           'buttons': triggered })
+        if (triggered.length == 0) { return }
+        else if (triggered.length > 1) {
+            console.log('Warning: Multiple buttons triggered simultaneously.')
+        }
+        else {
+            this.send_message('trigger_button',
+                              {'name':   node.name,
+                               'button': triggered[0] })
+        }
     }
 
     update_params(node) {  // Send updated param values to Python
