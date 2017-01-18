@@ -136,8 +136,10 @@ class Inventory(object):
                 for boxtype in boxlist:
                     inputs = cls.guis[gui].json_inputs(boxtype, excluded)
                     outputs = cls.guis[gui].json_outputs(boxtype)
+                    buttons = cls.guis[gui].json_buttons(boxtype)
                     json_obj[boxtype.name] = {'inputs'  : inputs,
                                               'outputs' : outputs,
+                                              'buttons' : buttons,
                                               'nodetype': nodetype,
                                               'group'   : group }
         return json_obj
