@@ -35,7 +35,7 @@ new RightClickDisableTool();
 let gui_tool = new GUITool(gui);
 let pan_tool = new PanningTool(canvas);
 let highlight_tool = new HighlightTool(canvas);
-let marker_tool = new MarkerTool(gui, highlight_tool);
+let marker_tool = new MarkerTool(canvas, gui, highlight_tool);
 let zoom_tool = new ZoomTool(canvas);
 let motion_tool = new ConnectorMotionTool(graph, view);
 let connection_tool = new ConnectionTool(canvas, graph, view, marker_tool);

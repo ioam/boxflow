@@ -3,7 +3,8 @@
 
 class MarkerTool {
     // Tool to mark a node and display it with a given stroke color
-    constructor(gui, highlight_tool, select_stroke='blue', deselect_stroke='black') {
+    constructor(canvas, gui, highlight_tool, select_stroke='blue', deselect_stroke='black') {
+        this.canvas = canvas;
         this.gui = gui;
         this.highlight_tool = highlight_tool;
         this.select_stroke = select_stroke;
@@ -30,7 +31,7 @@ class MarkerTool {
         }
         else {
             // Keep connectors behind
-            canvas.deactivateAll()
+            this.canvas.deactivateAll()
             e.target.sendToBack();
         }
     }
