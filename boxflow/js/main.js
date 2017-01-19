@@ -73,6 +73,7 @@ canvas.on('mouse:over', function(e) {
 
 
 canvas.on('mouse:out', function(e) {
+    canvas.deactivateAll(); // subtargetting has issues if object kept active
     highlight_tool.mouse_out(e);
 });
 
