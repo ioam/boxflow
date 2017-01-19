@@ -79,7 +79,10 @@ class Command(object):
     def trigger_button(self, data):
         box = self.dataflow.find_box(data['name'])
         if box is None: return
-        self.push_params(data['name'], box.trigger(data['button']))
+        # Push updated values to the GUI
+        params = box.trigger(data['button'])
+        self.push_params(data['name'], params)
+        self.update_params({'name':data['name'], 'params':params})
 
     # Push commands
 
