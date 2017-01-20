@@ -32,6 +32,10 @@ class Boolean(ParamBox):
     boolean = param.Boolean(default=True)
 
 
+class Magnitude(ParamBox):
+    magnitude = param.Magnitude(default=0.5)
+
+
 class Time(param.Parameterized):
 
     time = param.Number(default=0)
@@ -50,7 +54,7 @@ class Time(param.Parameterized):
 
 def load_param():
     boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer,
-                                                               String, Boolean]]
+                                                               String, Boolean, Magnitude]]
     Inventory.add('param', boxtypes +
                   [BoxType(Time, buttons=OrderedDict([('increment','+'),
                                                       ('decrement','-')]))])

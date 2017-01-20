@@ -19,14 +19,6 @@ class Percentage(param.Parameterized):
         return self.percent
 
 
-class Magnitude(param.Parameterized):
-
-    magnitude = param.Number(default=0.5, bounds=(0,1))
-
-    def propagate(self):
-        return self.magnitude
-
-
 class BinaryOp(numbergen.NumberGenerator):
 
     lhs = param.Number(default=0)
@@ -43,7 +35,6 @@ class BinaryOp(numbergen.NumberGenerator):
 
 def load_numbergen():
     Inventory.add('numbergen', [BoxType(Percentage, hidden=['percent']),
-                                BoxType(Magnitude,  hidden=['magnitude']),
                                 BoxType(numbergen.UniformRandom,
                                         hidden=['lbound','ubound','seed']),
                                 BinaryOp])
