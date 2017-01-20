@@ -50,6 +50,19 @@ _.mixin({
         return new_obj
     },
 
+    basic_demo : function(view, graph) { // Show param types and toolbox
+
+        let param_types = ['Number', 'Integer', 'String', 'Boolean',
+                           'Magnitude', 'Prompt'];
+        for (let i in param_types) {
+            let type = param_types[i];
+            let name = type.toLowerCase() + ':0';
+            view.add_node(graph, type, name, { pos: [40,20+(i*80)]});
+        }
+        view.add_node(graph, 'ToolBox', 'toolbox:0', { pos: [250,100]});
+    },
+
+
     demo : function(view, graph) {
 
         view.add_node(graph, 'Magnitude', 'magnitude:0', { pos: [0,100]});
