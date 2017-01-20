@@ -78,8 +78,8 @@ class ConnectionTool {
     }
 
     mouse_move(e) {
+        let pointer = this.canvas.getPointer(e.e);
         if (this.x1 && this.y1) {
-            let pointer = canvas.getPointer(e.e);
 
             if (!this.connector) {
                 let coords = [this.x1, this.y1, pointer.x, pointer.y];
