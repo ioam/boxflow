@@ -33,8 +33,11 @@ class BinaryOp(numbergen.NumberGenerator):
         return op(self.lhs() if callable(self.lhs) else self.lhs,
                   self.rhs() if callable(self.rhs) else self.rhs)
 
+class URandom(numbergen.UniformRandom): # TODO: Namespace properly
+    pass
+
 def load_numbergen():
     Inventory.add('numbergen', [BoxType(Percentage, hidden=['percent']),
-                                BoxType(numbergen.UniformRandom,
+                                BoxType(URandom,
                                         hidden=['lbound','ubound','seed']),
                                 BinaryOp])
