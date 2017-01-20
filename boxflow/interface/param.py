@@ -57,9 +57,34 @@ class Time(param.Parameterized):
         self.time -= self.step
 
 
+class ToolBox(param.Parameterized):
+    """
+    Demo of how various parameters render in BoxFlow and how you can
+    sort them by precedence.
+    """
+    number = param.Number(default=0, precedence=0.1)
+    integer = param.Integer(default=0, precedence=0.2)
+    string = param.String(default='', precedence=0.3)
+    boolean = param.Boolean(default=True, precedence=0.4)
+    magnitude = param.Magnitude(default=0.5, precedence=0.5)
+    prompt = param.ObjectSelector(default='yes', objects=['yes','no'], precedence=0.6)
+
+    def randomize(self):
+        import random
+        self.number = random.random() * 10
+        self.integer = int(random.random() * 10)
+        ords = [random.randint(65, 122) for i in range(7)]
+        self.string = ''.join(chr(o) for o in ords)
+        self.boolean = random.random() > 0.5
+        self.magnitude = random.random()
+        self.prompt = 'yes' if random.random() > 0.5 else 'no'
+
+
+
 def load_param():
     boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, Prompt,
                                                                String, Boolean, Magnitude]]
     Inventory.add('param', boxtypes +
                   [BoxType(Time, buttons=OrderedDict([('increment','+'),
-                                                      ('decrement','-')]))])
+                                                      ('decrement','-')])),
+                   BoxType(ToolBox, buttons = dict(randomize='Randomize'))])
