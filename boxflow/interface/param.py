@@ -62,12 +62,18 @@ class ToolBox(param.Parameterized):
     Demo of how various parameters render in BoxFlow and how you can
     sort them by precedence.
     """
-    number = param.Number(default=0, precedence=0.1)
-    integer = param.Integer(default=0, precedence=0.2)
-    string = param.String(default='', precedence=0.3)
-    boolean = param.Boolean(default=True, precedence=0.4)
-    magnitude = param.Magnitude(default=0.5, precedence=0.5)
-    prompt = param.ObjectSelector(default='yes', objects=['yes','no'], precedence=0.6)
+    number = param.Number(default=0, precedence=0.1,
+                          doc="Example number parameter")
+    integer = param.Integer(default=0, precedence=0.2,
+                            doc="Example integer parameter")
+    string = param.String(default='', precedence=0.3,
+                          doc="Example string parameter")
+    boolean = param.Boolean(default=True, precedence=0.4,
+                            doc="Example boolean parameter")
+    magnitude = param.Magnitude(default=0.5, precedence=0.5,
+                                doc="Example magnitude parameter")
+    prompt = param.ObjectSelector(default='yes', objects=['yes','no'], precedence=0.6,
+                                  doc="Example prompt")
 
     def randomize(self):
         import random
