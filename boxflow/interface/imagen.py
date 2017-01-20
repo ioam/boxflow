@@ -94,7 +94,9 @@ def imagen_display(instance):
 binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
                BoxType(Mul, untyped = ['lhs','rhs'])]
 
-patterngenerators = [imagen.Disk, imagen.Gaussian, imagen.Line, imagen.Spiral ]
+patterngenerators = [imagen.Disk, imagen.Gaussian, imagen.Line,
+                     imagen.Spiral, imagen.Gabor, imagen.SineGrating,
+                     imagen.ConcentricRings, imagen.Asterisk ]
 vanilla_classes = [ BoxType(patgen,
                             nodetype='ImageNode',
                             display_fn=imagen_display)
