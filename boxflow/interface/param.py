@@ -28,6 +28,10 @@ class String(ParamBox):
     string = param.String(default='')
 
 
+class Boolean(ParamBox):
+    boolean = param.Boolean(default=True)
+
+
 class Time(param.Parameterized):
 
     time = param.Number(default=0)
@@ -45,7 +49,8 @@ class Time(param.Parameterized):
 
 
 def load_param():
-    boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, String]]
+    boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer,
+                                                               String, Boolean]]
     Inventory.add('param', boxtypes +
                   [BoxType(Time, buttons=OrderedDict([('increment','+'),
                                                       ('decrement','-')]))])
