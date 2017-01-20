@@ -40,6 +40,15 @@ _.mixin({
         }
     },
 
+
+    eachController : function(dat, fnc) { // https://stackoverflow.com/questions/27362914
+        for (let controllerName in dat.controllers) {
+            if (dat.controllers.hasOwnProperty(controllerName)) {
+                fnc(dat.controllers[controllerName]);
+            }
+        }
+    },
+
     getURLParameter : function (name, url) {
         if (!url) {
             url = window.location.href;
