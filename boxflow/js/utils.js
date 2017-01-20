@@ -40,6 +40,13 @@ _.mixin({
         }
     },
 
+    patch_docstring_support : function(dat) { // Adds title method to datGUI
+        _.eachController(dat, function(controller) {
+            if (!controller.prototype.hasOwnProperty('doc')) {
+                controller.prototype.doc = _._set_docstring;
+            }
+        });
+    },
 
     eachController : function(dat, fnc) { // https://stackoverflow.com/questions/27362914
         for (let controllerName in dat.controllers) {
@@ -47,6 +54,15 @@ _.mixin({
                 fnc(dat.controllers[controllerName]);
             }
         }
+    },
+
+    _set_docstring : function(v) { // __li is the root dom element of each controller
+        if (v) {
+            this.__li.setAttribute('title', v);
+        } else {
+            this.__li.removeAttribute('title')
+        }
+        return this;
     },
 
     getURLParameter : function (name, url) {
