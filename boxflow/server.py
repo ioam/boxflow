@@ -37,7 +37,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
 html = """
 <head>
-  <title>Node Editor</title>
+  <title>Boxflow</title>
     <script>
       // For debugging purposes
       console.log(new Array(24 + 1).join('\\n'));
