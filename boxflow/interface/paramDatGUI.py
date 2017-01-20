@@ -9,8 +9,7 @@ class ParamDatGUI(object):
     supported_types = (param.Number,
                        param.Integer,
                        param.String,
-                       param.Boolean,
-                       param.Filename)
+                       param.Boolean)
 
     @classmethod
     def supported(cls, p):
