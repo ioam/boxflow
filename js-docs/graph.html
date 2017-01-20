@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -170,10 +165,10 @@ what parameters are expressed by the nodes.</p>
 
     add_edge(src, output, dest, input) {
         <span class="hljs-keyword">if</span> ( !_.contains(<span class="hljs-keyword">this</span>.nodes, src) ) {
-            <span class="hljs-keyword">throw</span> <span class="hljs-string">'Source node not in graph.'</span>;
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">`Source node <span class="hljs-subst">${src}</span> not in graph: <span class="hljs-subst">${<span class="hljs-keyword">this</span>.nodes}</span>`</span>;
         }
         <span class="hljs-keyword">if</span> ( !_.contains(<span class="hljs-keyword">this</span>.nodes, dest) ) {
-            <span class="hljs-keyword">throw</span> <span class="hljs-string">'Destination node not in graph.'</span>;
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">`Destination node <span class="hljs-subst">${dest}</span> not in graph: <span class="hljs-subst">${<span class="hljs-keyword">this</span>.nodes}</span>`</span>;
         }
         <span class="hljs-keyword">let</span> edge = <span class="hljs-keyword">new</span> Edge(src,output,dest, input);
         <span class="hljs-keyword">this</span>.edges.push(edge);
@@ -206,16 +201,31 @@ what parameters are expressed by the nodes.</p>
         <span class="hljs-keyword">return</span> matches
     }
 
-    remove(name) { <span class="hljs-comment">// Remove edge or node by name. If a node is removed, also remove edges</span>
-        <span class="hljs-keyword">if</span> ( name.startsWith(<span class="hljs-string">'edge-'</span>) ) {
+    remove(name, comm=<span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Remove edge or node by name. If a node is removed, also remove edges
+If comm is false, do not update Python over commlink (used for invalid edges).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( name.startsWith(<span class="hljs-string">'edge-'</span>) ) {
             <span class="hljs-keyword">let</span> edge = <span class="hljs-keyword">this</span>.find_edge(name);
             edge.dest.lock_param(edge.input, <span class="hljs-literal">false</span>);
-            <span class="hljs-keyword">this</span>.commlink &amp;&amp; <span class="hljs-keyword">this</span>.commlink.remove_edge(edge);
+            <span class="hljs-keyword">this</span>.commlink &amp;&amp; comm &amp;&amp; <span class="hljs-keyword">this</span>.commlink.remove_edge(edge);
             <span class="hljs-keyword">this</span>.edges = _.difference(<span class="hljs-keyword">this</span>.edges, [edge]);
         }
         <span class="hljs-keyword">else</span> {
             <span class="hljs-keyword">let</span> node = _.findWhere(<span class="hljs-keyword">this</span>.nodes, {<span class="hljs-string">'name'</span>:name});
-            <span class="hljs-keyword">this</span>.commlink &amp;&amp; <span class="hljs-keyword">this</span>.commlink.remove_node(node);
+            <span class="hljs-keyword">this</span>.commlink &amp;&amp; comm &amp;&amp; <span class="hljs-keyword">this</span>.commlink.remove_node(node);
             <span class="hljs-keyword">this</span>.nodes = _.difference(<span class="hljs-keyword">this</span>.nodes, [node]);
 
             <span class="hljs-keyword">let</span> removed_edges = <span class="hljs-keyword">this</span>.node_edges(node, <span class="hljs-string">'input'</span>)
@@ -244,10 +254,10 @@ what parameters are expressed by the nodes.</p>
 
     validate(src, output, dest, input) {
         <span class="hljs-keyword">if</span> ( !_.contains(src.outputs, output) ) {
-            <span class="hljs-keyword">throw</span> <span class="hljs-string">'Specified output not in source node outputs.'</span>;
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">`Specified output <span class="hljs-subst">${output}</span> not in source outputs: <span class="hljs-subst">${src.outputs}</span>`</span>;
         }
         <span class="hljs-keyword">if</span> ( !_.contains(dest.inputs, input) )  {
-            <span class="hljs-keyword">throw</span> <span class="hljs-string">'Specified input not in source node inputs.'</span>;
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">`Specified input <span class="hljs-subst">${input}</span> not in dest inputs: <span class="hljs-subst">${dest.outputs}</span>`</span>;
         }
     }
 }
@@ -255,34 +265,11 @@ what parameters are expressed by the nodes.</p>
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Definitions</span> </span>{ <span class="hljs-comment">//  Associates nodes to the input/output param definitions</span>
 
-    <span class="hljs-keyword">constructor</span>(definitions={}, order=<span class="hljs-literal">undefined</span>) {
+    <span class="hljs-keyword">constructor</span>(definitions={},
+                order=<span class="hljs-literal">undefined</span>,
+                boxes = [LabelledBox, ImageBox, ViewportBox],
+                nodes = [LabelledNode, ImageNode, Viewport]) {
         <span class="hljs-keyword">this</span>.definitions = definitions;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <!-- TODO: Make use of this order in the GUI -->
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.order = order;
-
-        <span class="hljs-keyword">this</span>.boxtypes={<span class="hljs-string">'Node'</span>: NodeBox,
-                       <span class="hljs-string">'Viewport'</span>: ViewportBox,
-                       <span class="hljs-string">'LabelledNode'</span>: LabelledBox}
-    }
-
-    param(name, value=<span class="hljs-literal">true</span>, lims=[], step=<span class="hljs-literal">null</span>) { <span class="hljs-comment">// A parameter definition</span>
-        <span class="hljs-keyword">return</span> {<span class="hljs-attr">name</span>: name, <span class="hljs-attr">value</span> : value, <span class="hljs-attr">lims</span>:lims, <span class="hljs-attr">step</span>: step}
-    }
-
-    default_params(type, field=<span class="hljs-string">'value'</span>) { <span class="hljs-comment">// Generate a default parameters object</span></pre></div></div>
             
         </li>
         
@@ -293,37 +280,17 @@ what parameters are expressed by the nodes.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <!-- TODO: value of 'untyped-port' for lims results in it being skipped -->
+              <!-- TODO: Make use of this order in the GUI -->
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = {};
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> pdef <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.definitions[type].inputs) {
-            <span class="hljs-keyword">if</span> (pdef.lims !== <span class="hljs-string">'untyped-port'</span>) {
-                params[pdef.name] = pdef[field];
-            }
-        }
-        <span class="hljs-keyword">return</span> params
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.order = order;
+
+        <span class="hljs-keyword">this</span>._boxtypes = _.object(_.map(boxes, (bx) =&gt; [bx.nodetype(), bx]));
+        <span class="hljs-keyword">this</span>._node_names = _.object(_.map(nodes, (nd) =&gt; [nd.name, nd]));
     }
 
-    define(type, inputs, outputs) { <span class="hljs-comment">// Define the input and output params of a node type</span>
-        <span class="hljs-keyword">this</span>.definitions[type] = {<span class="hljs-attr">inputs</span>: inputs, <span class="hljs-attr">outputs</span> : outputs}
-    }
-
-    input_names(type) {  <span class="hljs-comment">// Get the input param names for a node</span>
-        <span class="hljs-keyword">return</span> _.pluck(<span class="hljs-keyword">this</span>.definitions[type].inputs, <span class="hljs-string">'name'</span>)
-    }
-
-    output_names(type) { <span class="hljs-comment">// Get the output param names for a node</span>
-        <span class="hljs-keyword">return</span> _.pluck(<span class="hljs-keyword">this</span>.definitions[type].outputs, <span class="hljs-string">'name'</span>)
-    }
-
-    types() {  <span class="hljs-comment">// Returns an array of available node types</span>
-        <span class="hljs-keyword">let</span> keys = <span class="hljs-built_in">Object</span>.keys(<span class="hljs-keyword">this</span>.definitions);
-        <span class="hljs-keyword">return</span> keys.sort()
-    }
-
-    nodetype(type) { <span class="hljs-comment">// Return the appropriate node class for a given type name</span></pre></div></div>
+    param(name, value=<span class="hljs-literal">true</span>, lims=[], mode=<span class="hljs-string">'normal'</span>, step=<span class="hljs-literal">null</span>, label=<span class="hljs-literal">null</span>, doc=<span class="hljs-literal">null</span>) {</pre></div></div>
             
         </li>
         
@@ -334,14 +301,54 @@ what parameters are expressed by the nodes.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Note: All node types support: name, type, params, inputs, outputs
-<!-- TODO: Generalize --></p>
+              <p>A parameter definition</p>
+<p>name:   The name of the parameter.
+value:  The default parameter values.
+lims:   Limits based on datgui constraints:</p>
+<ul>
+<li>[]         -  Mo limits specified.</li>
+<li>[min, max] -  Minimum/maximum limits.</li>
+<li>[min]      -  Minimum only.</li>
+<li>[[‘a’,’b’]] - Options</li>
+</ul>
+<p>step:  The step size for numeric quantities
+label: Text label in the GUI
+mode: The mode of the port, ie one of…</p>
+<ul>
+<li>‘normal’    - Port with visual port and GUI parameter.</li>
+<li>‘untyped’   - Port without GUI parameters</li>
+<li><p>‘hidden’    - GUI parameter but no visual port.</p>
+<p>TODO: Support [undefined, max] for maximum limit only.</p>
+</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (type===<span class="hljs-string">'Viewport'</span>) {
-            <span class="hljs-keyword">return</span> Viewport
-        }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> {<span class="hljs-attr">name</span>:name, <span class="hljs-attr">value</span>:value, <span class="hljs-attr">lims</span>:lims, <span class="hljs-attr">doc</span>: doc ? doc : <span class="hljs-string">'No docs'</span>,
+                <span class="hljs-attr">mode</span>:mode, <span class="hljs-attr">step</span>:step, <span class="hljs-attr">label</span>: label ? label : name}
+    }
+
+    default_params(type, field=<span class="hljs-string">'value'</span>) { <span class="hljs-comment">// Generate a default parameters object</span>
+        <span class="hljs-keyword">let</span> params = {};
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> pdef <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.definitions[type].inputs) {
+            <span class="hljs-keyword">if</span> (pdef.mode !== <span class="hljs-string">'untyped'</span>) { <span class="hljs-comment">// Untyped ports omitted from params.</span>
+                params[pdef.name] = pdef[field];
+            }
+        }
+        <span class="hljs-keyword">return</span> params
+    }
+
+    default_buttons(type) {  <span class="hljs-comment">// Returns object to hold button state</span>
+        <span class="hljs-keyword">let</span> buttons = {};
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> button <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.definitions[type].buttons) {
+            buttons[button.callback] = <span class="hljs-literal">false</span>;
+            buttons[button.callback + <span class="hljs-string">'_trigger'</span>] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                <span class="hljs-keyword">this</span>[button.callback] = <span class="hljs-literal">true</span> } ;
+        }
+        <span class="hljs-keyword">return</span> buttons
+    }
+
+    define(type, inputs, outputs, nodetype=<span class="hljs-string">'ImageNode'</span>, group=<span class="hljs-string">'Default'</span>) {</pre></div></div>
             
         </li>
         
@@ -352,15 +359,50 @@ what parameters are expressed by the nodes.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <!-- FIXME! Height seems to include image height somehow in demo graph
-if (type == 'Mul') { return LabelledNode } -->
+              <p>Define the input and output params of a node type
+as well as the associated nodetype</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> Node
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.definitions[type] = {<span class="hljs-attr">inputs</span>: inputs,
+                                  <span class="hljs-attr">outputs</span> : outputs,
+                                  <span class="hljs-attr">nodetype</span>:nodetype,
+                                  <span class="hljs-attr">group</span>: group }
     }
 
-    boxtype(type) {</pre></div></div>
+    groups() { <span class="hljs-comment">// Set of groups (currently alphabetically sorted)</span>
+        <span class="hljs-keyword">let</span> unique = _.uniq(_.pluck(defs.definitions, <span class="hljs-string">'group'</span>))
+        <span class="hljs-keyword">return</span> unique.sort()
+    }
+
+    types(group) {  <span class="hljs-comment">// Returns an array of node types in given group</span>
+        <span class="hljs-keyword">let</span> types = [];
+        <span class="hljs-keyword">let</span> all_types = <span class="hljs-built_in">Object</span>.keys(<span class="hljs-keyword">this</span>.definitions);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> type <span class="hljs-keyword">of</span> all_types) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.definitions[type].group === group) {
+                types.push(type);
+            }
+        }
+        <span class="hljs-keyword">return</span> types.sort()
+    }
+
+    buttons(type) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.definitions[type].buttons
+    }
+
+    input_names(type) {  <span class="hljs-comment">// Get the input param names for a node</span>
+        <span class="hljs-keyword">return</span> _.pluck(<span class="hljs-keyword">this</span>.definitions[type].inputs, <span class="hljs-string">'name'</span>)
+    }
+
+    output_names(type) { <span class="hljs-comment">// Get the output param names for a node</span>
+        <span class="hljs-keyword">return</span> _.pluck(<span class="hljs-keyword">this</span>.definitions[type].outputs, <span class="hljs-string">'name'</span>)
+    }
+
+    group(type) { <span class="hljs-comment">// Group name of a node</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.definitions[type].group
+    }
+
+    nodetype(type) { <span class="hljs-comment">// Return the appropriate node class for a given type name</span></pre></div></div>
             
         </li>
         
@@ -371,17 +413,14 @@ if (type == 'Mul') { return LabelledNode } -->
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Returns a box class (i.e a static class for rendering nodes)
-Currently a 1-to-1 relation.
-If you want a different boxtype for the same type of node,
-a trivial subclass is easy enough to define.</p>
+              <p>Note: All node types support: name, type, params, inputs, outputs</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.boxtypes[<span class="hljs-keyword">this</span>.nodetype(type).name]
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._node_names[<span class="hljs-keyword">this</span>.definitions[type].nodetype]
     }
 
-}</pre></div></div>
+    boxtype(type) {</pre></div></div>
             
         </li>
         
@@ -391,6 +430,27 @@ a trivial subclass is easy enough to define.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Returns a box class (i.e a static class for rendering nodes)
+Currently a 1-to-1 relation.
+If you want a different boxtype for the same type of node,
+a trivial subclass is easy enough to define.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._boxtypes[<span class="hljs-keyword">this</span>.nodetype(type).name]
+    }
+
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Docs Index</p>
 <p><a href="main.html">main.js</a> :  Toplevel entry point. <br>

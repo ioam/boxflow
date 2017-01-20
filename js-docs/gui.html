@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -100,7 +95,20 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
 
-dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>) </span>{</pre></div></div>
+
+_.patch_remove_folder(dat);
+_.patch_docstring_support(dat);
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GUI</span> </span>{
+    <span class="hljs-keyword">constructor</span>(graph, view) {
+        <span class="hljs-keyword">this</span>.graph = graph;
+        <span class="hljs-keyword">this</span>.view = view;
+
+        <span class="hljs-keyword">this</span>.datgui = <span class="hljs-keyword">new</span> dat.GUI();
+        <span class="hljs-keyword">this</span>.editor = <span class="hljs-literal">undefined</span>;
+
+        <span class="hljs-keyword">this</span>.group = <span class="hljs-string">'uninitialized'</span>;       <span class="hljs-comment">// Group - can't be undefined for datgui</span>
+        <span class="hljs-keyword">this</span>.node_type = <span class="hljs-string">'uninitialized'</span>;   <span class="hljs-comment">// Can't be undefined for datgui</span></pre></div></div>
             
         </li>
         
@@ -111,29 +119,42 @@ dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-k
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Augment dat GUI with ability to remove folders
-<a href="https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui">https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui</a></p>
+              <p>TODO: Pass group through to add_node.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">let</span> folder = <span class="hljs-keyword">this</span>.__folders[name];
-    <span class="hljs-keyword">if</span> (!folder) {
-        <span class="hljs-keyword">return</span>;
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.instantiate = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+            <span class="hljs-keyword">this</span>.view.add_node(<span class="hljs-keyword">this</span>.graph,
+                               <span class="hljs-keyword">this</span>.node_type,
+                               graph.new_name(<span class="hljs-keyword">this</span>.node_type))
+        }
     }
-    folder.close();
-    <span class="hljs-keyword">this</span>.__ul.removeChild(folder.domElement.parentNode);
-    <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.__folders[name];
-    <span class="hljs-keyword">this</span>.onResize();
-}
 
+    init() {
+        <span class="hljs-keyword">let</span> groups = <span class="hljs-keyword">this</span>.graph.defs.groups();
+        <span class="hljs-keyword">this</span>.group = groups[<span class="hljs-number">0</span>]; <span class="hljs-comment">// Pick the first group</span>
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GUI</span> </span>{
-    <span class="hljs-keyword">constructor</span>(graph, view) {
-        <span class="hljs-keyword">this</span>.graph = graph;
-        <span class="hljs-keyword">this</span>.view = view;
+        <span class="hljs-keyword">let</span> nodegen = <span class="hljs-keyword">this</span>.datgui.addFolder(<span class="hljs-string">"Create Node"</span>);
+        <span class="hljs-keyword">let</span> group_controller = nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'group'</span>, groups).name(<span class="hljs-string">'Group'</span>);
+        group_controller.onChange(set_types);
 
-        <span class="hljs-keyword">this</span>.datgui = <span class="hljs-keyword">new</span> dat.GUI();
-        <span class="hljs-keyword">this</span>.editor = <span class="hljs-literal">undefined</span>;</pre></div></div>
+        <span class="hljs-keyword">let</span> type_controller =  nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'node_type'</span>).name(<span class="hljs-string">'Node Type'</span>);
+        type_controller.listen(); <span class="hljs-comment">// Update when group changed</span>
+
+        <span class="hljs-keyword">let</span> self = <span class="hljs-keyword">this</span>; <span class="hljs-comment">// Needed to have access inside following callback</span>
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">set_types</span>(<span class="hljs-params">group</span>) </span>{
+            <span class="hljs-keyword">let</span> node_types = self.graph.defs.types(group);
+            self.node_type = node_types[<span class="hljs-number">0</span>];
+            type_controller = type_controller.options(node_types).name(<span class="hljs-string">'Node Type'</span>);
+        }
+        set_types(groups[<span class="hljs-number">0</span>]);  <span class="hljs-comment">// Initialize dropdown</span>
+
+        nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'instantiate'</span>).name(<span class="hljs-string">"Add Node"</span>);
+        nodegen.open();
+
+    }
+
+    populate(node) {</pre></div></div>
             
         </li>
         
@@ -144,16 +165,29 @@ dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-k
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Parameters</p>
+              <p>Populate the GUI with the given parameters with optional limits and step</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.type = <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// Set on init()</span>
-        <span class="hljs-keyword">this</span>.node_name = <span class="hljs-literal">undefined</span>;
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = node.params;
+        <span class="hljs-keyword">let</span> plims = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'lims'</span>);
+        <span class="hljs-keyword">let</span> pstep = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'step'</span>);
+        <span class="hljs-keyword">let</span> pmode = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'mode'</span>);
+        <span class="hljs-keyword">let</span> plabel = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'label'</span>);
+        <span class="hljs-keyword">let</span> pdoc = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'doc'</span>);
 
-        <span class="hljs-keyword">this</span>.instantiate = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-keyword">this</span>.view.add_node(<span class="hljs-keyword">this</span>.graph,
-                                                      <span class="hljs-keyword">this</span>.type,
-                                                      <span class="hljs-keyword">this</span>.node_name);</pre></div></div>
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.editor) {
+            <span class="hljs-keyword">let</span> editor = <span class="hljs-keyword">this</span>.datgui.addFolder(<span class="hljs-string">"Parameters"</span>);
+            <span class="hljs-keyword">this</span>.editor = editor;
+        }
+
+        <span class="hljs-keyword">let</span> unlocked = node.unlocked_params(pmode);
+        <span class="hljs-keyword">if</span> (unlocked.length==<span class="hljs-number">0</span>) {<span class="hljs-keyword">this</span>.clear_params(); <span class="hljs-keyword">return</span>}
+
+        <span class="hljs-keyword">this</span>.editor.open();
+        <span class="hljs-keyword">this</span>.clear_params(<span class="hljs-literal">false</span>);
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> unlocked) {</pre></div></div>
             
         </li>
         
@@ -164,33 +198,25 @@ dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-k
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Suggest a new node name</p>
+              <p>There seems to be a bug in datGUI with numbers becoming strings for
+named value selections as well as multi-selections (lists).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                                   <span class="hljs-keyword">this</span>.node_name=graph.new_name(<span class="hljs-keyword">this</span>.type) }
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">let</span> control = <span class="hljs-keyword">this</span>.editor.add(params, key, ...plims[key]).name(plabel[key]);
+            <span class="hljs-keyword">if</span> (pstep[key]!==<span class="hljs-literal">null</span>) {
+                control.step(pstep[key])
+            }
+            control.doc(pdoc[key]);
+        }
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> button <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.graph.defs.buttons(node.type)) {
+            <span class="hljs-keyword">this</span>.editor.add(node.buttons, button.callback+<span class="hljs-string">'_trigger'</span>).name(button.label);
+        }
+
     }
 
-
-    init() {
-        <span class="hljs-keyword">let</span> types = <span class="hljs-keyword">this</span>.graph.defs.types();
-        <span class="hljs-keyword">this</span>.type = types[<span class="hljs-number">0</span>];
-        <span class="hljs-keyword">this</span>.proposed_name = <span class="hljs-keyword">this</span>.graph.new_name(<span class="hljs-keyword">this</span>.type);
-
-        <span class="hljs-keyword">let</span> nodegen = <span class="hljs-keyword">this</span>.datgui.addFolder(<span class="hljs-string">"Create Node"</span>);
-        <span class="hljs-keyword">let</span> type_controller = nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'type'</span>, types).name(<span class="hljs-string">'Node type'</span>);
-
-        type_controller.onChange( <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
-            <span class="hljs-keyword">this</span>.proposed_name = <span class="hljs-keyword">this</span>.graph.new_name(<span class="hljs-keyword">this</span>.type);
-        });
-
-        <span class="hljs-keyword">let</span> name_controller = nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'proposed_name'</span>).name(<span class="hljs-string">"Node name:"</span>);
-        name_controller.listen();
-        nodegen.add(<span class="hljs-keyword">this</span>, <span class="hljs-string">'instantiate'</span>).name(<span class="hljs-string">"Add Node"</span>);
-        nodegen.open();
-    }
-
-    populate(node) {</pre></div></div>
+    refresh_params() {</pre></div></div>
             
         </li>
         
@@ -201,30 +227,12 @@ dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-k
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Populate the GUI with the given parameters with optional limits and step</p>
+              <p>Refresh the value of the parameters shown in the GUI</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = node.params;
-        <span class="hljs-keyword">let</span> plims = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'lims'</span>);
-        <span class="hljs-keyword">let</span> pstep = <span class="hljs-keyword">this</span>.graph.defs.default_params(node.type, <span class="hljs-string">'step'</span>);
-
-        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.editor) {
-            <span class="hljs-keyword">let</span> editor = <span class="hljs-keyword">this</span>.datgui.addFolder(<span class="hljs-string">"Parameters"</span>);
-            <span class="hljs-keyword">this</span>.editor = editor;
-        }
-
-        <span class="hljs-keyword">let</span> unlocked = node.unlocked_params(plims);
-        <span class="hljs-keyword">if</span> (unlocked.length==<span class="hljs-number">0</span>) {<span class="hljs-keyword">this</span>.clear_params(); <span class="hljs-keyword">return</span>}
-
-        <span class="hljs-keyword">this</span>.editor.open();
-        <span class="hljs-keyword">this</span>.clear_params(<span class="hljs-literal">false</span>);
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> unlocked) {
-            <span class="hljs-keyword">let</span> control = <span class="hljs-keyword">this</span>.editor.add(params, key, ...plims[key]);
-            <span class="hljs-keyword">if</span> (pstep[key]!==<span class="hljs-literal">null</span>) {
-                control.step(pstep[key])
-            }
-        }
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> controller <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.editor.__controllers) {
+            controller.updateDisplay() }
     }
 
     clear_params(clear_folder=<span class="hljs-literal">true</span>) {

@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -136,6 +131,59 @@ _.mixin({
                 + <span class="hljs-string">"JTVBkLmUHAAAADElEQVQI12N49OgRAAVQAqe5fRrCAAAAAElFTkSuQmCC"</span>)
     },
 
+    <span class="hljs-attr">patch_remove_folder</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">dat</span>) </span>{ <span class="hljs-comment">// Adds folder removal to dataGUI</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Augment dat GUI with ability to remove folders
+<a href="https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui">https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        dat.GUI.prototype.removeFolder = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>) </span>{
+            <span class="hljs-keyword">let</span> folder = <span class="hljs-keyword">this</span>.__folders[name];
+            <span class="hljs-keyword">if</span> (!folder) {
+                <span class="hljs-keyword">return</span>;
+            }
+            folder.close();
+            <span class="hljs-keyword">this</span>.__ul.removeChild(folder.domElement.parentNode);
+            <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.__folders[name];
+            <span class="hljs-keyword">this</span>.onResize();
+        }
+    },
+
+    <span class="hljs-attr">patch_docstring_support</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">dat</span>) </span>{ <span class="hljs-comment">// Adds title method to datGUI</span>
+        _.eachController(dat, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">controller</span>) </span>{
+            <span class="hljs-keyword">if</span> (!controller.prototype.hasOwnProperty(<span class="hljs-string">'doc'</span>)) {
+                controller.prototype.doc = _._set_docstring;
+            }
+        });
+    },
+
+    <span class="hljs-attr">eachController</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">dat, fnc</span>) </span>{ <span class="hljs-comment">// https://stackoverflow.com/questions/27362914</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> controllerName <span class="hljs-keyword">in</span> dat.controllers) {
+            <span class="hljs-keyword">if</span> (dat.controllers.hasOwnProperty(controllerName)) {
+                fnc(dat.controllers[controllerName]);
+            }
+        }
+    },
+
+    <span class="hljs-attr">_set_docstring</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">v</span>) </span>{ <span class="hljs-comment">// __li is the root dom element of each controller</span>
+        <span class="hljs-keyword">if</span> (v) {
+            <span class="hljs-keyword">this</span>.__li.setAttribute(<span class="hljs-string">'title'</span>, v);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.__li.removeAttribute(<span class="hljs-string">'title'</span>)
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+
     <span class="hljs-attr">getURLParameter</span> : <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">name, url</span>) </span>{
         <span class="hljs-keyword">if</span> (!url) {
             url = <span class="hljs-built_in">window</span>.location.href;
@@ -151,13 +199,44 @@ _.mixin({
         <span class="hljs-keyword">return</span> <span class="hljs-built_in">decodeURIComponent</span>(results[<span class="hljs-number">2</span>].replace(<span class="hljs-regexp">/\+/g</span>, <span class="hljs-string">" "</span>));
     },
 
-    <span class="hljs-attr">demo_graph</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">view, graph</span>) </span>{
-        view.add_node(graph, <span class="hljs-string">'Disk'</span>, <span class="hljs-string">'disk:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]});
-        view.add_node(graph, <span class="hljs-string">'Gaussian'</span>, <span class="hljs-string">'gaussian:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">180</span>,<span class="hljs-number">100</span>]});
-        view.add_node(graph,<span class="hljs-string">'Sub'</span>, <span class="hljs-string">'sub:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">400</span>,<span class="hljs-number">0</span>]});
-        view.add_node(graph, <span class="hljs-string">'Mul'</span>, <span class="hljs-string">'mul:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">700</span>,<span class="hljs-number">100</span>]});
-        view.add_node(graph, <span class="hljs-string">'Spiral'</span>, <span class="hljs-string">'spiral:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">400</span>,<span class="hljs-number">300</span>]});
+    <span class="hljs-attr">invert</span> : <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">obj</span>) </span>{
+        <span class="hljs-keyword">var</span> new_obj = {};
 
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> prop <span class="hljs-keyword">in</span> obj) {
+            <span class="hljs-keyword">if</span>(obj.hasOwnProperty(prop)) {
+                new_obj[obj[prop]] = prop;
+            }
+        }
+        <span class="hljs-keyword">return</span> new_obj
+    },
+
+    <span class="hljs-attr">basic_demo</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">view, graph</span>) </span>{ <span class="hljs-comment">// Show param types and toolbox</span>
+
+        <span class="hljs-keyword">let</span> param_types = [<span class="hljs-string">'Number'</span>, <span class="hljs-string">'Integer'</span>, <span class="hljs-string">'String'</span>, <span class="hljs-string">'Boolean'</span>,
+                           <span class="hljs-string">'Magnitude'</span>, <span class="hljs-string">'Prompt'</span>];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">in</span> param_types) {
+            <span class="hljs-keyword">let</span> type = param_types[i];
+            <span class="hljs-keyword">let</span> name = type.toLowerCase() + <span class="hljs-string">':0'</span>;
+            view.add_node(graph, type, name, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">40</span>,<span class="hljs-number">20</span>+(i*<span class="hljs-number">80</span>)]});
+        }
+        view.add_node(graph, <span class="hljs-string">'ToolBox'</span>, <span class="hljs-string">'toolbox:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">250</span>,<span class="hljs-number">100</span>]});
+    },
+
+
+    <span class="hljs-attr">demo</span> : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">view, graph</span>) </span>{
+
+        view.add_node(graph, <span class="hljs-string">'Magnitude'</span>, <span class="hljs-string">'magnitude:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">100</span>]});
+        view.add_node(graph, <span class="hljs-string">'BinaryOp'</span>, <span class="hljs-string">'binaryop:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">150</span>,<span class="hljs-number">350</span>]});
+
+        view.add_node(graph, <span class="hljs-string">'Disk'</span>, <span class="hljs-string">'disk:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">200</span>,<span class="hljs-number">0</span>]});
+        view.add_node(graph, <span class="hljs-string">'Gaussian'</span>, <span class="hljs-string">'gaussian:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">380</span>,<span class="hljs-number">100</span>]});
+        view.add_node(graph,<span class="hljs-string">'Sub'</span>, <span class="hljs-string">'sub:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">600</span>,<span class="hljs-number">0</span>]});
+        view.add_node(graph, <span class="hljs-string">'Mul'</span>, <span class="hljs-string">'mul:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">900</span>,<span class="hljs-number">100</span>]});
+        view.add_node(graph, <span class="hljs-string">'Spiral'</span>, <span class="hljs-string">'spiral:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">600</span>,<span class="hljs-number">300</span>]});
+
+
+        <span class="hljs-keyword">let</span> mag = graph.find_node(<span class="hljs-string">'magnitude:0'</span>);
+        <span class="hljs-keyword">let</span> binmul = graph.find_node(<span class="hljs-string">'binaryop:0'</span>);
 
         <span class="hljs-keyword">let</span> disk = graph.find_node(<span class="hljs-string">'disk:0'</span>);
         <span class="hljs-keyword">let</span> gaussian = graph.find_node(<span class="hljs-string">'gaussian:0'</span>);
@@ -165,10 +244,18 @@ _.mixin({
         <span class="hljs-keyword">let</span> sub = graph.find_node(<span class="hljs-string">'sub:0'</span>);
         <span class="hljs-keyword">let</span> mul = graph.find_node(<span class="hljs-string">'mul:0'</span>);
 
+        graph.add_edge(mag, <span class="hljs-string">''</span>, disk, <span class="hljs-string">'x'</span>);
+        graph.add_edge(mag, <span class="hljs-string">''</span>, binmul, <span class="hljs-string">'rhs'</span>);
+        graph.add_edge(binmul, <span class="hljs-string">''</span>, spiral, <span class="hljs-string">'orientation'</span>);
+
         graph.add_edge(disk, <span class="hljs-string">''</span>, sub, <span class="hljs-string">'lhs'</span>);
         graph.add_edge(gaussian, <span class="hljs-string">''</span>, sub, <span class="hljs-string">'rhs'</span>);
         graph.add_edge(sub, <span class="hljs-string">''</span>, mul, <span class="hljs-string">'lhs'</span>);
         graph.add_edge(spiral, <span class="hljs-string">''</span>, mul, <span class="hljs-string">'rhs'</span>);
+
+
+        binmul.params[<span class="hljs-string">'operator'</span>] = <span class="hljs-string">'mul'</span>
+        binmul.params[<span class="hljs-string">'lhs'</span>] = <span class="hljs-number">3.14</span>;
 
         disk.params[<span class="hljs-string">'aspect_ratio'</span>] = <span class="hljs-number">0.4</span>;
         disk.params[<span class="hljs-string">'orientation'</span>] = <span class="hljs-number">0.55</span>;
@@ -179,7 +266,7 @@ _.mixin({
         spiral.params[<span class="hljs-string">'scale'</span>] = <span class="hljs-number">1.44</span>;
 
 
-        view.add_node(graph, <span class="hljs-string">'Viewport'</span>, <span class="hljs-string">'viewport:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">900</span>,<span class="hljs-number">100</span>]});
+        view.add_node(graph, <span class="hljs-string">'Viewport'</span>, <span class="hljs-string">'viewport:0'</span>, { <span class="hljs-attr">pos</span>: [<span class="hljs-number">1100</span>,<span class="hljs-number">100</span>]});
         <span class="hljs-keyword">let</span> viewport = graph.find_node(<span class="hljs-string">'viewport:0'</span>);
         graph.add_edge(mul, <span class="hljs-string">''</span>, viewport, <span class="hljs-string">'input'</span>);
 

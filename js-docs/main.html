@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -119,6 +114,7 @@ to the appropriate events.</p>
             
             <div class="content"><div class='highlight'><pre>
 <span class="hljs-keyword">let</span> canvas = <span class="hljs-keyword">new</span> fabric.Canvas(<span class="hljs-string">'c'</span>, {<span class="hljs-string">'selection'</span> : <span class="hljs-literal">false</span>});
+canvas.defaultCursor = <span class="hljs-string">'crosshair'</span>;
 
 <span class="hljs-keyword">let</span> view = <span class="hljs-keyword">new</span> View(canvas);
 <span class="hljs-keyword">let</span> defs = <span class="hljs-keyword">new</span> Definitions(); <span class="hljs-comment">// Start with empty definitions</span>
@@ -157,7 +153,7 @@ know what is highlighted to delete the right thing on ‘Backspace’/‘d’</p
 <span class="hljs-keyword">let</span> gui_tool = <span class="hljs-keyword">new</span> GUITool(gui);
 <span class="hljs-keyword">let</span> pan_tool = <span class="hljs-keyword">new</span> PanningTool(canvas);
 <span class="hljs-keyword">let</span> highlight_tool = <span class="hljs-keyword">new</span> HighlightTool(canvas);
-<span class="hljs-keyword">let</span> marker_tool = <span class="hljs-keyword">new</span> MarkerTool(gui, highlight_tool);
+<span class="hljs-keyword">let</span> marker_tool = <span class="hljs-keyword">new</span> MarkerTool(canvas, gui, highlight_tool);
 <span class="hljs-keyword">let</span> zoom_tool = <span class="hljs-keyword">new</span> ZoomTool(canvas);
 <span class="hljs-keyword">let</span> motion_tool = <span class="hljs-keyword">new</span> ConnectorMotionTool(graph, view);
 <span class="hljs-keyword">let</span> connection_tool = <span class="hljs-keyword">new</span> ConnectionTool(canvas, graph, view, marker_tool);
@@ -195,6 +191,7 @@ canvas.on(<span class="hljs-string">'mouse:over'</span>, <span class="hljs-funct
 
 
 canvas.on(<span class="hljs-string">'mouse:out'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+    canvas.deactivateAll(); <span class="hljs-comment">// subtargetting has issues if object kept active</span>
     highlight_tool.mouse_out(e);
 });
 

@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -130,6 +125,8 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">static</span> nodetype() { <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span> }
+
     <span class="hljs-keyword">static</span> make_nodebox(node) {</pre></div></div>
             
         </li>
@@ -177,6 +174,11 @@
             .concat(<span class="hljs-keyword">this</span>.make_ports(node, <span class="hljs-string">'input'</span>))
     }
 
+    <span class="hljs-keyword">static</span> port_filter(node, type) { <span class="hljs-comment">// Filter by type and mode (ensure visible)</span>
+        <span class="hljs-keyword">let</span> params = type == <span class="hljs-string">'input'</span> ? node.inputs : node.outputs;
+        <span class="hljs-keyword">return</span> _.filter(params, (p) =&gt; {<span class="hljs-keyword">return</span> node.param_modes[p] != <span class="hljs-string">'hidden'</span> });
+    }
+
 
     <span class="hljs-keyword">static</span> make_ports(node, type) {</pre></div></div>
             
@@ -193,7 +195,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = type == <span class="hljs-string">'input'</span> ? node.inputs : node.outputs;
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> params = <span class="hljs-keyword">this</span>.port_filter(node, type);
         <span class="hljs-keyword">let</span> offset = type == <span class="hljs-string">'input'</span> ? node.outputs.length : <span class="hljs-number">0</span>;
         <span class="hljs-keyword">return</span> params.map( <span class="hljs-function">(<span class="hljs-params">param, i</span>) =&gt;</span> <span class="hljs-keyword">this</span>.make_port(node, param, type, i+offset));
     }
@@ -249,7 +251,7 @@
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> flags =  { <span class="hljs-attr">selectable</span>: <span class="hljs-literal">true</span>,
                        <span class="hljs-attr">hasControls</span>: <span class="hljs-literal">false</span>,
                        <span class="hljs-attr">hasBorders</span> : <span class="hljs-literal">false</span> }
-        <span class="hljs-keyword">let</span> height = node.ports_height() + node.header_height;
+        <span class="hljs-keyword">let</span> height = node.ports_height() + node.header_height();
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> fabric.Rect(_.extend({}, node.style, node.geom, flags,
                                         { <span class="hljs-attr">height</span>: height,
                                           <span class="hljs-attr">left</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">top</span>: <span class="hljs-number">0</span> }));
@@ -318,6 +320,8 @@ ports inside (getObjects) and get the positions there.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">static</span> nodetype() { <span class="hljs-keyword">return</span> <span class="hljs-string">'LabelledNode'</span> }
+
     <span class="hljs-keyword">static</span> make_title(node) {</pre></div></div>
             
         </li>
@@ -351,7 +355,7 @@ ports inside (getObjects) and get the positions there.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Add 10% padding</p>
+              <p>Add padding to title.</p>
 
             </div>
             
@@ -385,13 +389,11 @@ ports inside (getObjects) and get the positions there.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Allocate space in the node neader</p>
+              <p>Allocate space in the node neader for the title</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        node.title_height = title.top + (title.height * title.scaleY);
-        node.header_height += node.title_height;
-
+            <div class="content"><div class='highlight'><pre>        node.header_heights[<span class="hljs-string">'title'</span>] = title.top + (title.height * title.scaleY);
         <span class="hljs-keyword">return</span> title
     }
 
@@ -399,7 +401,8 @@ ports inside (getObjects) and get the positions there.</p>
     <span class="hljs-keyword">static</span> make_label(name, node, type) {
         <span class="hljs-keyword">let</span> [x,y] = node.port_position(name, type);
         <span class="hljs-keyword">let</span> padding = node.geom.width * <span class="hljs-number">0.2</span>;
-        <span class="hljs-keyword">let</span> label = <span class="hljs-keyword">new</span> fabric.Text(name, {
+        <span class="hljs-keyword">let</span> label = <span class="hljs-keyword">new</span> fabric.Text(
+            node.labels[name]? node.labels[name] : name, {
             <span class="hljs-attr">fontFamily</span>: node.label_opts.fontFamily,
             <span class="hljs-attr">strokeWidth</span> : <span class="hljs-number">0</span>,
             <span class="hljs-attr">originX</span> :     (type === <span class="hljs-string">'input'</span>) ? <span class="hljs-string">'left'</span> : <span class="hljs-string">'right'</span>,
@@ -442,6 +445,8 @@ ports inside (getObjects) and get the positions there.</p>
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ImageBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">LabelledBox</span> </span>{
 
+    <span class="hljs-keyword">static</span> nodetype() { <span class="hljs-keyword">return</span> <span class="hljs-string">'ImageNode'</span> }
+
     <span class="hljs-keyword">static</span> make_image(node, group, imopts={}) {</pre></div></div>
             
         </li>
@@ -457,9 +462,9 @@ ports inside (getObjects) and get the positions there.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> half_height = (node.ports_height() + node.header_height)/<span class="hljs-number">2.0</span>;
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">let</span> half_height = (node.ports_height() + node.header_height())/<span class="hljs-number">2.0</span>;
         <span class="hljs-keyword">let</span> opts = _.extend( {
-            <span class="hljs-attr">top</span>: node.title_height - half_height,</pre></div></div>
+            <span class="hljs-attr">top</span>: node.header_heights[<span class="hljs-string">'title'</span>] - half_height,</pre></div></div>
             
         </li>
         
@@ -520,7 +525,7 @@ ports inside (getObjects) and get the positions there.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        node.header_height = node.image_opts.height;
+            <div class="content"><div class='highlight'><pre>        node.header_heights[<span class="hljs-string">'image'</span>] = node.image_opts.height;
         <span class="hljs-keyword">let</span> group = <span class="hljs-keyword">super</span>.make_nodebox(node);</pre></div></div>
             
         </li>
@@ -542,12 +547,9 @@ ports inside (getObjects) and get the positions there.</p>
 }
 
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NodeBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageBox</span> </span>{
-
-}
-
-
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ViewportBox</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageBox</span> </span>{
+
+    <span class="hljs-keyword">static</span> nodetype() { <span class="hljs-keyword">return</span> <span class="hljs-string">'Viewport'</span> }
 
     <span class="hljs-keyword">static</span> make_rect_port(node, param) {</pre></div></div>
             

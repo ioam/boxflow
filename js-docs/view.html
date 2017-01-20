@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -286,12 +281,17 @@
         }
     }
 
-    add_node(graph, type, name, options={}) {
-        <span class="hljs-keyword">let</span> opts = {<span class="hljs-attr">name</span>: name,
-                    <span class="hljs-attr">type</span> : type,
-                    <span class="hljs-attr">params</span> : graph.defs.default_params(type),
-                    <span class="hljs-attr">inputs</span> : graph.defs.input_names(type),
-                    <span class="hljs-attr">outputs</span>: graph.defs.output_names(type)}
+    add_node(graph, type, name, options={}) { <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Work by group</span>
+        <span class="hljs-keyword">let</span> opts = {
+            <span class="hljs-attr">name</span>: name,
+            <span class="hljs-attr">type</span> : type,
+            <span class="hljs-attr">params</span> : graph.defs.default_params(type),
+            <span class="hljs-attr">labels</span> : graph.defs.default_params(type, <span class="hljs-string">'label'</span>),
+            <span class="hljs-attr">buttons</span> : graph.defs.default_buttons(type),
+            <span class="hljs-attr">inputs</span> : graph.defs.input_names(type),
+            <span class="hljs-attr">outputs</span>: graph.defs.output_names(type),
+            <span class="hljs-attr">param_modes</span>: graph.defs.default_params(type, <span class="hljs-string">'mode'</span>)
+        }
 
         <span class="hljs-keyword">let</span> nodetype = graph.defs.nodetype(type);
         graph.add_node( <span class="hljs-keyword">new</span> nodetype(_.extend(opts, options)));
@@ -325,7 +325,7 @@
         }
     }
 
-    remove(graph, name) {
+    remove(graph, name, comm=<span class="hljs-literal">true</span>) {
         <span class="hljs-keyword">let</span> object = <span class="hljs-keyword">this</span>.lookup(name);
         <span class="hljs-keyword">if</span> (object === <span class="hljs-literal">undefined</span>) { <span class="hljs-keyword">return</span>}
         <span class="hljs-keyword">if</span> (<span class="hljs-string">'node'</span> <span class="hljs-keyword">in</span> object ) {
@@ -336,7 +336,7 @@
             }
         }
         <span class="hljs-keyword">this</span>.canvas.remove(object);
-        graph.remove(name)
+        graph.remove(name, comm)
     }
 }</pre></div></div>
             

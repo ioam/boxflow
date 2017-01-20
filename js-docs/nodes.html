@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -148,6 +143,9 @@ to concretely visualize that height.</p>
                   inputs=[],                     <span class="hljs-comment">// Input/output parameter names</span>
                   outputs=[],
                   params = {},                    <span class="hljs-comment">// Parameter state</span>
+                  labels = {},
+                  buttons = {},                   <span class="hljs-comment">// Button state</span>
+                  param_modes = {},
                   pos = [<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],                    <span class="hljs-comment">// Geometry</span>
                   width = <span class="hljs-number">100</span>,
                   smooth = <span class="hljs-number">10</span>,
@@ -168,8 +166,11 @@ to concretely visualize that height.</p>
         <span class="hljs-keyword">this</span>.inputs = inputs;
         <span class="hljs-keyword">this</span>.outputs = outputs;
         <span class="hljs-keyword">this</span>.params = params;
-        <span class="hljs-keyword">this</span>.locked_params = _.mapObject(<span class="hljs-keyword">this</span>.params, <span class="hljs-comment">// Parameters 'locked' by connections</span>
-                                         (k,v) =&gt; { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>});
+        <span class="hljs-keyword">this</span>.labels = labels;
+        <span class="hljs-keyword">this</span>.buttons = buttons;
+        <span class="hljs-keyword">this</span>.param_modes = param_modes;
+        <span class="hljs-keyword">this</span>._locked_params = _.mapObject(<span class="hljs-keyword">this</span>.params, <span class="hljs-comment">// Parameters 'locked' by connections</span>
+                                          (k,v) =&gt; { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>});
 
         <span class="hljs-keyword">this</span>.port_gap_ratio = port_gap_ratio;
 
@@ -183,23 +184,29 @@ to concretely visualize that height.</p>
             <span class="hljs-attr">port_radius</span> : <span class="hljs-number">7</span>,
             <span class="hljs-attr">rx</span>: smooth, <span class="hljs-attr">ry</span>: smooth};
 
-        <span class="hljs-keyword">this</span>.header_height = <span class="hljs-number">0</span>;  <span class="hljs-comment">// Unscaled height of header</span>
+        <span class="hljs-keyword">this</span>.header_heights = {};
+    }
+
+    header_height() { <span class="hljs-comment">// Sums the entries in header_heights</span>
+        <span class="hljs-keyword">return</span> _.reduce(<span class="hljs-built_in">Object</span>.values(<span class="hljs-keyword">this</span>.header_heights),
+                        (a, b) =&gt; { <span class="hljs-keyword">return</span> a+b }, <span class="hljs-number">0</span>);
     }
 
     lock_param(param, state=<span class="hljs-literal">true</span>) {
-        <span class="hljs-keyword">this</span>.locked_params[param]=state;
+        <span class="hljs-keyword">this</span>._locked_params[param]=state;
     }
 
 
-    unlocked_params(plims=<span class="hljs-literal">undefined</span>) {
-        <span class="hljs-keyword">if</span> ((plims !== <span class="hljs-literal">undefined</span>) &amp;&amp; (<span class="hljs-built_in">Object</span>.keys(plims).length == <span class="hljs-number">0</span>)) {
+    unlocked_params(pmode=<span class="hljs-literal">undefined</span>) {
+        <span class="hljs-keyword">if</span> (!(pmode)) {<span class="hljs-keyword">return</span> [] }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Object</span>.keys(pmode).length == <span class="hljs-number">0</span>) {
             <span class="hljs-keyword">return</span> []
         }
         <span class="hljs-keyword">let</span> unlocked = [];
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> param <span class="hljs-keyword">of</span> <span class="hljs-built_in">Object</span>.keys(<span class="hljs-keyword">this</span>.params)) {
-            <span class="hljs-keyword">if</span> (plims &amp;&amp; plims[param]==<span class="hljs-string">'untyped-port'</span>) {
+            <span class="hljs-keyword">if</span> (pmode[param]==<span class="hljs-string">'untyped'</span>) {
                 <span class="hljs-keyword">continue</span> }
-            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span>.locked_params[param])) {
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span>._locked_params[param])) {
                 unlocked.push(param);
             }
         }
@@ -216,7 +223,7 @@ to concretely visualize that height.</p>
 
     port_position(port, port_type=<span class="hljs-string">'input'</span>) {
         <span class="hljs-keyword">let</span> width = <span class="hljs-keyword">this</span>.geom.width;
-        <span class="hljs-keyword">let</span> ypos =   ( <span class="hljs-keyword">this</span>.header_height + <span class="hljs-keyword">this</span>.port_spacing()/<span class="hljs-number">2.0</span>
+        <span class="hljs-keyword">let</span> ypos =   ( <span class="hljs-keyword">this</span>.header_height() + <span class="hljs-keyword">this</span>.port_spacing()/<span class="hljs-number">2.0</span>
                        + <span class="hljs-keyword">this</span>.row(port, port_type) * <span class="hljs-keyword">this</span>.port_spacing());
         <span class="hljs-keyword">return</span> [port_type == <span class="hljs-string">'input'</span> ? <span class="hljs-number">0</span>  : width, ypos];
     }
@@ -319,7 +326,10 @@ to concretely visualize that height.</p>
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.geom.port_radius/<span class="hljs-number">4.0</span>
         }
     }
-}</pre></div></div>
+}
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Viewport</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{</pre></div></div>
             
         </li>
         
@@ -329,26 +339,6 @@ to concretely visualize that height.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <!-- Remove once mapping system complete -->
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{
-
-}
-
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Viewport</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ImageNode</span> </span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <!-- FIXME should not be hardcoded, but odd results using geom.width/height -->
 
@@ -364,11 +354,11 @@ to concretely visualize that height.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Docs Index</p>
 <p><a href="main.html">main.js</a> :  Toplevel entry point. <br>

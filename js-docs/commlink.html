@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -108,7 +103,14 @@
         <span class="hljs-keyword">this</span>.gui = gui;
         <span class="hljs-keyword">this</span>.graph = graph;
 
-        <span class="hljs-keyword">this</span>.configure_callbacks(<span class="hljs-keyword">this</span>.socket)
+        <span class="hljs-keyword">this</span>.setup(<span class="hljs-keyword">this</span>.socket)
+    }
+
+    setup(socket) {
+        socket.onopen =    <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onopen;
+        socket.onerror =   <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onerror;
+        socket.onmessage = <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onmessage(e);
+        socket.onclose =   <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onclose;
     }
 
     socket_onopen(e) {
@@ -123,14 +125,27 @@
         <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Socket error'</span>);
     }
 
-    socket_onmessage(e) {
+    socket_onmessage(e) { <span class="hljs-comment">// Dispatch according to value of 'command'</span>
         <span class="hljs-keyword">let</span> json = <span class="hljs-built_in">JSON</span>.parse(e.data);
         <span class="hljs-keyword">if</span> (json.command == <span class="hljs-string">'definitions'</span>) {
             <span class="hljs-keyword">this</span>.graph.defs.definitions = json[<span class="hljs-string">'data'</span>];
-            <span class="hljs-keyword">this</span>.gui.init();
-            _.demo_graph(<span class="hljs-keyword">this</span>.view, <span class="hljs-keyword">this</span>.graph);
-        }
-        <span class="hljs-keyword">if</span> (json.command == <span class="hljs-string">'image_update'</span>) {
+            <span class="hljs-keyword">this</span>.gui.init();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>_.demo(this.view, this.graph);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (json.command == <span class="hljs-string">'image_update'</span>) {
             <span class="hljs-keyword">let</span> node = <span class="hljs-keyword">this</span>.graph.find_node(json[<span class="hljs-string">'data'</span>][<span class="hljs-string">'name'</span>]);
             <span class="hljs-keyword">if</span> (!node) {<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Warning: node not found'</span>); <span class="hljs-keyword">return</span> }
             <span class="hljs-keyword">let</span> boxtype = <span class="hljs-keyword">this</span>.graph.defs.boxtype(node.type);
@@ -139,18 +154,31 @@
                 boxtype.update_image(node, <span class="hljs-keyword">this</span>.view, <span class="hljs-literal">true</span>);
             }
         }
-    }
-
-    configure_callbacks(socket) {
-        socket.onopen =    <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onopen;
-        socket.onerror =   <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onerror;
-        socket.onmessage = <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onmessage(e);
-        socket.onclose =   <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-keyword">this</span>.socket_onclose;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (json.command == <span class="hljs-string">'param_update'</span>) {
+            <span class="hljs-keyword">let</span> params = json[<span class="hljs-string">'data'</span>][<span class="hljs-string">'params'</span>];
+            <span class="hljs-keyword">let</span> node = <span class="hljs-keyword">this</span>.graph.find_node(json[<span class="hljs-string">'data'</span>][<span class="hljs-string">'name'</span>]);
+            <span class="hljs-keyword">if</span> (node) {
+                WatchJS.noMore = <span class="hljs-literal">true</span>; <span class="hljs-comment">// Set params without triggering watch.js</span>
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> <span class="hljs-built_in">Object</span>.keys(params)) {
+                    node.params[key] = params[key];
+                }
+                WatchJS.noMore = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">this</span>.gui.refresh_params();
+            }
+            <span class="hljs-keyword">else</span> {
+                <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Could not find node to update params'</span>)
+            }
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (json.command == <span class="hljs-string">'invalid_edge'</span>) {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Invalid edge: '</span> + json[<span class="hljs-string">'data'</span>]);
+            <span class="hljs-keyword">this</span>.view.remove(<span class="hljs-keyword">this</span>.graph, json[<span class="hljs-string">'data'</span>], <span class="hljs-literal">false</span>); <span class="hljs-comment">// Avoid looping back</span>
+        }
     }
 
     send_message(command, data) {
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.socket.readyState === <span class="hljs-keyword">this</span>.socket.OPEN ) {
-            <span class="hljs-keyword">this</span>.socket.send(<span class="hljs-built_in">JSON</span>.stringify({<span class="hljs-string">'command'</span>: command, <span class="hljs-string">'data'</span>:data}));
+            <span class="hljs-keyword">this</span>.socket.send(<span class="hljs-built_in">JSON</span>.stringify({<span class="hljs-string">'command'</span>: command,
+                                             <span class="hljs-string">'data'</span>:data}));
         }
         <span class="hljs-keyword">else</span> {
             <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Socket not ready'</span>);
@@ -164,19 +192,24 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Use watch.js to follow the new nodes parameters</p>
+              <p>Using watch.js to trigger update_params when the params change</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>        watch(node.params, () =&gt; {
             <span class="hljs-keyword">this</span>.update_params(node);
         });
+
+        watch(node.buttons, () =&gt; {
+            <span class="hljs-keyword">this</span>.trigger_button(node);
+        });
+
     }
 
     remove_node(node) {
@@ -186,7 +219,8 @@
 
     add_edge(edge) {
         <span class="hljs-keyword">this</span>.send_message(<span class="hljs-string">'add_edge'</span>,
-                          {<span class="hljs-string">'src'</span>:edge.src.name,
+                          {<span class="hljs-string">'name'</span>: edge.name,
+                           <span class="hljs-string">'src'</span>:edge.src.name,
                            <span class="hljs-string">'output'</span>: edge.output,
                            <span class="hljs-string">'dest'</span> : edge.dest.name,
                            <span class="hljs-string">'input'</span>: edge.input});
@@ -202,31 +236,59 @@
         <span class="hljs-keyword">this</span>.update_params(edge.dest);
     }
 
-
-    update_params(node) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>Send updated param values to Python</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.send_message(<span class="hljs-string">'update_params'</span>,
-                          {<span class="hljs-string">'name'</span>:node.name, <span class="hljs-string">'params'</span>:node.params})
+    trigger_button(node) { <span class="hljs-comment">// Communicate which buttons have been triggered</span>
+        <span class="hljs-keyword">let</span> triggered = [];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> button <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.graph.defs.buttons(node.type)) {
+            <span class="hljs-keyword">if</span> (node.buttons[button.callback]) {
+                triggered.push(button.callback);
+                WatchJS.noMore = <span class="hljs-literal">true</span>; <span class="hljs-comment">// Reset state back to untriggered (false)</span>
+                node.buttons[button.callback] = <span class="hljs-literal">false</span>;
+                WatchJS.noMore = <span class="hljs-literal">false</span>;
+            }
+        }
+        <span class="hljs-keyword">if</span> (triggered.length == <span class="hljs-number">0</span>) { <span class="hljs-keyword">return</span> }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (triggered.length &gt; <span class="hljs-number">1</span>) {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Warning: Multiple buttons triggered simultaneously.'</span>)
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.send_message(<span class="hljs-string">'trigger_button'</span>,
+                              {<span class="hljs-string">'name'</span>:   node.name,
+                               <span class="hljs-string">'button'</span>: triggered[<span class="hljs-number">0</span>] })
+        }
     }
 
+    update_params(node) {  <span class="hljs-comment">// Send updated param values to Python</span>
+        <span class="hljs-keyword">this</span>.send_message(<span class="hljs-string">'update_params'</span>,
+                          {<span class="hljs-string">'name'</span>   : node.name,
+                           <span class="hljs-string">'params'</span> : node.params })
+    }
 
     unwatch_params(node) {
 
     }
 }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Docs Index</p>
+<p><a href="main.html">main.js</a> :  Toplevel entry point. <br>
+<a href="nodes.html">nodes.js</a> : Nodes hold semantic and visual state.<br>
+<a href="graph.html">graph.js</a> : A Graph holds nodes and edges.<br>
+<a href="commlink.html">commlink.js</a> : Commlink links the graph to the server.<br>
+<a href="utils.html">utils.js</a> : Simple set of utilities injected into underscore. <br>
+<a href="view.html">view.js</a> : The View manages graphical state.. <br>
+<a href="boxes.html">boxes.js</a> : Boxes are the visual representation of nodes. <br>
+<a href="tools.html">tools.js</a> : Tools respond to interactive events. <br>
+<a href="connector.html">connector.js</a> : The connection tool has its own file. <br></p>
+
+            </div>
             
         </li>
         

@@ -55,11 +55,6 @@
                 </a>
               
                 
-                <a class="source" href="tests.html">
-                  tests.js
-                </a>
-              
-                
                 <a class="source" href="tools.html">
                   tools.js
                 </a>
@@ -255,8 +250,8 @@
     }
 
     mouse_move(e) {
+        <span class="hljs-keyword">let</span> pointer = <span class="hljs-keyword">this</span>.canvas.getPointer(e.e);
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.x1 &amp;&amp; <span class="hljs-keyword">this</span>.y1) {
-            <span class="hljs-keyword">let</span> pointer = canvas.getPointer(e.e);
 
             <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.connector) {
                 <span class="hljs-keyword">let</span> coords = [<span class="hljs-keyword">this</span>.x1, <span class="hljs-keyword">this</span>.y1, pointer.x, pointer.y];
