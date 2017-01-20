@@ -49,6 +49,16 @@ html = """
     <script src="./static/watch.js"></script>
 
 {scripts}
+
+<style>
+body {{  /* Disable text selection on GUI*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}}
+</style>
+
 </head><body>
   <div id="container">
     <canvas id="c" height="800" width="800"></canvas>
