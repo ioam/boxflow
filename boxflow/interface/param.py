@@ -36,6 +36,11 @@ class Magnitude(ParamBox):
     magnitude = param.Magnitude(default=0.5)
 
 
+class Prompt(ParamBox):
+    # ObjectSelectors become drop down menus.
+    prompt = param.ObjectSelector(default='yes', objects=['yes','no'])
+
+
 class Time(param.Parameterized):
 
     time = param.Number(default=0)
@@ -53,7 +58,7 @@ class Time(param.Parameterized):
 
 
 def load_param():
-    boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer,
+    boxtypes = [BoxType(p, hidden=[p.name.lower()]) for p in [ Number, Integer, Prompt,
                                                                String, Boolean, Magnitude]]
     Inventory.add('param', boxtypes +
                   [BoxType(Time, buttons=OrderedDict([('increment','+'),
