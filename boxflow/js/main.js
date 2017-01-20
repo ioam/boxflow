@@ -8,6 +8,7 @@
 // to the appropriate events.
 
 let canvas = new fabric.Canvas('c', {'selection' : false});
+canvas.defaultCursor = 'crosshair';
 
 let view = new View(canvas);
 let defs = new Definitions(); // Start with empty definitions
