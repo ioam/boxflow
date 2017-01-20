@@ -24,8 +24,7 @@ _.mixin({
                 + "JTVBkLmUHAAAADElEQVQI12N49OgRAAVQAqe5fRrCAAAAAElFTkSuQmCC")
     },
 
-
-    patch_gui_remove_folder : function(dat) {
+    patch_remove_folder : function(dat) { // Adds folder removal to dataGUI
         // Augment dat GUI with ability to remove folders
         // https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui
         dat.GUI.prototype.removeFolder = function(name) {
