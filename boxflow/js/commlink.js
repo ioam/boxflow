@@ -35,7 +35,7 @@ class CommLink {
         if (json.command == 'definitions') {
             this.graph.defs.definitions = json['data'];
             this.gui.init();
-            _.demo_graph(this.view, this.graph);
+            _.demo(this.view, this.graph);
         }
         else if (json.command == 'image_update') {
             let node = this.graph.find_node(json['data']['name']);

@@ -50,7 +50,7 @@ _.mixin({
         return new_obj
     },
 
-    demo_graph : function(view, graph) {
+    demo : function(view, graph) {
 
         view.add_node(graph, 'Magnitude', 'magnitude:0', { pos: [0,100]});
         view.add_node(graph, 'BinaryOp', 'binaryop:0', { pos: [150,350]});
