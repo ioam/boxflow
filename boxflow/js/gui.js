@@ -1,18 +1,6 @@
 'use strict';
 
-dat.GUI.prototype.removeFolder = function(name) {
-    // Augment dat GUI with ability to remove folders
-    // https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui
-    let folder = this.__folders[name];
-    if (!folder) {
-        return;
-    }
-    folder.close();
-    this.__ul.removeChild(folder.domElement.parentNode);
-    delete this.__folders[name];
-    this.onResize();
-}
-
+_.patch_gui_remove_folder(dat);
 
 class GUI {
     constructor(graph, view) {

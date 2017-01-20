@@ -24,6 +24,22 @@ _.mixin({
                 + "JTVBkLmUHAAAADElEQVQI12N49OgRAAVQAqe5fRrCAAAAAElFTkSuQmCC")
     },
 
+
+    patch_gui_remove_folder : function(dat) {
+        // Augment dat GUI with ability to remove folders
+        // https://stackoverflow.com/questions/18085540/remove-folder-in-dat-gui
+        dat.GUI.prototype.removeFolder = function(name) {
+            let folder = this.__folders[name];
+            if (!folder) {
+                return;
+            }
+            folder.close();
+            this.__ul.removeChild(folder.domElement.parentNode);
+            delete this.__folders[name];
+            this.onResize();
+        }
+    },
+
     getURLParameter : function (name, url) {
         if (!url) {
             url = window.location.href;
