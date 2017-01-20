@@ -61,9 +61,12 @@ class ParamDatGUI(object):
     def paramlist(cls, typeobj, min_precedence):
         """
         Given a parameterized object, return a (name, parameter) pairs list.
+        Sorts by precedence and excludes parameters below min precedence.
         """
-        return [(n,p) for n,p in typeobj.params().items()
-                if not (cls.excluded(p, min_precedence) or n=='name')]
+        filtered = [(n,p) for n,p in typeobj.params().items()
+                    if not (cls.excluded(p, min_precedence) or n=='name')]
+        return sorted(filtered,
+                      key=lambda el: el[1].precedence if el[1].precedence else 0)
 
     @classmethod
     def excluded(cls, p, min_precedence):
