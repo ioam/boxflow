@@ -56,6 +56,9 @@ class ParamDatGUI(object):
         else:
             return p.default
 
+    @classmethod
+    def param_doc(cls, p):
+        return p.doc.strip() if p.doc else None
 
     @classmethod
     def paramlist(cls, typeobj, min_precedence):
@@ -112,6 +115,7 @@ class ParamDatGUI(object):
         return {'name' : name,
                 'label': boxtype.label(name),
                 'mode' : mode,
+                'doc'  : cls.param_doc(p),
                 'value': cls.param_default(p),
                 'lims' : cls.param_lims(p),
                 'step' : cls.param_step(p)}

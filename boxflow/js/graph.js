@@ -145,7 +145,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         this._node_names = _.object(_.map(nodes, (nd) => [nd.name, nd]));
     }
 
-    param(name, value=true, lims=[], mode='normal', step=null, label=null) {
+    param(name, value=true, lims=[], mode='normal', step=null, label=null, doc=null) {
         // A parameter definition
         //
         // name:   The name of the parameter.
@@ -165,7 +165,7 @@ class Definitions { //  Associates nodes to the input/output param definitions
         //   + 'hidden'    - GUI parameter but no visual port.
         //
         //   TODO: Support [undefined, max] for maximum limit only.
-        return {name:name, value:value, lims:lims,
+        return {name:name, value:value, lims:lims, doc: doc ? doc : 'No docs',
                 mode:mode, step:step, label: label ? label : name}
     }
 

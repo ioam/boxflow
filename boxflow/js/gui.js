@@ -1,6 +1,8 @@
 'use strict';
 
-_.patch_gui_remove_folder(dat);
+
+_.patch_remove_folder(dat);
+_.patch_docstring_support(dat);
 
 class GUI {
     constructor(graph, view) {
@@ -52,6 +54,7 @@ class GUI {
         let pstep = this.graph.defs.default_params(node.type, 'step');
         let pmode = this.graph.defs.default_params(node.type, 'mode');
         let plabel = this.graph.defs.default_params(node.type, 'label');
+        let pdoc = this.graph.defs.default_params(node.type, 'doc');
 
         if (!this.editor) {
             let editor = this.datgui.addFolder("Parameters");
@@ -71,6 +74,7 @@ class GUI {
             if (pstep[key]!==null) {
                 control.step(pstep[key])
             }
+            control.doc(pdoc[key]);
         }
 
         for (let button of this.graph.defs.buttons(node.type)) {
