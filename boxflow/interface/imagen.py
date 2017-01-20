@@ -11,8 +11,16 @@ from StringIO import StringIO
 import imagen
 from imagen import PatternGenerator
 from imagen import image
+from imagen import random
+from imagen.random import RandomGenerator
 import param
+import fractions
 
+from numbergen import TimeAware
+
+param.Dynamic.time_fn(val=0.0, time_type=fractions.Fraction)
+param.Dynamic.time_dependent = True
+TimeAware.time_dependent = True # Why can't I set it on RandomGenerator?
 
 from .inventory import Inventory, BoxType
 
@@ -106,7 +114,9 @@ binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
 
 patterngenerators = [imagen.Disk, imagen.Gaussian, imagen.Line,
                      imagen.Spiral, imagen.Gabor, imagen.SineGrating,
-                     imagen.ConcentricRings, imagen.Asterisk, FileImage]
+                     imagen.ConcentricRings, imagen.Asterisk, FileImage,
+                     imagen.random.GaussianRandom, imagen.random.GaussianCloud,
+                     imagen.random.UniformRandom, imagen.random.UniformRandomInt]
 vanilla_classes = [ BoxType(patgen,
                             nodetype='ImageNode',
                             display_fn=imagen_display)
