@@ -3,12 +3,14 @@
 #
 from __future__ import absolute_import
 
+import os
 import base64
 from PIL import Image
 from StringIO import StringIO
 
 import imagen
 from imagen import PatternGenerator
+from imagen import image
 import param
 
 
@@ -91,12 +93,20 @@ def imagen_display(instance):
     return {'b64':image_to_base64(instance())}
 
 
+class FileImage(image.FileImage):
+
+    def __init__(self, *args, **kwargs):
+        super(FileImage, self).__init__(*args, **dict(kwargs,
+                                                      filename='assets/ellen_arthur.pgm'))
+
+
+
 binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
                BoxType(Mul, untyped = ['lhs','rhs'])]
 
 patterngenerators = [imagen.Disk, imagen.Gaussian, imagen.Line,
                      imagen.Spiral, imagen.Gabor, imagen.SineGrating,
-                     imagen.ConcentricRings, imagen.Asterisk ]
+                     imagen.ConcentricRings, imagen.Asterisk, FileImage]
 vanilla_classes = [ BoxType(patgen,
                             nodetype='ImageNode',
                             display_fn=imagen_display)

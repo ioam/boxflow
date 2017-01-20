@@ -6,7 +6,11 @@ import imagen
 
 class ParamDatGUI(object):
 
-    supported_types = (param.Number, param.Integer, param.String, param.Boolean)
+    supported_types = (param.Number,
+                       param.Integer,
+                       param.String,
+                       param.Boolean,
+                       param.Filename)
 
     @classmethod
     def supported(cls, p):
