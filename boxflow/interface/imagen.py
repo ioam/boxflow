@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import os
 import base64
 from PIL import Image
-from StringIO import StringIO
+from io import BytesIO
 
 import imagen
 from imagen import PatternGenerator
@@ -87,10 +87,11 @@ class Mul(BinaryOp):
 
 def image_to_base64(arr):
     im = Image.fromarray((arr * 255))
-    buff = StringIO()
+    buff = BytesIO()
     im.convert('RGBA').save(buff, format='png')
     buff.seek(0)
-    return 'data:image/png;base64,' + base64.b64encode(buff.read())
+    b64 = base64.b64encode(buff.read())
+    return 'data:image/png;base64,' + b64.decode('utf8')
 
 
 def imagen_display(instance):
