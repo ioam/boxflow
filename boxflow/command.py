@@ -1,8 +1,6 @@
 import json
 
 from dataflow import DataFlow
-from definitions import ParamDefinitions
-
 
 
 class Command(object):

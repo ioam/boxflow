@@ -30,7 +30,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
          self.command.dispatch(json.loads(message))
 
     def on_close(self):
-        print 'connection closed'
+        print('connection closed')
 
     def check_origin(self, origin):
         return True
@@ -103,7 +103,7 @@ def main(js_dir):
                              js_handler,
                              static_handler,
                              assets_handler]).listen(8000)
-    print "Serving at:\n\n{host}:8000/index.html?server={host}\n".format(host=host)
+    print("Serving at:\n\n{host}:8000/index.html?server={host}\n".format(host=host))
     main_loop.start()
 
 
