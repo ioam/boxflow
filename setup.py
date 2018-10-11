@@ -6,7 +6,6 @@ from distutils.core import setup
 install_requires = ['tornado', 'param']
 extras_require={'all': ['imagen', 'pillow']}
 
-extras_require['notebook-dependencies']
 setup_args = dict(
     name='boxflow',
     version="0.0.1",
