@@ -44,6 +44,10 @@ class Graph {
         this.commlink && this.commlink.add_node(node);
     }
 
+    node_repr(node) {
+      this.commlink && this.commlink.node_repr(node);
+    }
+
     add_edge(src, output, dest, input) {
         if ( !_.contains(this.nodes, src) ) {
             throw `Source node ${src} not in graph: ${this.nodes}`;

@@ -48,6 +48,7 @@ class GUI {
     }
 
     populate(node) {
+        this.graph.node_repr(node);
         // Populate the GUI with the given parameters with optional limits and step
         let params = node.params;
         let plims = this.graph.defs.default_params(node.type, 'lims');
