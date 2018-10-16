@@ -4,7 +4,7 @@ import os, sys
 from distutils.core import setup
 
 install_requires = ['tornado', 'param']
-extras_require={'all': ['imagen', 'pillow']}
+extras_require={'all': ['imagen', 'pillow', 'pyperclip']}
 
 setup_args = dict(
     name='boxflow',
