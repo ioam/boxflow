@@ -77,6 +77,9 @@ class Box(object):
         # Can get button definition from boxtype.
         self.instance.set_param(*args, **kwargs)
 
+    def script_repr(self,imports=[],prefix="    "):
+        return self.instance.script_repr()
+
     def params(self):
         return self.instance.params()
 
