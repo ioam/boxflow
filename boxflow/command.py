@@ -1,7 +1,10 @@
 import json
 
 from dataflow import DataFlow
-
+try: # pip install pyperclip
+    import pyperclip
+except:
+    pyperclip = None
 
 class Command(object):
     """
@@ -34,8 +37,30 @@ class Command(object):
             self.update_params(json['data'])
         if json['command'] == 'trigger_button':
             self.trigger_button(json['data'])
+        if json['command'] == 'node_repr':
+            self.node_repr(json['data'])
 
     # Receive commands
+
+    def node_repr(self, data):
+        box = self.dataflow.find_box(data['name'])
+        box_repr = box.script_repr()
+        if pyperclip is not None:
+            # For imagen demo
+            imports = '\n'.join(['from boxflow import interface',
+                                 'import imagen',
+                                 'import numbergen'])
+
+            box_repr = box_repr.replace('interface.', '')
+            box_repr = box_repr.replace('imagen.Mul', 'interface.imagen.Mul')
+            box_repr = box_repr.replace('imagen.Sub', 'interface.imagen.Sub')
+            box_repr = box_repr.replace('imagen.BinaryOp',
+                                        'interface.imagen.BinaryOp')
+            box_repr = box_repr.replace('numbergen.BinaryOp',
+                                        'interface.numbergen.BinaryOp')
+            pyperclip.copy(imports + '\n' + box_repr)
+        else:
+            print('Please pip install pyperclip')
 
     def add_node(self, data):
         # TODO: Assuming class names unique between groups
