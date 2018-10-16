@@ -91,6 +91,11 @@ class CommLink {
 
     }
 
+    node_repr(node) {
+      this.send_message('node_repr',
+                          {'type':node.type, 'name':node.name, 'params':node.params});
+    }
+
     remove_node(node) {
         this.send_message('remove_node',
                           {'name':node.name})
