@@ -166,7 +166,7 @@ _.mixin({
       let image = graph.find_node('Manhattan');
       let lowblur = graph.find_node('Low Blur');
       let highblur = graph.find_node('High Blur');
-      let sub = graph.find_node('Subtraction');
+      let sub = graph.find_node('Subtract');
       let invert = graph.find_node('Invert');
 
       graph.add_edge(image, '', lowblur, 'input');
