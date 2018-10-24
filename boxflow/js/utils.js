@@ -153,5 +153,12 @@ _.mixin({
 
         view.canvas.clear();
         view.render(graph);
+    },
+
+    screenshot : function(view, graph) {
+        view.add_node(graph, 'FileImage', 'image:0', { pos: [200,0]});
+        view.canvas.clear();
+        view.render(graph);
     }
+
 });
