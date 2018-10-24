@@ -184,6 +184,14 @@ _.mixin({
       graph.add_edge(invert, '', viewport, 'input');
       view.canvas.clear();
       view.render(graph);
-    }
+    },
+
+  bezier_path : function(x1,x2,y1,y2, delta) {
+    let deltax = x2 - x1
+    let deltay = y2 - y1
+    let node1x = deltax * delta // 10%
+    let node2x = x2 - (2 * deltax * delta)
+    return `M ${x1} ${y1} ${x1+node1x} ${y1} C ${x1+node1x*2} ${y1} ${x2- (3 * deltax * delta)} ${y2} ${x2-node1x} ${y2} L ${x2} ${y2}`
+  }
 
 });
