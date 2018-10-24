@@ -96,6 +96,27 @@ canvas.on('mouse:move', function (e) {
     connection_tool.mouse_move(e);
 });
 
+// download_file('test.svg', canvas.toSVG())
+function download_file(filename, data) {
+  let a = document.createElement('a');
+  a.style = "display: none";
+  let blob = new Blob([data], {type: "application/octet-stream"});
+  let url = window.URL.createObjectURL(blob);
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  // See https://stackoverflow.com/questions/30694453 for Firefox support
+  setTimeout(function(){
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+}
+
+
 // Docs Index
 //
 // [main.js](main.html) :  Toplevel entry point. <br>
