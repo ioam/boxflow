@@ -111,7 +111,7 @@ class FileImage(image.FileImage):
 
     def __init__(self, *args, **kwargs):
         super(FileImage, self).__init__(*args, **dict(kwargs,
-                                                      filename='assets/ellen_arthur.pgm'))
+                                                      filename='assets/manhattan.png'))
 
 
 
@@ -188,6 +188,30 @@ class Blur(PatternGenerator):
 
 
 
+
+class Invert(PatternGenerator):
+    """
+    Trivial wrapper around a pattern generator used to define a viewport
+    node.
+    """
+    input = param.ClassSelector(class_=PatternGenerator,
+                                default=imagen.Constant(), precedence=1)
+    x = param.Number(default=0.0,softbounds=(-1.0,1.0),precedence=-1)
+    y = param.Number(default=0.0,softbounds=(-1.0,1.0),precedence=-1)
+    orientation = param.Number(default=0.0,precedence=-1)
+    size = param.Number(default=1.0, precedence=-1)
+    scale = param.Number(default=1.0, precedence=-1)
+    offset = param.Number(default=0.0,precedence=-1)
+    output_fns = param.HookList(default=[], precedence=-1)
+    mask_shape = param.ClassSelector(param.Parameterized, default=None, precedence=-1)
+
+    def function(self,p):
+        arr = p.input()
+        mina, maxa = arr.min(), arr.max()
+        zeros = np.zeros(arr.shape)
+        return (zeros - arr) + maxa
+
+
 binary_ops = [ BoxType(Sub, untyped=['lhs','rhs']),
                BoxType(Mul, untyped = ['lhs','rhs'])]
 
@@ -202,14 +226,16 @@ vanilla_classes = [ BoxType(patgen,
                     for patgen in patterngenerators ]
 
 
-blurbox = [BoxType(Blur, nodetype='ImageNode',
-                untyped=['input'],
-                display_fn=imagen_display)]
+imageops = [BoxType(Blur, nodetype='ImageNode',
+                    untyped=['input'],
+                    display_fn=imagen_display),
+            BoxType(Invert,
+                    untyped=['input'])]
 
 
 
 def load_imagen():
-    Inventory.add('imagen', vanilla_classes + binary_ops + blurbox )
+    Inventory.add('imagen', vanilla_classes + binary_ops + imageops )
     Inventory.add('imagen',  BoxType(Viewport,
                                      nodetype='Viewport',
                                      untyped=['input'],
