@@ -129,7 +129,7 @@ class LabelledNode extends BaseNode {
     constructor({ title_opts = {size : 12,
                                 width_ratio : 0.8,
                                 top_padding_ratio : 0.6,
-                                fontFamily : 'Monospace'},
+                                fontFamily : 'Arial'},
 
                   label_opts = {size: 12,
                                 fontFamily : 'Arial'}
