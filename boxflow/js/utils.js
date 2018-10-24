@@ -156,17 +156,18 @@ _.mixin({
     },
 
     screenshot : function(view, graph) {
-      view.add_node(graph, 'FileImage', 'Image', { pos: [200,100]});
+      view.add_node(graph, 'FileImage', 'Manhattan', { pos: [200,100]});
 
       view.add_node(graph, 'Blur', 'High Blur', { pos: [400,0]});
       view.add_node(graph, 'Blur', 'Low Blur', { pos: [400,200]});
+      view.add_node(graph, 'Sub', 'Subtract', { pos: [600,100]});
+      view.add_node(graph, 'Invert', 'Invert', { pos: [750,100]});
 
-      view.add_node(graph, 'Sub', 'Subtraction', { pos: [600,100]});
-
-      let image = graph.find_node('Image');
+      let image = graph.find_node('Manhattan');
       let lowblur = graph.find_node('Low Blur');
       let highblur = graph.find_node('High Blur');
       let sub = graph.find_node('Subtraction');
+      let invert = graph.find_node('Invert');
 
       graph.add_edge(image, '', lowblur, 'input');
       graph.add_edge(image, '', highblur, 'input');
@@ -175,11 +176,12 @@ _.mixin({
       graph.add_edge(lowblur, '', sub, 'rhs');
 
       lowblur.params['blur_amount'] = 60;
-      highblur.params['blur_amount'] = 400;
+      highblur.params['blur_amount'] = 200;
 
-      view.add_node(graph, 'Viewport', 'Viewport', { pos: [800,100]});
+      graph.add_edge(sub, '', invert, 'input');
+      view.add_node(graph, 'Viewport', 'Viewport', { pos: [900,100]});
       let viewport = graph.find_node('Viewport');
-      graph.add_edge(sub, '', viewport, 'input');
+      graph.add_edge(invert, '', viewport, 'input');
       view.canvas.clear();
       view.render(graph);
     }
