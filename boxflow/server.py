@@ -61,7 +61,8 @@ body {{  /* Disable text selection on GUI*/
 
 </head><body>
   <div id="container">
-    <canvas id="c" height="800" width="800"></canvas>
+    <canvas id="c" height="800" width="800"
+            style="background-color: rgba(158, 167, 184, 0.2);"></canvas>
   </div>
   <script src="./js/main.js"></script>
 </body></html>
