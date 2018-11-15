@@ -11,8 +11,8 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
-from interface import Inventory
-from command import Command
+from .interface import Inventory
+from .command import Command
 
 
 
@@ -108,8 +108,7 @@ def main(js_dir):
     main_loop.start()
 
 
-if __name__ == "__main__":
-
+def console_script():
     if len(sys.argv) == 1:
         js_dir = 'js'
     elif sys.argv[1] == '-es5':
