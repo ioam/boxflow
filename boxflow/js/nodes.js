@@ -30,10 +30,10 @@ class BaseNode {
                   width = 100,
                   smooth = 10,
                   port_gap_ratio = 0.25,          // Port settings
-                  style     = { fill: 'Silver',   // Styles
-                                stroke : 'black',
-                                strokeWidth : 3 },
-                  input_style  = { fill: 'white' },
+                  style     = { fill: '#5a9bd3',   // Styles
+                                stroke : '#4e58bf',
+                                strokeWidth : 4 },
+                  input_style  = { fill: '#96b38b' },
                   output_style = { fill: 'DarkGoldenRod' }
                 } = {} ) {
 
@@ -129,7 +129,7 @@ class LabelledNode extends BaseNode {
     constructor({ title_opts = {size : 12,
                                 width_ratio : 0.8,
                                 top_padding_ratio : 0.6,
-                                fontFamily : 'Monospace'},
+                                fontFamily : 'Arial'},
 
                   label_opts = {size: 12,
                                 fontFamily : 'Arial'}

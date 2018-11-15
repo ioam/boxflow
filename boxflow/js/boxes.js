@@ -101,6 +101,7 @@ class LabelledBox extends BaseBox {
         // Returns an array of fabric objects to group
         let title = new fabric.Text(node.name, {
             fontFamily: node.title_opts.fontFamily,
+            fontWeight: 'bold',
             strokeWidth : 0,
             originX :     'center',
             originY :     'top',

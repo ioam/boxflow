@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 import os, sys
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
 
 install_requires = ['tornado', 'param']
 extras_require={'all': ['imagen', 'pillow', 'pyperclip']}
@@ -20,11 +24,16 @@ setup_args = dict(
     platforms=['Windows', 'Mac OS X', 'Linux'],
     license='BSD',
     url='https://github.com/ioam/boxflow',
-    packages = ["boxflow", "boxflow.assets", "boxflow.js", "boxflow.static"],
+    packages = ["boxflow", "boxflow.assets", "boxflow.js",
+                "boxflow.static", "boxflow.interface"],
     package_data={'boxflow':['*.tpl'],
                   'boxflow.assets':['*.png'],
                   'boxflow.js':['*.js'],
                   'boxflow.static':['*.js']},
+    entry_points={
+        'console_scripts': [
+            'boxflow = boxflow.server:console_script'
+        ]},
     classifiers = [
         "License :: OSI Approved :: BSD License",
         "Development Status :: 3 - Alpha",

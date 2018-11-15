@@ -1,4 +1,7 @@
 
+
+
+
 // For reference:
 //
 //https://stackoverflow.com/questions/29829475/
@@ -31,7 +34,7 @@ class Connector {
 
     static connector_glyph(edge) {
         // Given an edge, create a new fabric object as a connector
-        let coords = this.connector_coords(edge);
+      let coords = this.connector_coords(edge);
         return new fabric.Line([coords['x1'], coords['y1'], coords['x2'],coords['y2']],
                                { name : edge.name,
                                  strokeWidth : 3,

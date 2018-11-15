@@ -11,8 +11,8 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
-from interface import Inventory
-from command import Command
+from .interface import Inventory
+from .command import Command
 
 
 
@@ -61,7 +61,8 @@ body {{  /* Disable text selection on GUI*/
 
 </head><body>
   <div id="container">
-    <canvas id="c" height="800" width="800"></canvas>
+    <canvas id="c" height="800" width="800"
+            style="background-color: rgba(158, 167, 184, 0.2);"></canvas>
   </div>
   <script src="./js/main.js"></script>
 </body></html>
@@ -107,8 +108,7 @@ def main(js_dir):
     main_loop.start()
 
 
-if __name__ == "__main__":
-
+def console_script():
     if len(sys.argv) == 1:
         js_dir = 'js'
     elif sys.argv[1] == '-es5':

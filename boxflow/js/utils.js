@@ -153,5 +153,45 @@ _.mixin({
 
         view.canvas.clear();
         view.render(graph);
-    }
+    },
+
+    screenshot : function(view, graph) {
+      view.add_node(graph, 'FileImage', 'Manhattan', { pos: [200,100]});
+
+      view.add_node(graph, 'Blur', 'High Blur', { pos: [400,0]});
+      view.add_node(graph, 'Blur', 'Low Blur', { pos: [400,200]});
+      view.add_node(graph, 'Sub', 'Subtract', { pos: [600,100]});
+      view.add_node(graph, 'Invert', 'Invert', { pos: [750,100]});
+
+      let image = graph.find_node('Manhattan');
+      let lowblur = graph.find_node('Low Blur');
+      let highblur = graph.find_node('High Blur');
+      let sub = graph.find_node('Subtract');
+      let invert = graph.find_node('Invert');
+
+      graph.add_edge(image, '', lowblur, 'input');
+      graph.add_edge(image, '', highblur, 'input');
+
+      graph.add_edge(highblur, '', sub, 'lhs');
+      graph.add_edge(lowblur, '', sub, 'rhs');
+
+      lowblur.params['blur_amount'] = 60;
+      highblur.params['blur_amount'] = 200;
+
+      graph.add_edge(sub, '', invert, 'input');
+      view.add_node(graph, 'Viewport', 'Viewport', { pos: [900,100]});
+      let viewport = graph.find_node('Viewport');
+      graph.add_edge(invert, '', viewport, 'input');
+      view.canvas.clear();
+      view.render(graph);
+    },
+
+  bezier_path : function(x1,x2,y1,y2, delta) {
+    let deltax = x2 - x1
+    let deltay = y2 - y1
+    let node1x = deltax * delta // 10%
+    let node2x = x2 - (2 * deltax * delta)
+    return `M ${x1} ${y1} ${x1+node1x} ${y1} C ${x1+node1x*2} ${y1} ${x2- (3 * deltax * delta)} ${y2} ${x2-node1x} ${y2} L ${x2} ${y2}`
+  }
+
 });
