@@ -35,22 +35,6 @@ class Connector {
     static connector_glyph(edge) {
         // Given an edge, create a new fabric object as a connector
       let coords = this.connector_coords(edge);
-      return new fabric.Path(_.bezier_path(coords['x1'],coords['x2'],
-                                         coords['y1'],coords['y2'], 0.2),
-                               { name : edge.name,
-                                 strokeWidth : 3,
-                                 fill : 'transparent',
-                                 stroke : '#666',
-                                 originX : 'center',
-                                 originY : 'center',
-                                 lockMovementX : true,
-                                 lockMovementY : true,
-                                 selectable : true,
-                                 hasControls: false,
-                                 hasBorders : false,
-                                 perPixelTargetFind : true,
-                                 targetFindTolerance : 20
-                               });
         return new fabric.Line([coords['x1'], coords['y1'], coords['x2'],coords['y2']],
                                { name : edge.name,
                                  strokeWidth : 3,
