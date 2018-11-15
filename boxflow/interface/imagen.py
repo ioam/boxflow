@@ -107,11 +107,15 @@ def imagen_display(instance):
     return {'b64':image_to_base64(instance())}
 
 
+fpath, _ = os.path.split(__file__)
+manhattan_path = os.path.abspath(os.path.join(fpath, '..',
+                                              'assets', 'manhattan.png'))
+
 class FileImage(image.FileImage):
 
     def __init__(self, *args, **kwargs):
         super(FileImage, self).__init__(*args, **dict(kwargs,
-                                                      filename='assets/manhattan.png'))
+                                                      filename=manhattan_path))
 
 
 
