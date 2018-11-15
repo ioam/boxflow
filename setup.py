@@ -12,7 +12,7 @@ extras_require={'all': ['imagen', 'pillow', 'pyperclip']}
 
 setup_args = dict(
     name='boxflow',
-    version="0.0.3",
+    version="0.0.4",
     install_requires = install_requires,
     extras_require = extras_require,
     description='Visual dataflow programming between parameterized objects.',
