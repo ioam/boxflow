@@ -1,6 +1,6 @@
 import json
 
-from dataflow import DataFlow
+from .dataflow import DataFlow
 try: # pip install pyperclip
     import pyperclip
 except:
